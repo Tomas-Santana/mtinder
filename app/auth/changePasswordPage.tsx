@@ -1,10 +1,10 @@
 import { View } from "react-native";
 import { GlowingText, Text } from "@/components/ui/text";
 import mt from "@/style/mtWind";
-import SendResetForm from "@/components/forms/changePasswordForms/sendResetForm";
+import ChangePasswordForm from "@/components/forms/changePasswordForms/changePasswordForm";
 import { NeonGlow } from "@/components/ui/glow";
 
-export default function SendReset() {
+export default function ChangePasswordPage(){
   return (
     <View
       style={[mt.flexCol, mt.items("center"), mt.gap(4), mt.p(5), mt.w("full")]}
@@ -21,10 +21,10 @@ export default function SendReset() {
           </View>
         </NeonGlow>
         <Text style={[mt.fontSize("md"), mt.color("gray"), mt.spacing(1)]}>
-          Receba um link para redefinir sua senha.
+          Recupera tu contraseña para seguir interactuando!
         </Text>
       </View>
-      <SendResetForm />
+      <ChangePasswordForm />
     </View>
   );
 }
