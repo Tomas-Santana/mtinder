@@ -32,7 +32,7 @@ export const formStyles = StyleSheet.create({
 export const mtForm = {
   container: [mt.w("full"), mt.flexCol, mt.gap(4), mt.p(4)],
   sideText: [mt.w("full"), mt.flexRow, mt.justify("flex-end")],
-  text: [mt.color("red", 600), mt.fontSans, mt.fontWeight("black")],
+  text: [mt.color("orange", 600), mt.fontSans, mt.fontWeight("black")],
 }
 
 export const genericStyles = StyleSheet.create({

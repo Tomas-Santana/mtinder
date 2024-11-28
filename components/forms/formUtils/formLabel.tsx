@@ -7,6 +7,6 @@ interface FormLabelProps {
 
 export function FormLabel({ label }: FormLabelProps) {
   return (
-    <Text style={[mt.fontSize("base"), mt.fontWeight("bold")]}>{label}</Text>
+    <Text style={[mt.fontSize("base"), mt.fontWeight("bold"), mt.color("white")]}>{label}</Text>
   );
 }

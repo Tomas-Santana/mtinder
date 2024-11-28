@@ -47,7 +47,7 @@ export function FormTextInput({
   return (
     <Animated.View
       layout={LinearTransition}
-      style={[mt.flexCol, mt.gap(2), viewStyle]}
+      style={[mt.flexCol, mt.gap(3), viewStyle]}
     >
       {label && <FormLabel label={label} />}
       <Controller
