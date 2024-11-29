@@ -4,11 +4,16 @@ import { useState } from "react";
 import { Glow, NeonGlow } from "@/components/ui/glow";
 import { GlowingText, Text } from "@/components/ui/text";
 import LoginForm from "@/components/forms/loginForm";
+import DropDown from "@/components/ui/dropDown";
+
+const options = [
+  { label: "Masculino", value: "male" },
+  { label: "Femenino", value: "female" },
+  { label: "Otro", value: "other" },
+];
 
 export default function Login() {
   
-  const [focus, setFocus] = useState(false);
-
   return (
     <View style={[mt.flexCol, mt.gap(4), mt.p(4), mt.pt(10), mt.w("full")]}>
       <View style={[mt.flexCol, mt.gap(2), mt.items("center")]}>
@@ -25,6 +30,7 @@ export default function Login() {
         </Text>
       </View>
       <LoginForm />
+      <DropDown data={options} onChange={console.log} placeholder="Selecciona un genero"/>
     </View>
   );
 }
