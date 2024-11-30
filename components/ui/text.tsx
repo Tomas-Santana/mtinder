@@ -28,17 +28,17 @@ export function GlowingText({
   ...props
 }: CustomTextProps) {
   return (
-    <MTText
+    <Text
       {...props}
       style={[
-        mt.fontWeight(weight),
-        mt.fontSize(size),
         props.style,
+        mt.fontSans,
         {
           textShadowColor: color,
           textShadowOffset: { width: 0, height: 0 },
           textShadowRadius: 10,
-          fontWeight: "bold",
+          fontWeight: "700",
+          // fontFamily: "TiltNeon-Regular"
         },
       ]}
     />

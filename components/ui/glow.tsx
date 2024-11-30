@@ -48,24 +48,24 @@ export function Glow({ children, color, glowing }: GlowProps){
 }
 
 export function NeonGlow({ children, color }: GlowProps) {
-  const neonLight = useRef(new Animated.Value(0.3)).current
+  const neonLight = useRef(new Animated.Value(1))
 
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
-        Animated.timing(neonLight, {
+        Animated.timing(neonLight.current, {
           toValue: 1,
-          duration: 500,
+          duration: 700,
           useNativeDriver: true,
         }),
-        Animated.timing(neonLight, {
+        Animated.timing(neonLight.current, {
           toValue: 0.3,
-          duration: 100,
+          duration: 700,
           useNativeDriver: true,
         }),
-        Animated.timing(neonLight, {
+        Animated.timing(neonLight.current, {
           toValue: 1,
-          duration: 100,
+          duration: 700,
           useNativeDriver: true,
         }),
       ]),
@@ -74,7 +74,7 @@ export function NeonGlow({ children, color }: GlowProps) {
   }, [neonLight])
 
   return (
-    <Animated.View style={[{ boxShadow: `0 0 5 4 ${color}`, opacity: neonLight }, mt.shadowRadius("base")]}>
+    <Animated.View style={[{ boxShadow: `0 0 5 4 ${color}`, opacity: neonLight.current }, mt.shadowRadius("base")]}>
       {children}
     </Animated.View>
   )

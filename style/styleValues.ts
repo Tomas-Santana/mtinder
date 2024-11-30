@@ -92,7 +92,7 @@ const s = {
     italic: "italic",
   },
   fontFamily: {
-    sans: "Lexend_500Medium",
+    sans: "TiltNeon-Regular",
     sansBold: "Lexend_700Bold",
     sansBlack: "Lexend_900Black",
   },
