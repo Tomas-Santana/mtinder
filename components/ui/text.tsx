@@ -32,13 +32,10 @@ export function GlowingText({
       {...props}
       style={[
         props.style,
-        mt.fontSans,
         {
           textShadowColor: color,
           textShadowOffset: { width: 0, height: 0 },
           textShadowRadius: 10,
-          fontWeight: "700",
-          // fontFamily: "TiltNeon-Regular"
         },
       ]}
     />

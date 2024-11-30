@@ -280,6 +280,22 @@ const s = {
       offset: [5, 4] as [number, number],
     },
   },
+  glow: {
+    sm(color: string) {
+      return `0 0 3 3 ${color}`;
+    },
+    md(color: string) {
+      return `0 0 5 4 ${color}`;
+    },
+    lg(color: string) {
+      return `0 0 8 6 ${color}`;
+    },
+  },
+  textGlowRadius: {
+    sm: 5,
+    md: 10,
+    lg: 15,
+  },
   timing: {
     fast: 100,
     base: 400,

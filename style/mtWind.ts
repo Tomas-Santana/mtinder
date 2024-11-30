@@ -65,6 +65,7 @@ export type MTTypes = {
   Font: Font;
   FontWeight: FontWeight;
   FontSize: FontSize;
+  Shade: ColorShade
 };
 
 const mt = {
@@ -137,7 +138,7 @@ const mt = {
     bottom:
       s.pixels[value as Pixels] || s.negativePixels[value as NegativePixels],
   }),
-  
+
   m: (value: AbsolutePixels) => ({
     margin: s.pixels[value],
   }),
@@ -176,7 +177,7 @@ const mt = {
     shade: ColorShade = 500,
     opacity: number = 1
   ) => {
-    return handleColor(value, shade, opacity, "borderColor");
+    return handleColorKey(value, shade, opacity, "borderColor");
   },
   borderBottom: (value: keyof typeof s.borderWidth) => ({
     borderBottomWidth: s.borderWidth[value],
@@ -191,7 +192,7 @@ const mt = {
     zIndex: value,
   }),
   spacing: (value: number) => ({
-    letterSpacing: value
+    letterSpacing: value,
   }),
   fontWeight: (value: "bold" | "black" | "normal") => {
     switch (value) {
@@ -252,7 +253,7 @@ const mt = {
     shade: ColorShade = 500,
     opacity: number = 1
   ) => {
-    return handleColor(value, shade, opacity, "shadowColor");
+    return handleColorKey(value, shade, opacity, "shadowColor");
   },
   shadowOpacity: (value: number) => ({
     shadowOpacity: value,
@@ -260,19 +261,27 @@ const mt = {
   shadowRadius: (value: keyof typeof s.borderRadius) => ({
     shadowRadius: s.borderRadius[value],
   }),
+  glow: (size: "sm" | "md" | "lg" = "md", color: MTTypes["Color"] = "blue", shade: ColorShade = 500) => ({
+    boxShadow: s.glow[size](handleColor(color, shade)),
+  }),
+  textGlow: (size: "sm" | "md" | "lg" = "md", color: MTTypes["Color"] = "blue", shade: ColorShade = 500) => ({
+    textShadowColor: handleColor(color, shade),
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: s.textGlowRadius[size],
+  }),
   backgroundColor: (
     value: keyof typeof s.colors,
     shade: ColorShade = 500,
     opacity: number = 1
   ) => {
-    return handleColor(value, shade, opacity, "backgroundColor");
+    return handleColorKey(value, shade, opacity, "backgroundColor");
   },
   color: (
     value: keyof typeof s.colors,
     shade: ColorShade = 500,
     opacity: number = 1
   ) => {
-    return handleColor(value, shade, opacity, "color");
+    return handleColorKey(value, shade, opacity, "color");
   },
   fontSans: {
     fontFamily: s.fontFamily.sans,
@@ -294,24 +303,29 @@ const mt = {
 
 export default mt;
 
-function handleColor(
+function handleColor (
+  value: keyof typeof s.colors,
+  shade: ColorShade = 500,
+  opacity: number = 1,
+) {
+  if (typeof s.colors[value] === "object") {
+    if (value.endsWith("Opacity")) {
+      const func = s.colors[value][shade] as ((opacity: number) => string);
+      return func(opacity);
+    }
+    return s.colors[value][shade] as string;
+  }
+  return s.colors[value] as string;
+}
+
+function handleColorKey(
   value: keyof typeof s.colors,
   shade: ColorShade = 500,
   opacity: number = 1,
   key: "color" | "backgroundColor" | "shadowColor" | "borderColor" = "color" 
 ) {
-  if (typeof s.colors[value] === "object") {
-    if (value.endsWith("Opacity")) {
-      const func = s.colors[value][shade] as (opacity: number) => string;
-      return {
-        [key]: func(opacity),
-      };
-    }
-    return {
-      [key]: s.colors[value][shade],
-    };
-  }
   return {
-    [key]: s.colors[value],
+    [key]: handleColor(value, shade, opacity),
   };
 }
+

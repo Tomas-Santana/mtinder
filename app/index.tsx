@@ -35,6 +35,9 @@ export default function Login() {
         <Text style={[mt.color("white")]}>Conecta con personas!</Text>
       </View>
       <LoginForm />
+      <View
+        style={[mt.h(10), mt.w(10), mt.glow()]}
+      ></View>
       <DropDown
         data={options}
         onChange={console.log}
