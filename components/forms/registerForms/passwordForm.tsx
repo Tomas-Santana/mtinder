@@ -68,12 +68,14 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
         control={form.control}
         label="Contraseña"
         error={form.formState.errors.password}
+        type="password"
       />
       <FormTextInput
         name="confirmPassword"
         control={form.control}
         label="Confirmar contraseña"
         error={form.formState.errors.confirmPassword}
+        type="password"
       />
       <Animated.View layout={LinearTransition}>
         <Button
