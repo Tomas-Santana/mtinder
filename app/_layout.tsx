@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaView, StatusBar, useWindowDimensions } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const queryClient = new QueryClient()
 
@@ -34,19 +35,21 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={DarkTheme}>
-        <StatusBar barStyle="dark-content" backgroundColor="#191919" />
-          <Stack screenOptions={{
-            headerShown: false,
-            animation: "default",
-            contentStyle: {
-              backgroundColor: "#191919", //change to transparent when we have the bg ready
-              height: adjustedHeight
-            }
-          }}
-          >
-          </Stack>
-      </ThemeProvider>
+      <GestureHandlerRootView>
+        <ThemeProvider value={DarkTheme}>
+          <StatusBar barStyle="dark-content" backgroundColor="#191919" />
+            <Stack screenOptions={{
+              headerShown: false,
+              animation: "default",
+              contentStyle: {
+                backgroundColor: "#191919", //change to transparent when we have the bg ready
+                height: adjustedHeight
+              }
+            }}
+            >
+            </Stack>
+        </ThemeProvider>
+      </GestureHandlerRootView>
     </QueryClientProvider>
       
   );
