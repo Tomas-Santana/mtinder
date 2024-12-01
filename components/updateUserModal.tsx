@@ -1,4 +1,4 @@
-import { Modal, View } from "react-native";
+import { Modal, View, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import UserForm from "./forms/updateUserForm";
 import mt from "@/style/mtWind";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -21,11 +21,16 @@ export function UpdateModal(){
         <Text style={[mt.color("white")]}>Editar Perfil</Text>
       </Button>
       <Modal visible={visible} transparent={true} animationType="fade">
-        <View style={[mt.flex1, mt.justify("center"), mt.items("center") ]}>
-          <View style={[mt.position("absolute"), mt.p(4), mt.w("full"), mt.maxW(96)]}>
-            <UserForm onClose={close} />
+        <TouchableWithoutFeedback onPress={close}>
+          <View style={[mt.flex1, mt.justify("center"), mt.items("center") ]}>
+            <View style={[mt.position("absolute"), mt.p(4), mt.maxW(96), mt.border(2), mt.borderColor("white"), mt.glow("sm", "white")]}>
+              <TouchableOpacity onPress={close} style={[mt.position("absolute"), mt.top(5), mt.right(5), mt.glow("sm", "red")]}>
+                <MaterialCommunityIcons name="close" color="red" size={24}/>
+              </TouchableOpacity>
+              <UserForm onClose={close} />
+            </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   )

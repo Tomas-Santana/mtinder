@@ -40,14 +40,14 @@ export default function UserForm({ onClose }: UserFormProps) {
 
   return (
     <Animated.View style={[mt.flexCol, mt.gap(4), mt.p(4), mt.w("full")]} layout={LinearTransition}>
-      <Text size="lg" weight="bold" style={[mt.align("center")]}>
+      <Text size="lg" style={[mt.align("center"), mt.color("white")]}>
         Actualiza tus datos
       </Text>
       <FormTextInput 
         name="firstName"
         control={form.control}
         placeholder="John"
-        label="nombre"
+        label="Nombre"
         error={form.formState.errors.firstName}
       />
       <FormTextInput 
