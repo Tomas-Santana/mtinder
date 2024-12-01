@@ -48,9 +48,8 @@ export default function SendResetForm() {
   });
 
   const onSubmit = (data: z.infer<typeof sendResetFormSchema>) => {
-    // SendResetMutation.mutate(data)
+    SendResetMutation.mutate(data)
     console.log("Data enviada", data);
-    router.push("/auth/changePasswordPage");
   };
 
   return (

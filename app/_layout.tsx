@@ -2,11 +2,11 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { SafeAreaView, StatusBar, useWindowDimensions } from 'react-native';
 
 const queryClient = new QueryClient()
 
@@ -18,6 +18,9 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     "TiltNeon-Regular": require('../assets/fonts/TiltNeon-Regular.ttf'),
   });
+
+  const { height, width } = useWindowDimensions();
+  const adjustedHeight = height + 30;
 
   useEffect(() => {
     if (loaded) {
@@ -32,15 +35,17 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={DarkTheme}>
-        <Stack screenOptions={{
-          headerShown: false,
-          animation: "default",
-          contentStyle: {
-            backgroundColor: "#191919" //change to transparent when we have the bg ready
-          }
-        }}
-        >
-        </Stack>
+        <StatusBar barStyle="dark-content" backgroundColor="#191919" />
+          <Stack screenOptions={{
+            headerShown: false,
+            animation: "default",
+            contentStyle: {
+              backgroundColor: "#191919", //change to transparent when we have the bg ready
+              height: adjustedHeight
+            }
+          }}
+          >
+          </Stack>
       </ThemeProvider>
     </QueryClientProvider>
       

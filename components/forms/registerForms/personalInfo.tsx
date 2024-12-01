@@ -22,11 +22,11 @@ interface InfoFormProps {
   fullForm: UseFormReturn<FullSchema>;
 }
 
-const options = [
-  { label: "Masculino", value: "male" },
-  { label: "Femenino", value: "female" },
-  { label: "Otro", value: "other" },
-];
+// const options = [
+//   { label: "Masculino", value: "male" },
+//   { label: "Femenino", value: "female" },
+//   { label: "Otro", value: "other" },
+// ];
 
 export function InfoForm({ setTab, fullForm }: InfoFormProps){
 
@@ -72,7 +72,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
   });
 
   const onSubmit = (data: InfoSchema) => {
-    // verifyEmailMutation.mutate(data);
+    verifyEmailMutation.mutate(data);
     setTab(1)
   }
 
@@ -106,8 +106,8 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
         />
       </Animated.View>
 
-      <GlowingText color="white" style={[mt.color("white"), mt.pb(0)]}>Genero</GlowingText>
-      <DropDown data={options} placeholder="Selecciona tu genero" onChange={(genre)=> setGenre(genre)}/>
+      {/* <GlowingText color="white" style={[mt.color("white"), mt.pb(0)]}>Genero</GlowingText>
+      <DropDown data={options} placeholder="Selecciona tu genero" onChange={(genre)=> setGenre(genre)}/> */}
       
       <Animated.View layout={LinearTransition}>
         <Button 

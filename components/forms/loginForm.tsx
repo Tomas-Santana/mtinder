@@ -52,9 +52,7 @@ export default function LoginForm(){
   })
 
   const onSubmit = (data: z.infer<typeof loginFormSchema>) => {
-    //loginMutation.mutate(data)
-    console.log("hola tomi")
-    router.push("/main/home")
+    loginMutation.mutate(data)
   }
 
   return (

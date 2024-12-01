@@ -63,12 +63,10 @@ export default function SetPasswordForm({
 
   const onSubmit = (data: z.infer<typeof setPasswordFormSchema>) => {
     fullForm.setValue("password", form.getValues("password"));
-    // SetPasswordMutation.mutate({
-    //   code: fullForm.getValues("code"),
-    //   password: data.password,
-    // })
-    console.log("todo ben");
-    router.push("/");
+    SetPasswordMutation.mutate({
+      code: fullForm.getValues("code"),
+      password: data.password,
+    })
   };
 
   return (
