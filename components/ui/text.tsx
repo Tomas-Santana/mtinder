@@ -1,6 +1,5 @@
 import { Text as MTText, TextProps } from "react-native";
 import mt, { MTTypes } from "@/style/mtWind";
-import { Glow } from "./glow";
 
 interface CustomTextProps extends TextProps {
   weight?: "bold" | "black" | "normal";

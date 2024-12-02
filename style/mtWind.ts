@@ -303,7 +303,7 @@ const mt = {
 
 export default mt;
 
-function handleColor (
+export function handleColor (
   value: keyof typeof s.colors,
   shade: ColorShade = 500,
   opacity: number = 1,

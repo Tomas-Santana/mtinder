@@ -16,7 +16,6 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     "TiltNeon-Regular": require('../assets/fonts/TiltNeon-Regular.ttf'),
   });
 
@@ -40,7 +39,7 @@ export default function RootLayout() {
           <StatusBar barStyle="dark-content" backgroundColor="#191919" />
             <Stack screenOptions={{
               headerShown: false,
-              animation: "default",
+              animation: "slide_from_right",
               contentStyle: {
                 backgroundColor: "#191919", //change to transparent when we have the bg ready
                 height: adjustedHeight

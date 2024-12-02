@@ -5,6 +5,7 @@ export const UserSchema = z.object({
     email: z.string(),
     firstName: z.string(),
     lastName: z.string(),
+    profileReady: z.boolean().nullish(),
 });
 
 

@@ -1,15 +1,18 @@
-import { Animated } from "react-native";
+import { Animated, StyleProp, ViewStyle } from "react-native";
 import React, { useEffect, useRef } from "react";
-import mt from "@/style/mtWind";
+import mt, {MTTypes, handleColor} from "@/style/mtWind";
+import s from "@/style/styleValues";
 
 interface GlowProps {
-  children: React.ReactNode
-  color?: string
-  glowing?: boolean
-  isRounded?: boolean
+  children: React.ReactNode;
+  color?: string;
+  mtColor?: MTTypes["Color"];
+  glowing?: boolean;
+  isRounded?: boolean;
+  viewStyles?: StyleProp<ViewStyle>;
 }
 
-export function Glow({ children, color, glowing }: GlowProps){
+export function Glow({ children, color, glowing }: GlowProps) {
   const glow = useRef(new Animated.Value(0.6)).current;
 
   useEffect(() => {
@@ -41,14 +44,18 @@ export function Glow({ children, color, glowing }: GlowProps){
   }, [glow]);
 
   return (
-    <Animated.View style={glowing && { boxShadow: `0 0 5 4 ${color}`, opacity: glow }}>
+    <Animated.View
+      style={glowing && { boxShadow: `0 0 5 4 ${color}`, opacity: glow }}
+    >
       {children}
     </Animated.View>
-  )
+  );
 }
 
-export function NeonGlow({ children, color }: GlowProps) {
-  const neonLight = useRef(new Animated.Value(1))
+export function NeonGlow({ children, color, mtColor, viewStyles }: GlowProps) {
+  const neonLight = useRef(new Animated.Value(1));
+
+  const glowColor = mtColor ? handleColor(mtColor) : color;
 
   useEffect(() => {
     Animated.loop(
@@ -70,13 +77,18 @@ export function NeonGlow({ children, color }: GlowProps) {
         }),
       ]),
       { iterations: -1 }
-    ).start()
-  }, [neonLight])
+    ).start();
+  }, [neonLight]);
 
   return (
-    <Animated.View style={[{ boxShadow: `0 0 5 4 ${color}`, opacity: neonLight.current }, mt.shadowRadius("base")]}>
+    <Animated.View
+      style={[
+        { boxShadow: `0 0 5 4 ${glowColor}`, opacity: neonLight.current },
+        mt.shadowRadius("base"),
+        viewStyles,
+      ]}
+    >
       {children}
     </Animated.View>
-  )
-
+  );
 }

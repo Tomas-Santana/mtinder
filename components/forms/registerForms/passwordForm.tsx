@@ -40,7 +40,7 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
       fullForm.reset();
       form.reset();
       setTab(0);
-      router.push("/main/home");
+      router.push("/main/completeProfile");
     },
   });
 
