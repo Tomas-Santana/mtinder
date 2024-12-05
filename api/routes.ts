@@ -1,5 +1,6 @@
 const server = process.env.EXPO_PUBLIC_SERVER || "http://localhost:8080";
 export const resourceURL = server + "/resources"
+export const uploadthingUrl = server + "/upload"
 export const apiRoutes = {
   login: () => `${server}/auth/login`,
   checkEmail: () => `${server}/auth/check-email`,

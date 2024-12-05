@@ -8,5 +8,5 @@ export const uploadImagesResponse = z.object({
 export type UploadImagesResponse = z.infer<typeof uploadImagesResponse>;
 
 export interface UploadImagesRequest {
-  imagesBase64: string[];
+  images: File[];
 }

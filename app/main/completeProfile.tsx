@@ -3,7 +3,7 @@ import { Text } from "@/components/ui/text";
 import mt from "@/style/mtWind";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useEffect } from "react";
 import PhotosController from "@/api/controllers/PhotosController";
 import { useMutation } from "@tanstack/react-query";
 import Animated, {
@@ -12,11 +12,14 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 import { resourceURL } from "@/api/routes";
+import FirebaseUploadController from "@/api/controllers/UploadController";
+import { userAtom } from "@/utils/atoms/userAtom";
+import { useAtomValue } from "jotai";
 
-const imagesBase64: string[] = [];
 
 export default function CompleteProfile() {
-  const [images, setImages] = React.useState<string[] | null>(null);
+  const [imageUris, setImageUris] = React.useState<string[]>([]);
+  const user = useAtomValue(userAtom);
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -29,20 +32,27 @@ export default function CompleteProfile() {
     });
 
     if (!result.canceled) {
-      setImages(result.assets.map((image) => image.uri));
-      result.assets.forEach((image) => {
-        imagesBase64.push(image.base64!);
-      });
+      setImageUris(result.assets.map((asset) => asset.uri));
+      result.assets.map((as) => console.log(
+        base64ToFile(as.base64!, as.uri, "image/jpeg").name
+      ));
     }
   };
 
   const uploadMutation = useMutation({
-    mutationFn: PhotosController.uploadImages,
+    mutationFn: (files: string[]) => {
+      return FirebaseUploadController.uploadProfilePictures({
+        uris: files,
+        userId: user?._id!,
+      });
+    },
     onError: (error) => {
       console.log(error.message);
     },
     onSuccess: (data) => {
-      console.log("Photos uploaded", data.imageUrls?.map(url => (resourceURL + "/" + url)));
+      data.forEach((file) => {
+        console.log(file.downloadUrl);
+      });
     },
   });
 
@@ -59,21 +69,23 @@ export default function CompleteProfile() {
           style={[mt.flexRow, mt.flexWrap, mt.w("full"), mt.h(96), mt.gap(2)]}
           layout={LinearTransition}
         >
-          {images &&
-            images.map((image, index) => (
-              <ImagePreview key={index} image={image} setImages={setImages} />
+          {imageUris &&
+            imageUris.map((image, index) => (
+              <ImagePreview
+                key={index}
+                image={image}
+                setImages={setImageUris}
+              />
             ))}
         </Animated.View>
 
         <Button
           onPress={() => {
-            uploadMutation.mutate({ imagesBase64 });
+            uploadMutation.mutate(imageUris);
           }}
-          disabled={uploadMutation.isPending}
+          disabled={uploadMutation.isPending || imageUris.length === 0}
         >
-          <Text>
-            {uploadMutation.isPending ? "loading" : "upload"}
-          </Text>
+          <Text>{uploadMutation.isPending ? "loading" : "upload"}</Text>
         </Button>
       </View>
     </SafeAreaView>
@@ -85,7 +97,7 @@ export function ImagePreview({
   setImages,
 }: {
   image: string;
-  setImages: React.Dispatch<React.SetStateAction<string[] | null>>;
+  setImages: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   // image with a little button that allow deletion
   return (
@@ -111,17 +123,31 @@ export function ImagePreview({
           mt.right(2),
           mt.p(2),
           mt.z(1),
-          mt.backgroundColor("red")
+          mt.backgroundColor("red"),
         ]}
         variant="danger"
-        onPress={() =>
-          setImages((prev) =>
-            prev ? prev.filter((prevImage) => image != prevImage) : null
-          )
-        }
+        onPress={() => {
+          setImages((prev) => prev.filter((prevImage) => image != prevImage));
+        }}
       >
         <Text>✂</Text>
       </Button>
     </Animated.View>
   );
+}
+
+function base64ToFile(
+  base64: string,
+  filename: string,
+  mimeType: string
+): File {
+  const byteString = atob(base64);
+  // log the first 100 characters of the byteString to see if it's correct
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  console.log(ia.subarray(0, 100));
+  return new File([ia], filename, { type: mimeType });
 }
