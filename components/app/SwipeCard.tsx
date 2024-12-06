@@ -1,76 +1,126 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Animated, PanResponder } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Animated,
+  PanResponder,
+} from 'react-native';
 
+// Obtener el ancho y alto de la pantalla
 const { width, height } = Dimensions.get('window');
-const SWIPE_THRESHOLD = 120;
 
-const SwipeCard = () => {
-  const [cards, setCards] = useState([
-    { id: 1, text: 'Card 1' },
-    { id: 2, text: 'Card 2' },
-    { id: 3, text: 'Card 3' },
-  ]);
+// Definir el tipo para las cartas
+interface Card {
+  id: number;
+  name: string;
+}
 
-  const swipe = useRef(new Animated.ValueXY()).current;
+interface SwipeProps {
+  onRightSwipe: () => void;
+  onLeftSwipe: () => void;
+  cardsData: Card[];
+}
 
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, { dx, dy }) => {
-      swipe.setValue({ x: dx, y: dy });
-    },
-    onPanResponderRelease: (_, { dx, dy }) => {
-      const direction = Math.sign(dx);
-      const isActionActive = Math.abs(dx) > SWIPE_THRESHOLD;
+export default function SwipeCard({ onRightSwipe, onLeftSwipe, cardsData }: SwipeProps){
 
-      if (isActionActive) {
-        Animated.timing(swipe, {
-          duration: 200,
-          toValue: {
-            x: direction * width,
-            y: dy,
-          },
-          useNativeDriver: true,
-        }).start(() => {
-          swipe.setValue({ x: 0, y: 0 });
-          setCards((prevCards) => prevCards.slice(1));
-        });
-      } else {
-        Animated.spring(swipe, {
-          toValue: { x: 0, y: 0 },
-          useNativeDriver: true,
-          friction: 5,
-        }).start();
-      }
-    },
-  });
+  const [cards, setCards] = useState<Card[]>(cardsData);
 
-  const rotate = swipe.x.interpolate({
-    inputRange: [-width * 1.5, 0, width * 1.5],
-    outputRange: ['-30deg', '0deg', '30deg'],
-  });
+  const animatedCards = cards.map(() => ({
+    pan: new Animated.ValueXY(),
+    rotate: new Animated.Value(0).interpolate({
+      inputRange: [-width / 2, 0, width / 2],
+      outputRange: ['-20deg', '0deg', '20deg'],
+      extrapolate: 'clamp',
+    }),
+  }));
 
-  const animatedCardStyle = {
-    transform: [
-      { translateX: swipe.x },
-      { translateY: swipe.y },
-      { rotate },
-    ],
+  const handlePanResponderMove = (event: any, gestureState: any, index: number): void => {
+    animatedCards[index].pan.setValue({
+      x: gestureState.dx,
+      y: gestureState.dy,
+    });
   };
+
+  const handlePanResponderRelease = (event: any, gestureState: any, index: number): void => {
+    if (gestureState.dx > 120) {
+      swipeCard('right', index);
+    } else if (gestureState.dx < -120) {
+      swipeCard('left', index);
+    } else {
+      resetCardPosition(index);
+    }
+  };
+
+  const swipeCard = (direction: 'right' | 'left', index: number): void => {
+    Animated.timing(animatedCards[index].pan, {
+      toValue: { x: direction === 'right' ? width : -width, y: 0 },
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      removeCard();
+      onSwipe(direction);
+    });
+  };
+
+  const onSwipe = (direction: 'right' | 'left'): void => {
+    if (direction === 'right') {
+      onRightSwipe()
+    } else if (direction === 'left') {
+      onLeftSwipe();
+    }
+  };
+
+  const removeCard = (): void => {
+    const newCards = [...cards];
+    newCards.shift(); 
+    setCards(newCards);
+  };
+
+  // Resetear la posición de la carta al centro
+  const resetCardPosition = (index: number): void => {
+    Animated.spring(animatedCards[index].pan, {
+      toValue: { x: 0, y: 0 },
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const panResponder = (index: number) =>
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (event: any, gestureState: any) =>
+        handlePanResponderMove(event, gestureState, index),
+      onPanResponderRelease: (event: any, gestureState: any) =>
+        handlePanResponderRelease(event, gestureState, index),
+    });
 
   return (
     <View style={styles.container}>
       {cards.map((card, index) => {
-        const isFirst = index === 0;
-        const panHandlers = isFirst ? panResponder.panHandlers : {};
-        const cardStyle = isFirst ? animatedCardStyle : {};
+        const isTopCard = index === 0;
 
         return (
           <Animated.View
             key={card.id}
-            style={[styles.card, cardStyle, { zIndex: cards.length - index, top: 10 * index }]}
-            {...panHandlers}
+            {...(isTopCard ? panResponder(index).panHandlers : {})}
+            style={[
+              styles.card,
+              {
+                transform: [
+                  { translateX: animatedCards[index].pan.x },
+                  { translateY: animatedCards[index].pan.y },
+                  { rotate: animatedCards[index].rotate },
+                ],
+                zIndex: cards.length - index,
+                top: 10 * index, 
+                opacity: isTopCard ? 1 : 0.8, 
+              },
+            ]}
           >
-            <Text style={styles.cardText}>{card.text}</Text>
+            <View style={styles.cardContent}>
+              <Text style={styles.cardText}>{card.name}</Text>
+            </View>
           </Animated.View>
         );
       })}
@@ -83,25 +133,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f2f2f2',
   },
   card: {
-    position: 'absolute',
     width: width - 40,
-    height: 300,
+    height: height / 2,
     backgroundColor: 'white',
     borderRadius: 10,
+    elevation: 5,
+    position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
+  },
+  cardContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cardText: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#333',
   },
 });
-
-export default SwipeCard;
