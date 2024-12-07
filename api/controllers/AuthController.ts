@@ -22,10 +22,11 @@ import {
   VerifyCodeResponse,
   VerifyCodeResponseSchema,
 } from "@/types/api/PasswordReset";
-import { superFetch, SuperFetchError } from "./superFetch";
+import { superFetch, SuperFetchError } from "./superfetch/superFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDefaultStore } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
+import { meResponse, MeResponse } from "@/types/api/Me";
 
 const store = getDefaultStore();
 store.sub(userAtom, () => {
@@ -138,7 +139,7 @@ export default class AuthController {
   }
 
   static async resetPassword(payload: PasswordResetRequest) {
-    console.log(payload)
+    console.log(payload);
     try {
       const res = await superFetch<
         PasswordResetRequest,
@@ -187,5 +188,26 @@ export default class AuthController {
   static async logout() {
     await AsyncStorage.removeItem("token");
     store.set(userAtom, null);
+  }
+
+  static async me() {
+    try {
+      const res = await superFetch<{}, MeResponse, "me">({
+        options: {
+          method: "GET",
+          includeCredentials: true,
+        },
+        route: "me",
+        routeParams: [],
+        responseSchema: meResponse,
+      });
+
+      store.set(userAtom, res.me);
+
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw new Error("No se pudo obtener el usuario");
+    }
   }
 }

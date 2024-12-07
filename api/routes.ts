@@ -3,6 +3,7 @@ export const resourceURL = server + "/resources"
 export const uploadthingUrl = server + "/upload"
 export const apiRoutes = {
   login: () => `${server}/auth/login`,
+  me: () => `${server}/user/me`,
   checkEmail: () => `${server}/auth/check-email`,
   register: () => `${server}/auth/register`,
   sendReset: () => `${server}/auth/send-reset-email`,
@@ -10,6 +11,7 @@ export const apiRoutes = {
   verifyCode: () => `${server}/auth/verify-reset-code`,
   user: () => `${server}/user`,
   "user/[id]": (id: string) => `${server}/user/${id}`,
+  "user/all": () => `${server}/user/all`,
   uploadImages: () => `${server}/photos/upload-images`,
 };
 

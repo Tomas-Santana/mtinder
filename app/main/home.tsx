@@ -5,7 +5,8 @@ import Navbar from "@/components/app/navbar";
 import SwipeCard from "@/components/app/SwipeCard";
 import { userAtom } from "@/utils/atoms/userAtom";
 import { useAtomValue } from "jotai";
-import { Redirect } from "expo-router";
+import { Link, Redirect } from "expo-router";
+import { useMe } from "@/hooks/useMe";
 
 const data = [
   { id: 1, name: 'Juan' },
@@ -17,9 +18,17 @@ const data = [
 export default function SendReset(){
   const user = useAtomValue(userAtom);
 
-  // if (!user || !user.profileReady) {
-  //   return <Redirect href={"/main/completeProfile"} />
-  // }
+  const meQuery = useMe();
+
+  if(!user){
+    return <Redirect href="/" />
+  }
+
+  if (!meQuery.data?.me.profileReady) {
+    return <Redirect href="/main/completeProfile" />
+  }
+
+
 
   const liked = () => {
     console.log("Liked"); 
@@ -33,6 +42,13 @@ export default function SendReset(){
     <View style={[mt.flex1, mt.justify("center"), mt.items("center")]}>
       <Navbar />
       <SwipeCard onLeftSwipe={disliked} onRightSwipe={liked} cardsData={data}/>
+      <Link
+        href="/main/completeProfile"
+      >
+        <Text
+          style={[mt.color("white")]}
+        >Tommy a complete profile</Text>
+      </Link>
     </View>
   )
 }

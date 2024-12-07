@@ -1,24 +1,30 @@
-import { SuperFetchError, superFetch } from "./superFetch";
+import { SuperFetchError, superFetch } from "./superfetch/superFetch";
 import {
-  UploadImagesRequest,
-  uploadImagesResponse,
-  UploadImagesResponse
+  CompleteProfileRequest,
+  completeProfileResponse,
+  CompleteProfileResponse,
 } from "@/types/api/UploadImages";
 
 export default class PhotosController {
   static async uploadImages(
-    payload: UploadImagesRequest
-  ): Promise<UploadImagesResponse> {
+    request: CompleteProfileRequest
+  ): Promise<CompleteProfileResponse> {
     try {
-      const res = await superFetch<UploadImagesRequest, UploadImagesResponse>({
+      const res = await superFetch<
+        CompleteProfileRequest,
+        CompleteProfileResponse
+      >({
         options: {
-          method: "POST",
           includeCredentials: true,
+          method: "POST",
         },
         route: "uploadImages",
-        responseSchema: uploadImagesResponse,
-        payload,
+        responseSchema: completeProfileResponse,
+        payload: request,
       });
+      if (!res) {
+        throw new Error("error uploading images");
+      }
       return res;
     } catch (error) {
       if (error instanceof SuperFetchError) {
@@ -26,6 +32,7 @@ export default class PhotosController {
           throw new Error("Invalid image data");
         }
       }
+      console.log(error);
       throw new Error("error uploading images");
     }
   }

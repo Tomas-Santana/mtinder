@@ -6,6 +6,8 @@ export const UserSchema = z.object({
     firstName: z.string(),
     lastName: z.string(),
     profileReady: z.boolean().nullish(),
+    imageUrls: z.array(z.string()).nullish(),
+    favoriteGenres: z.array(z.string()).nullish(),
 });
 
 

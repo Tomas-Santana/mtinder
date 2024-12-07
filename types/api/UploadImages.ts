@@ -1,12 +1,14 @@
 import z from "zod";
+import type { FileUpload } from "@/types/api/FileUpload";
 
-export const uploadImagesResponse = z.object({
-  imageUrls: z.array(z.string()).nullable(),
+export const completeProfileResponse = z.object({
+  imageUrls: z.array(z.string()).nullish(),
   error: z.string().nullish(),
 });
 
-export type UploadImagesResponse = z.infer<typeof uploadImagesResponse>;
+export type CompleteProfileResponse = z.infer<typeof completeProfileResponse>;
 
-export interface UploadImagesRequest {
-  images: File[];
+export interface CompleteProfileRequest {
+  images: FileUpload[];
+  genres: string[];
 }
