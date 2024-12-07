@@ -1,3 +1,4 @@
+import { User } from '@/types/User';
 import React, { useState } from 'react';
 import {
   View,
@@ -12,14 +13,13 @@ import {
 const { width, height } = Dimensions.get('window');
 
 // Definir el tipo para las cartas
-interface Card {
-  id: number;
-  name: string;
+export interface Card {
+  user: User
 }
 
 interface SwipeProps {
-  onRightSwipe: () => void;
-  onLeftSwipe: () => void;
+  onRightSwipe: (card: Card) => void;
+  onLeftSwipe: (card: Card) => void;
   cardsData: Card[];
 }
 
@@ -59,18 +59,16 @@ export default function SwipeCard({ onRightSwipe, onLeftSwipe, cardsData }: Swip
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
+      const card = cards[index];
       removeCard();
-      onSwipe(direction);
+      if (direction === 'right') {
+        onRightSwipe(card);
+      } else if (direction === 'left') {
+        onLeftSwipe(card);
+      }
     });
   };
 
-  const onSwipe = (direction: 'right' | 'left'): void => {
-    if (direction === 'right') {
-      onRightSwipe()
-    } else if (direction === 'left') {
-      onLeftSwipe();
-    }
-  };
 
   const removeCard = (): void => {
     const newCards = [...cards];
@@ -102,7 +100,7 @@ export default function SwipeCard({ onRightSwipe, onLeftSwipe, cardsData }: Swip
 
         return (
           <Animated.View
-            key={card.id}
+            key={card.user._id}
             {...(isTopCard ? panResponder(index).panHandlers : {})}
             style={[
               styles.card,
@@ -119,7 +117,7 @@ export default function SwipeCard({ onRightSwipe, onLeftSwipe, cardsData }: Swip
             ]}
           >
             <View style={styles.cardContent}>
-              <Text style={styles.cardText}>{card.name}</Text>
+              <Text style={styles.cardText}>{card.user.firstName}</Text>
             </View>
           </Animated.View>
         );

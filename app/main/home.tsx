@@ -5,7 +5,11 @@ import Navbar from "@/components/app/navbar";
 import SwipeCard from "@/components/app/SwipeCard";
 import { userAtom } from "@/utils/atoms/userAtom";
 import { useAtomValue } from "jotai";
-import { Redirect } from "expo-router";
+import { Redirect, router } from "expo-router";
+import { useState } from "react";
+import { Card } from "@/components/app/SwipeCard";
+import { useQuery } from "@tanstack/react-query";
+import UserController from "@/api/controllers/UserController";
 
 const data = [
   { id: 1, name: 'Juan' },
@@ -14,25 +18,41 @@ const data = [
   { id: 4, name: 'Ana' },
 ]
 
-export default function SendReset(){
+export default function Home(){
   const user = useAtomValue(userAtom);
+  const [currentCard, setCurrentCard] = useState<Card>()
 
   // if (!user || !user.profileReady) {
   //   return <Redirect href={"/main/completeProfile"} />
   // }
 
-  const liked = () => {
-    console.log("Liked"); 
+  const userQuery = useQuery({
+    queryKey: ['users', user?._id],
+    queryFn: () => user?._id ? UserController.getUsers(user._id) : Promise.reject("User ID is undefined")
+  })
+
+  const liked = (card: Card) => {
+    console.log("Liked", card);
+    setCurrentCard(card)
+    router.push({
+      pathname: "/chat/",
+      params: {
+        user: JSON.stringify(card.user)
+      }
+    }) 
   }
 
-  const disliked = () => {
-    console.log("Disliked");
+  const disliked = (card: Card) => {
+    console.log("Disliked", card);
+    setCurrentCard(card)
   }
 
   return(
     <View style={[mt.flex1, mt.justify("center"), mt.items("center")]}>
       <Navbar />
-      <SwipeCard onLeftSwipe={disliked} onRightSwipe={liked} cardsData={data}/>
+      {userQuery.data && <SwipeCard onLeftSwipe={disliked} onRightSwipe={liked} cardsData={userQuery.data.map(user => ({ user }))}/> }
+      
+      {currentCard && <Text>{currentCard.user.firstName}</Text>}
     </View>
   )
 }

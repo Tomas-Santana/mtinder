@@ -26,6 +26,7 @@ import { superFetch, SuperFetchError } from "./superFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDefaultStore } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
+import socket from "./SocketController";
 
 const store = getDefaultStore();
 store.sub(userAtom, () => {
@@ -187,5 +188,6 @@ export default class AuthController {
   static async logout() {
     await AsyncStorage.removeItem("token");
     store.set(userAtom, null);
+    socket.disconnect();
   }
 }
