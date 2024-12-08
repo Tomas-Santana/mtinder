@@ -13,13 +13,13 @@ export default class UserController {
 
   static async getUsers(userId: string): Promise<getUserResponse> {
     try {
-      const res = await superFetch<null, getUserResponse, "user/[id]">({
+      const res = await superFetch<null, getUserResponse, "user/all">({
         options: {
           method: "GET",
           includeCredentials: true,
         },
-        route: "user/[id]",
-        routeParams: [userId],
+        route: "user/all",
+        routeParams: [],
         responseSchema: getUserSchema,
       });
       return res;
