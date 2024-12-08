@@ -1,7 +1,7 @@
 import { User } from "@/types/User";
 import { superFetch, SuperFetchError } from "./superfetch/superFetch";
 import {
-  UserDeleteRequest,
+  getUserResponse, getUserSchema, UserDeleteRequest,
   UserDeleteResponse,
   UserDeleteSchema,
   UserUpdateRequest,
@@ -10,6 +10,29 @@ import {
 } from "@/types/api/UserRequest";
 
 export default class UserController {
+
+  static async getUsers(userId: string): Promise<getUserResponse> {
+    try {
+      const res = await superFetch<null, getUserResponse, "user/[id]">({
+        options: {
+          method: "GET",
+          includeCredentials: true,
+        },
+        route: "user/[id]",
+        routeParams: [userId],
+        responseSchema: getUserSchema,
+      });
+      return res;
+    } catch (error) {
+      if (error instanceof SuperFetchError) {
+        if (error.code === 404) {
+          throw new Error("User not found");
+        }
+      }
+      console.log(error)
+      throw new Error("error fetching user")
+    }
+  }
   static async UpdateUser(
     payload: UserUpdateRequest
   ): Promise<UserUpdateResponse> {

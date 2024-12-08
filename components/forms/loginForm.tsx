@@ -11,6 +11,7 @@ import mt from "@/style/mtWind";
 import { Link, useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "../ui/button";
+import socket from "@/api/controllers/SocketController";
 // import { Button } from "../ui/button";
 
 const loginFormSchema = z.object({
@@ -46,6 +47,7 @@ export default function LoginForm(){
     },
     onSuccess: (data) => {
       console.log("hola humano", data)
+      socket.connect()
       form.reset()
       router.push("/main/home")
     }
