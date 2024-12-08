@@ -11,7 +11,7 @@ import {
 
 export default class UserController {
 
-  static async getUsers(userId: string): Promise<getUserResponse> {
+  static async getUsers(): Promise<getUserResponse> {
     try {
       const res = await superFetch<null, getUserResponse, "user/all">({
         options: {

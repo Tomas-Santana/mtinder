@@ -13,52 +13,58 @@ import UserController from "@/api/controllers/UserController";
 import { useMe } from "@/hooks/useMe";
 
 const data = [
-  { id: 1, name: 'Juan' },
-  { id: 2, name: 'Maria' },
-  { id: 3, name: 'Carlos' },
-  { id: 4, name: 'Ana' },
-]
+  { id: 1, name: "Juan" },
+  { id: 2, name: "Maria" },
+  { id: 3, name: "Carlos" },
+  { id: 4, name: "Ana" },
+];
 
-export default function Home(){
+export default function Home() {
   const user = useAtomValue(userAtom);
-  const [currentCard, setCurrentCard] = useState<Card>()
+  const [currentCard, setCurrentCard] = useState<Card>();
 
   const meQuery = useMe();
 
-  if(!user){
-    return <Redirect href="/" />
+  if (!user) {
+    return <Redirect href="/" />;
   }
 
   if (!meQuery.data?.me.profileReady) {
-    return <Redirect href="/main/completeProfile" />
+    return <Redirect href="/main/completeProfile" />;
   }
   const userQuery = useQuery({
-    queryKey: ['users', user?._id],
-    queryFn: () => user?._id ? UserController.getUsers(user._id) : Promise.reject("User ID is undefined")
-  })
+    queryKey: ["users"],
+    queryFn: () => UserController.getUsers(),
+  });
 
   const liked = (card: Card) => {
     console.log("Liked", card);
-    setCurrentCard(card)
+    setCurrentCard(card);
     router.push({
       pathname: "/chat/",
       params: {
-        user: JSON.stringify(card.user)
-      }
-    }) 
-  }
+        user: JSON.stringify(card.user),
+      },
+    });
+  };
 
   const disliked = (card: Card) => {
     console.log("Disliked", card);
-    setCurrentCard(card)
-  }
+    setCurrentCard(card);
+  };
 
-  return(
+  return (
     <View style={[mt.flex1, mt.justify("center"), mt.items("center")]}>
       <Navbar />
-      {userQuery.data && <SwipeCard onLeftSwipe={disliked} onRightSwipe={liked} cardsData={userQuery.data.map(user => ({ user }))}/> }
-      
+      {userQuery.data && (
+        <SwipeCard
+          onLeftSwipe={disliked}
+          onRightSwipe={liked}
+          cardsData={userQuery.data.map((user) => ({ user }))}
+        />
+      )}
+
       {currentCard && <Text>{currentCard.user.firstName}</Text>}
     </View>
-  )
+  );
 }
