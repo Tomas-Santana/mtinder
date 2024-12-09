@@ -15,4 +15,8 @@ socket.on("disconnect", () => {
   console.log("Disconnected from server")
 })
 
+socket.on("match-request", (data) => {
+  console.log("Match request received", data)
+})
+
 export default socket

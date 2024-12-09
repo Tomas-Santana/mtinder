@@ -11,6 +11,9 @@ import { Card } from "@/components/app/SwipeCard";
 import { useQuery } from "@tanstack/react-query";
 import UserController from "@/api/controllers/UserController";
 import { useChats } from "@/hooks/useChats";
+import { useMutation } from "@tanstack/react-query";
+import MatchController from "@/api/controllers/MatchController";
+import { ToastAndroid } from "react-native";
 
 
 export default function Home() {
@@ -18,6 +21,16 @@ export default function Home() {
   const [currentCard, setCurrentCard] = useState<Card>();
 
   const chatsQuery = useChats();
+
+  const requestMatch = useMutation({
+    mutationFn: MatchController.requestMatch,
+    onError: (error) => {
+      console.log(error.message);
+    },
+    onSuccess: (data) => {
+      ToastAndroid.show(`Match ${data.status}`, ToastAndroid.SHORT);
+    },
+  });
 
 
   if (!user) {
@@ -35,12 +48,7 @@ export default function Home() {
   const liked = (card: Card) => {
     console.log("Liked", card);
     setCurrentCard(card);
-    router.push({
-      pathname: "/chat",
-      params: {
-        user: JSON.stringify(card.user),
-      },
-    });
+    requestMatch.mutate({ userId: card.user._id });
   };
 
   const disliked = (card: Card) => {
