@@ -49,7 +49,10 @@ export const generic = StyleSheet.create({
 type Pixels = keyof typeof s.pixels;
 type NegativePixels = keyof typeof s.negativePixels;
 type WholePixels = Pixels | NegativePixels;
-type AbsolutePixels = Exclude<Pixels, "full" | "half" | "third" | "twoThirds" | "sixty">;
+type AbsolutePixels = Exclude<
+  Pixels,
+  "full" | "half" | "third" | "twoThirds" | "sixty"
+>;
 type Font = keyof typeof s.font;
 type FontWeight = "bold" | "medium" | "light" | "black";
 type FontSize = Exclude<
@@ -65,7 +68,7 @@ export type MTTypes = {
   Font: Font;
   FontWeight: FontWeight;
   FontSize: FontSize;
-  Shade: ColorShade
+  Shade: ColorShade;
 };
 
 const mt = {
@@ -261,15 +264,23 @@ const mt = {
   shadowRadius: (value: keyof typeof s.borderRadius) => ({
     shadowRadius: s.borderRadius[value],
   }),
-  glow: (size: "sm" | "md" | "lg" = "md", color: MTTypes["Color"] = "blue", shade: ColorShade = 500) => ({
+  glow: (
+    size: "sm" | "md" | "lg" = "md",
+    color: MTTypes["Color"] = "blue",
+    shade: ColorShade = 500
+  ) => ({
     boxShadow: s.glow[size](handleColor(color, shade)),
   }),
-  textGlow: (size: "sm" | "md" | "lg" = "md", color: MTTypes["Color"] = "blue", shade: ColorShade = 500) => ({
+  textGlow: (
+    size: "sm" | "md" | "lg" = "md",
+    color: MTTypes["Color"] = "blue",
+    shade: ColorShade = 500
+  ) => ({
     textShadowColor: handleColor(color, shade),
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: s.textGlowRadius[size],
   }),
-  backgroundColor: (
+  bg: (
     value: keyof typeof s.colors,
     shade: ColorShade = 500,
     opacity: number = 1
@@ -303,14 +314,14 @@ const mt = {
 
 export default mt;
 
-export function handleColor (
+export function handleColor(
   value: keyof typeof s.colors,
   shade: ColorShade = 500,
-  opacity: number = 1,
+  opacity: number = 1
 ) {
   if (typeof s.colors[value] === "object") {
     if (value.endsWith("Opacity")) {
-      const func = s.colors[value][shade] as ((opacity: number) => string);
+      const func = s.colors[value][shade] as (opacity: number) => string;
       return func(opacity);
     }
     return s.colors[value][shade] as string;
@@ -322,10 +333,9 @@ function handleColorKey(
   value: keyof typeof s.colors,
   shade: ColorShade = 500,
   opacity: number = 1,
-  key: "color" | "backgroundColor" | "shadowColor" | "borderColor" = "color" 
+  key: "color" | "backgroundColor" | "shadowColor" | "borderColor" = "color"
 ) {
   return {
     [key]: handleColor(value, shade, opacity),
   };
 }
-

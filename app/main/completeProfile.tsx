@@ -1,4 +1,4 @@
-import { View, SafeAreaView, Image, ScrollView } from "react-native";
+import { View, SafeAreaView, Image, ScrollView, Pressable } from "react-native";
 import { Text } from "@/components/ui/text";
 import mt from "@/style/mtWind";
 import * as ImagePicker from "expo-image-picker";
@@ -19,11 +19,15 @@ import { useRouter } from "expo-router";
 import { FileUpload } from "@/types/api/FileUpload";
 import { genres } from "@/constants/genres";
 import { VerticalTabs, Tab } from "@/components/ui/tabs";
+import PagerView from "react-native-pager-view";
+import { ImagePreview } from "@/components/app/CompleteProfile/ImagePreview";
+import { CPushButton } from "@/components/ui/button";
 
 type FileUploadWithUri = FileUpload & { uri: string };
 
 export default function CompleteProfile() {
   const [imagesUris, setImagesUris] = React.useState<FileUploadWithUri[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
   const [selectedGenres, setSelectedGenres] = React.useState<string[]>([]);
   const router = useRouter();
   const user = useAtomValue(userAtom);
@@ -60,7 +64,7 @@ export default function CompleteProfile() {
     mutationFn: (imagesUris: FileUpload[]) => {
       return PhotosController.uploadImages({
         images: imagesUris,
-        genres: [],
+        genres: selectedGenres,
       });
     },
     onError: (error) => {
@@ -96,103 +100,173 @@ export default function CompleteProfile() {
             </GlowingText>
             Let's finish up your profile
           </Text>
-
-          <Text style={[mt.color("white")]} size="lg">
-            Upload your best pics (up to 5)
-          </Text>
         </Animated.View>
-
-          <Button onPress={pickImage}>
-            <Text>Open photos</Text>
-          </Button>
-        <Animated.View
-          style={[mt.flexRow, mt.flexWrap, mt.w("full"), mt.gap(2), mt.flex1]}
-          layout={LinearTransition}
-        >
-          <ScrollView
-            horizontal
-            contentContainerStyle={[
-              mt.gap(4),
-              mt.flexRow,
-              mt.p(2),
-              mt.justify("center"),
-              mt.items("center"),
-              mt.h("full"),
-            ]}
-            snapToInterval={330}
-            snapToAlignment="center"
-            decelerationRate="fast"
-          >
-            {imagesUris &&
-              imagesUris.map((image, index) => (
-                <ImagePreview
-                  key={index}
-                  image={image}
-                  setImages={setImagesUris}
-                />
-              ))}
-          </ScrollView>
-        </Animated.View>
+        <VerticalTabs fill>
+          <Tab name="Images">
+            <ImageTab
+              imagesUris={imagesUris}
+              setImagesUris={setImagesUris}
+              setCurrentImageIndex={setCurrentImageIndex}
+              currentImageIndex={currentImageIndex}
+              pickImage={pickImage}
+            />
+          </Tab>
+          <Tab name="Genres">
+            <GenresTab
+              selectedGenres={selectedGenres}
+              setSelectedGenres={setSelectedGenres}
+            />
+          </Tab>
+        </VerticalTabs>
 
         <Button
           onPress={() => {
             uploadMutation.mutate(imagesUris);
           }}
-          disabled={uploadMutation.isPending || imagesUris.length === 0}
+          disabled={uploadMutation.isPending || imagesUris.length === 0 || selectedGenres.length === 0}
           loading={uploadMutation.isPending}
         >
-          <Text>Save</Text>
+          <Text
+            style={[mt.color("white")]}
+          >Save</Text>
         </Button>
       </Animated.View>
     </SafeAreaView>
   );
 }
 
-export function ImagePreview({
-  image,
-  setImages,
-}: {
-  image: FileUploadWithUri;
-  setImages: React.Dispatch<React.SetStateAction<FileUploadWithUri[]>>;
-}) {
-  // image with a little button that allow deletion
+interface ImageTabProps {
+  imagesUris: FileUploadWithUri[];
+  setImagesUris: React.Dispatch<React.SetStateAction<FileUploadWithUri[]>>;
+  setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
+  currentImageIndex: number;
+  pickImage: () => void;
+}
+
+function ImageTab({
+  imagesUris,
+  setImagesUris,
+  setCurrentImageIndex,
+  currentImageIndex,
+  pickImage,
+}: ImageTabProps) {
   return (
-    <Animated.View
-      entering={FadeIn}
-      exiting={FadeOut}
-      layout={LinearTransition}
-      style={[
-        mt.pxw(320),
-        mt.flex1,
-        mt.position("relative"),
-        mt.items("center"),
-        mt.rounded("md"),
-        mt.justify("center"),
-        // mt.backgroundColor("white"),
-        mt.glow("sm"),
-        mt.p(2),
-        mt.gap(2),
-      ]}
-    >
-      <Image
-        source={{ uri: image.uri }}
+    <Animated.View style={[mt.flexCol, mt.flex1, mt.w("full"), mt.gap(2)]}>
+      <Text style={[mt.color("white")]} size="md">
+        Upload your best pics (up to 5)
+      </Text>
+      <Button onPress={pickImage}>
+        <Text>Open photos</Text>
+      </Button>
+      <PagerView
         style={[
-          { resizeMode: "cover" },
-          mt.pxh(390),
-          mt.pxw(300),
-          mt.rounded("sm"),
+          mt.p(2),
+          mt.justify("center"),
+          mt.items("center"),
+          mt.flex1,
+          mt.w("full"),
+          mt.border(2),
         ]}
-      />
-      <Button
-        variant="danger"
-        onPress={() => {
-          setImages((prev) =>
-            prev.filter((prevImage) => image.uri != prevImage.uri)
-          );
+        initialPage={0}
+        collapsable={false}
+        orientation={"horizontal"}
+        onPageSelected={(event) => {
+          setCurrentImageIndex(event.nativeEvent.position);
         }}
       >
-        <Text>✂</Text>
-      </Button>
+        {imagesUris &&
+          imagesUris.map((image, index) => (
+            <ImagePreview key={index} image={image} setImages={setImagesUris} />
+          ))}
+      </PagerView>
+      {imagesUris.length > 0 && (
+        <Animated.View
+          entering={FadeIn}
+          exiting={FadeOut}
+          style={[
+            mt.flexRow,
+            mt.justify("center"),
+            mt.items("center"),
+            mt.h(4),
+            mt.gap(2),
+          ]}
+        >
+          {imagesUris.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                mt.w(4),
+                mt.h(4),
+                mt.rounded("full"),
+                mt.bg(index === currentImageIndex ? "white" : "gray"),
+              ]}
+            ></View>
+          ))}
+        </Animated.View>
+      )}
     </Animated.View>
+  );
+}
+interface GenresTabProps {
+  selectedGenres: string[];
+  setSelectedGenres: React.Dispatch<React.SetStateAction<string[]>>;
+}
+function GenresTab({ selectedGenres, setSelectedGenres }: GenresTabProps) {
+  function toggleGenre(genre: string): React.SetStateAction<string[]> {
+    return (prev) =>
+      prev.includes(genre)
+        ? prev.filter((prevGenre) => prevGenre !== genre)
+        : prev.length >= 5
+        ? [genre, ...prev.slice(0, -1)]
+        : [...prev, genre];
+  }
+  return (
+    <View
+      style={[
+        mt.flexCol,
+        mt.gap(2),
+        mt.justify("center"),
+        mt.items("center"),
+        mt.flex1,
+        mt.w("full"),
+      ]}
+    >
+      <Text style={[mt.color("white")]} size="md">
+        Choose your favorite genres (up to 10)
+      </Text>
+      <View
+        style={[
+          mt.flexRow,
+          mt.flexWrap,
+          mt.w("full"),
+          mt.flex1,
+          mt.gap(2),
+          mt.items("center"),
+          
+        ]}
+      >
+        {genres.map((genre) => (
+          <CPushButton
+            key={genre}
+            onPress={() => {
+              setSelectedGenres(toggleGenre(genre));
+            }}
+            isPushed={selectedGenres.includes(genre)}
+          >
+            <Text>{genre}</Text>
+          </CPushButton>
+        ))}
+      </View>
+      {/* pressable for clear */}
+      <Pressable
+        onPress={() => {
+          setSelectedGenres([]);
+        }}
+      >
+        <Text
+          style={[mt.color("red")]} 
+        >Clear</Text>
+      </Pressable>
+    </View>
   );
 }

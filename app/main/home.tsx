@@ -6,30 +6,25 @@ import SwipeCard from "@/components/app/SwipeCard";
 import { userAtom } from "@/utils/atoms/userAtom";
 import { useAtomValue } from "jotai";
 import { Link, Redirect, router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/app/SwipeCard";
 import { useQuery } from "@tanstack/react-query";
 import UserController from "@/api/controllers/UserController";
-import { useMe } from "@/hooks/useMe";
+import { useChats } from "@/hooks/useChats";
 
-const data = [
-  { id: 1, name: "Juan" },
-  { id: 2, name: "Maria" },
-  { id: 3, name: "Carlos" },
-  { id: 4, name: "Ana" },
-];
 
 export default function Home() {
   const user = useAtomValue(userAtom);
   const [currentCard, setCurrentCard] = useState<Card>();
 
-  const meQuery = useMe();
+  const chatsQuery = useChats();
+
 
   if (!user) {
     return <Redirect href="/" />;
   }
 
-  if (!meQuery.data?.me.profileReady) {
+  if (!user.profileReady) {
     return <Redirect href="/main/completeProfile" />;
   }
   const userQuery = useQuery({
@@ -41,7 +36,7 @@ export default function Home() {
     console.log("Liked", card);
     setCurrentCard(card);
     router.push({
-      pathname: "/chat/",
+      pathname: "/chat",
       params: {
         user: JSON.stringify(card.user),
       },

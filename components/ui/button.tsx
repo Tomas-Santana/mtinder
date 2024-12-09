@@ -8,10 +8,10 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import s from "@/style/styleValues";
+import s, { ColorShade } from "@/style/styleValues";
 import React, { useState } from "react";
 import { Glow } from "./glow";
-import mt from "@/style/mtWind";
+import mt, { MTTypes } from "@/style/mtWind";
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated";
 
 interface ButtonProps extends TouchableOpacityProps {
@@ -86,8 +86,8 @@ const buttonStyles = (
   variant: ButtonProps["variant"],
   disabled: boolean = false
 ) => {
-  const disabledBg: [string, number?, number?] = ["whiteOpacity", 500, 0.5];
-  let backgroundColor: [string, number?, number?] = disabled
+  const disabledBg: [MTTypes["Color"], ColorShade, number?] = ["whiteOpacity", 500, 0.5];
+  let backgroundColor: [MTTypes["Color"], ColorShade?, number?] = disabled
     ? ["whiteOpacity", 500, 0.5]
     : ["blue"];
   let textColor: string = "white";
@@ -110,11 +110,9 @@ const buttonStyles = (
   const mtSheet = [
     mt.p(2),
     mt.border(2),
-    // @ts-ignore
-    mt.borderColor(backgroundColor[0], 200),
+    mt.borderColor(backgroundColor[0], 200, 1),
     mt.rounded("md"),
-    mt.backgroundColor(
-      // @ts-ignore
+    mt.bg(
       backgroundColor[0],
       backgroundColor[1],
       backgroundColor[2]

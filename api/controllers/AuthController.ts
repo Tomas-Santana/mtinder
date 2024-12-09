@@ -51,6 +51,8 @@ export default class AuthController {
       await AsyncStorage.setItem("token", result.token);
 
       store.set(userAtom, result.user);
+      socket.auth = { token: result.token };
+      socket.connect();
 
       return result;
     } catch (error) {
@@ -108,6 +110,9 @@ export default class AuthController {
       await AsyncStorage.setItem("token", res.token);
 
       store.set(userAtom, res.user);
+
+      socket.auth = { token: res.token };
+      socket.connect();
 
       return res;
     } catch (error) {

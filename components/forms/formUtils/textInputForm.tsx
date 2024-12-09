@@ -58,7 +58,7 @@ export function FormTextInput({
             <Input
               style={[
                 formStyles.input,
-                mt.backgroundColor("gray", 700),
+                mt.bg("gray", 700),
                 mt.h(10),
                 mt.p(2),
                 mt.border(2),

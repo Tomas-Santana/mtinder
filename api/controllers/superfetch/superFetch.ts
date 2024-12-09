@@ -26,13 +26,11 @@ export async function superFetch<
   responseSchema,
   payload,
 }: SuperFetchParams<Request, Response, Route, QueryParams>): Promise<Response> {
-  console.log("superfetch")
   if (routeParams === undefined) {
     routeParams = [] as ApiRouteParams<Route>;
   }
 
   const headers = await getHeaders(options.includeCredentials ?? false, false, options.method);
-  console.log(headers)
 
 
   let realRoute = createRouteWithParams<Route, QueryParams>(
@@ -41,8 +39,7 @@ export async function superFetch<
     queryParams
   );
 
-  console.log("realRoute")
-  console.log(realRoute)
+  console.log("fetching", realRoute);
 
   const response = await fetch(realRoute, {
     method: options.method,

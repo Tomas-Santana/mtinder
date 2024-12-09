@@ -3,7 +3,7 @@ import type { MTTypes } from "@/style/mtWind";
 import { Button, CPushButton } from "./button";
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 import React from "react";
-import { View } from "react-native";
+import { StyleProp, View, ViewStyle } from "react-native";
 import { Text } from "./text";
 
 interface TabProps {
@@ -17,7 +17,7 @@ export function Tab({ children, name, onSelected }: TabProps) {
     <Animated.View
       entering={ZoomIn}
       exiting={ZoomOut}
-      style={[mt.flexCol, mt.justify("center"), mt.w("full")]}
+      style={[mt.flexCol, mt.justify("center"), mt.w("full"), mt.flex1]}
     >
       {children}
     </Animated.View>
@@ -29,12 +29,18 @@ interface TabsProps {
   children: React.ReactElement<TabProps>[];
   activeTab?: number;
   tabHeight?: MTTypes["Pixels"];
+  containerStyle?: StyleProp<ViewStyle>;
+  tabContainerStyle?: StyleProp<ViewStyle>;
+  fill?: boolean;
 }
 
 export function VerticalTabs({
   children,
   activeTab = 0,
   tabHeight,
+  containerStyle,
+  tabContainerStyle,
+  fill
 }: TabsProps) {
   const [tab, setTab] = React.useState(activeTab);
   const tabNames = children.map((child) => {
@@ -54,6 +60,8 @@ export function VerticalTabs({
         mt.justify("center"),
         mt.items("center"),
         mt.w("full"),
+        fill && mt.flex1,
+        containerStyle,
       ]}
     >
       {/* cpushbuttons with tabs */}
@@ -65,7 +73,6 @@ export function VerticalTabs({
             isPushed={tab === index}
             key={index}
             onPress={() => setTab(index)}
-            variant={tab === index ? "primary" : "secondary"}
           >
             <Text>{name}</Text>
           </CPushButton>
@@ -76,11 +83,9 @@ export function VerticalTabs({
 
       <View
         style={[
-          mt.flex1,
+          fill && mt.flex1,
           mt.w("full"),
-          ...(tabHeight ? [mt.h(tabHeight)] : []),
-          mt.justify("center"),
-          mt.items("center"),
+          tabContainerStyle,
         ]}
       >
         {children[tab]}

@@ -13,6 +13,7 @@ export const apiRoutes = {
   "user/[id]": (id: string) => `${server}/user/${id}`,
   "user/all": () => `${server}/user/all`,
   uploadImages: () => `${server}/photos/upload-images`,
+  chat: () => `${server}/chat`,
 };
 
 
