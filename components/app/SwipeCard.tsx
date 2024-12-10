@@ -14,11 +14,9 @@ import { Text } from "../ui/text";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-
-// Obtener el ancho y alto de la pantalla
 const { width, height } = Dimensions.get("window");
 
-// Definir el tipo para las cartas
+
 export interface Card {
   user: User;
 }

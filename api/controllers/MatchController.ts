@@ -2,7 +2,7 @@ import {
   RequestMatch,
   RequestMatchResponse,
   requestMatchResponseSchema,
-} from "@/types/api/RequestMatch";
+} from "@/types/api/requestMatch";
 import { getMatchRequestResponseSchema, GetMatchRequestsResponse  } from "@/types/api/GetMatchRequests";
 
 
