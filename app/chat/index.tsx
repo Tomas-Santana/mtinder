@@ -1,21 +1,71 @@
 import { View } from "react-native";
-import Chat from "@/components/app/Chat";
 import { Text } from "@/components/ui/text";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/utils/atoms/userAtom";
-import { User } from "@/types/User";
+import { GlowingText } from "@/components/ui/text";
+import mt from "@/style/mtWind";
+import { SafeAreaView } from "react-native";
+import { useChats } from "@/hooks/useChats";
+import { ChatPreview } from "@/components/app/ChatPreview";
+import Animated, { LinearTransition } from "react-native-reanimated";
+import { useEffect } from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function Chater() {
-  const currentUser = useAtomValue(userAtom)
-  const { user } = useLocalSearchParams() 
+export default function ChatsView() {
+  const chatsQuery = useChats();
 
-  const userObj = JSON.parse(user as string)
-
+  useEffect(() => {
+    console.log(chatsQuery.data);
+  }, [chatsQuery.data]);
   return (
-    <View style={{ flex: 1 }}>
-      <Text color="white">{`${currentUser?._id}, ${userObj._id}`}</Text>
-      {currentUser && <Chat user1={currentUser} user2={userObj} />}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={[
+          mt.flexCol,
+          mt.gap(4),
+          
+          mt.flex1,
+        ]}
+      >
+        <View
+          style={[
+            mt.px(4),
+          ]}
+        >
+          <GlowingText
+            style={[mt.color("white"), mt.fontSize("2xl")]}
+            color="#80E1FF"
+          >
+            Chats
+          </GlowingText>
+        </View>
+
+        <Animated.FlatList
+          style={[mt.flex1, mt.bg("gray", 900)]}
+          contentContainerStyle={[]}
+          itemLayoutAnimation={LinearTransition}
+          data={chatsQuery.data?.chats}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (<ChatPreview chat={item} />)}
+          ListEmptyComponent={<EmptySplash />}
+          
+        />
+
+       {/* {chatsQuery.data?.chats?.map((chat) => (
+          <ChatPreview key={chat._id} chat={chat} />
+        ))} */}
+      </View>
+    </SafeAreaView>
+  );
+}
+
+function EmptySplash() {
+  return (
+    <View style={[mt.flexCol, mt.justify("center"), mt.items("center"), mt.flex1, mt.p(10)]}>
+
+
+        <MaterialCommunityIcons name="chat" size={100} color="white"
+          style={[mt.textGlow("md", "blue")]}
+        />
+      <Text size="xl" style={[mt.color("white"), mt.textGlow("md", "blue")]}>No matches yet. Time to swipe!</Text>
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import { Text } from "@/components/ui/text";
 import mt from "@/style/mtWind";
 import Navbar from "@/components/app/navbar";
@@ -13,14 +13,18 @@ import UserController from "@/api/controllers/UserController";
 import { useChats } from "@/hooks/useChats";
 import { useMutation } from "@tanstack/react-query";
 import MatchController from "@/api/controllers/MatchController";
-import { ToastAndroid } from "react-native";
+import { useMatchRequests } from "@/hooks/useMatchRequests";
+import { MatchModal } from "@/components/app/matchModal";
 
 
 export default function Home() {
   const user = useAtomValue(userAtom);
   const [currentCard, setCurrentCard] = useState<Card>();
-
   const chatsQuery = useChats();
+  const matchRequestsQuery = useMatchRequests();
+
+  const [openMatchDialog, setOpenMatchDialog] = useState(false);
+  const [matchChatId, setMatchChatId] = useState<string | null>(null);
 
   const requestMatch = useMutation({
     mutationFn: MatchController.requestMatch,
@@ -28,7 +32,19 @@ export default function Home() {
       console.log(error.message);
     },
     onSuccess: (data) => {
-      ToastAndroid.show(`Match ${data.status}`, ToastAndroid.SHORT);
+      if (data.chatId) {
+        setMatchChatId(data.chatId);
+      }
+    },
+    onMutate: (variables) => {
+      const hasRequestedMe = !!matchRequestsQuery.data?.requests.some(
+        (req) => req.from === variables.userId
+      );
+      console.log("hasRequestedMe", matchRequestsQuery.data);
+      if (hasRequestedMe) {
+        setOpenMatchDialog(true);
+        return;
+      }
     },
   });
 
@@ -46,18 +62,16 @@ export default function Home() {
   });
 
   const liked = (card: Card) => {
-    console.log("Liked", card);
     setCurrentCard(card);
     requestMatch.mutate({ userId: card.user._id });
   };
 
   const disliked = (card: Card) => {
-    console.log("Disliked", card);
     setCurrentCard(card);
   };
 
   return (
-    <View style={[mt.flex1, mt.justify("center"), mt.items("center")]}>
+    <SafeAreaView style={[mt.flex1, mt.justify("center"), mt.items("center")]}>
       <Navbar />
       {userQuery.data && (
         <SwipeCard
@@ -68,6 +82,15 @@ export default function Home() {
       )}
 
       {currentCard && <Text>{currentCard.user.firstName}</Text>}
-    </View>
+      <MatchModal
+        chatId={matchChatId}
+        isOpen={openMatchDialog}
+        setIsOpen={setOpenMatchDialog}
+        onCancel={() => {
+          setMatchChatId(null);
+        }}
+        user={currentCard?.user ?? null}
+      />
+    </SafeAreaView>
   );
 }

@@ -51,7 +51,7 @@ type NegativePixels = keyof typeof s.negativePixels;
 type WholePixels = Pixels | NegativePixels;
 type AbsolutePixels = Exclude<
   Pixels,
-  "full" | "half" | "third" | "twoThirds" | "sixty"
+  "full" | "half" | "third" | "twoThirds" | "sixty" | "auto"
 >;
 type Font = keyof typeof s.font;
 type FontWeight = "bold" | "medium" | "light" | "black";
@@ -75,6 +75,9 @@ const mt = {
   flex: {
     display: "flex",
   },
+  flexGrow: (value: number) => ({
+    flexGrow: value,
+  }),
   flexCol: {
     display: "flex",
     flexDirection: "column",
@@ -325,6 +328,9 @@ export function handleColor(
       return func(opacity);
     }
     return s.colors[value][shade] as string;
+  }
+  if (value.endsWith("Opacity")) {
+    return typeof s.colors[value] === "function" ? s.colors[value](opacity) : s.colors[value] as string;
   }
   return s.colors[value] as string;
 }

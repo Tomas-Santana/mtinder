@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaView, StatusBar, useWindowDimensions } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Toaster } from 'sonner-native'
 
 const queryClient = new QueryClient()
 
@@ -47,6 +48,7 @@ export default function RootLayout() {
             }}
             >
             </Stack>
+            <Toaster theme='dark' />
         </ThemeProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>

@@ -109,6 +109,7 @@ const buttonStyles = (
 
   const mtSheet = [
     mt.p(2),
+    mt.px(4),
     mt.border(2),
     mt.borderColor(backgroundColor[0], 200, 1),
     mt.rounded("md"),

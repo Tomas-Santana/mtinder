@@ -5,7 +5,8 @@ export const requestMatchSchema = z.object({
 });
 
 export const requestMatchResponseSchema = z.object({
-  status: z.enum(["created", "existed"]),
+  status: z.enum(["created", "accepted"]),
+  chatId: z.string().optional(),
 });
 
 export type RequestMatch = z.infer<typeof requestMatchSchema>;

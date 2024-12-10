@@ -50,6 +50,7 @@ const s = {
     sixty: "55%" as DimensionValue,
     twoThirds: "66.666667%" as DimensionValue,
     third: "33.333333%" as DimensionValue,
+    auto: "auto" as DimensionValue,
   },
   negativePixels: {
     "-1": -4,
