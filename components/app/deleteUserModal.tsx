@@ -48,14 +48,14 @@ export function DeleteModal() {
     >
       <Button
         variant="secondary"
-        style={[mt.flexRow, mt.gap(2)]}
+        style={[mt.flexRow, mt.gap(2), mt.borderColor("red"), mt.border(2), mt.p(3), mt.rounded("base")]}
         onPress={() => setVisible(true)}
       >
         <MaterialCommunityIcons
-          name="account-edit"
+          name="account-cancel-outline"
           size={24}
-          color="white"
-          style={[mt.textGlow("md", "white")]}
+          color="#ff0000"
+          style={[mt.textGlow("md", "red")]}
         />
         <Text style={[mt.color("white")]}>Borrar Cuenta</Text>
       </Button>
@@ -108,7 +108,7 @@ export function DeleteModal() {
                 </Text>
               </View>
 
-              <Button variant="danger" onPress={deleteUser} style={[mt.flexRow, mt.gap(2), mt.borderColor("red"), mt.border(2), mt.p(3), mt.rounded("base")]}>
+              <Button onPress={deleteUser} style={[mt.flexRow, mt.gap(2), mt.borderColor("red"), mt.border(2), mt.p(3), mt.rounded("base")]}>
                 <Text style={[mt.color("white")]}>
                   Borrar cuenta
                 </Text>

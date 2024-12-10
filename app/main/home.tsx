@@ -33,6 +33,11 @@ export default function Home() {
   });
 
 
+  const userQuery = useQuery({
+    queryKey: ["users"],
+    queryFn: () => UserController.getUsers(),
+  });
+  
   if (!currentUser) {
     return <Redirect href="/" />;
   }
@@ -40,11 +45,6 @@ export default function Home() {
   if (!currentUser.profileReady) {
     return <Redirect href="/main/completeProfile" />;
   }
-  const userQuery = useQuery({
-    queryKey: ["users"],
-    queryFn: () => UserController.getUsers(),
-  });
-
   const filterUsers = (users: Card[]) => {
     return users.filter( user => 
       user.user._id !== currentUser._id &&

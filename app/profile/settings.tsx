@@ -28,7 +28,15 @@ export default function Settings() {
       <View style={[mt.position("absolute"), mt.top(0), mt.left(0), mt.z(2)]}>
         <SimpleNavbar />
       </View>
-      <View style={[mt.items("center"), mt.justify("center")]}>
+      <View style={[mt.flex1, mt.items("center"), mt.justify("center")]}>
+        <View style={[mt.flexCol, mt.gap(2), mt.items("center")]}>
+          <Text style={[mt.fontSize("lg"), mt.align("center"), mt.color("white")]}>
+            {currentUser?.firstName} {currentUser?.lastName}
+          </Text>
+          <Text style={[mt.fontSize("sm"), mt.align("center"), mt.color("gray")]}>
+            {currentUser?.email}
+          </Text>
+        </View>
         <UpdateModal />
         <Button style={[mt.flexRow, mt.gap(2)]} onPress={logOut}>
           <Text style={[ mt.color("white") ]}>
