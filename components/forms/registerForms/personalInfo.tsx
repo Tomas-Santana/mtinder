@@ -30,15 +30,6 @@ interface InfoFormProps {
 
 export function InfoForm({ setTab, fullForm }: InfoFormProps){
 
-  const [genre, setGenre] = useState({
-    label: "",
-    value: "",
-  })
-
-  useEffect(() => {
-    console.log(genre)
-  }, [genre])
-
   const form = useForm<InfoSchema>({
     resolver: zodResolver(infoSchema),
     defaultValues: {

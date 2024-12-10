@@ -114,6 +114,18 @@ export default function SwipeCard({
       {cards.map((card, index) => {
         const isTopCard = index === 0;
 
+        const backgroundColor = animatedCards[index].pan.x.interpolate({
+          inputRange: [-width, 0, width],
+          outputRange: ['rgba(255, 0, 0, 1)', 'rgba(0, 0, 0, 0)', 'rgba(0, 255, 0, 1)'],
+          extrapolate: 'clamp',
+        });
+
+        const animatedOpacity = animatedCards[index].pan.x.interpolate({
+          inputRange: [-width, 0, width],
+          outputRange: [0, 0.5, 1],
+          extrapolate: 'clamp',
+        });
+
         return (
           <Animated.View
             key={card.user._id}
@@ -127,6 +139,7 @@ export default function SwipeCard({
                   { translateY: animatedCards[index].pan.y },
                   { rotate: animatedCards[index].rotate },
                 ],
+                backgroundColor,
                 zIndex: cards.length - index,
                 top: 10 * index,
                 opacity: isTopCard ? 1 : 0.8,
@@ -134,6 +147,7 @@ export default function SwipeCard({
               mt.bg("transparent"), 
             ]}
           >
+            <Animated.View style={[styles.background, { backgroundColor }]} />
             <UserCard user={card.user} />
           </Animated.View>
         );
@@ -254,5 +268,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "transparent",
+    overflow: "hidden"
   },
+  background: {
+    position: 'absolute',
+    top: 16, // Ajusta este valor para la distancia desde la parte superior
+    bottom: 16, // Ajusta este valor para la distancia desde la parte inferior
+    left: 0,
+    right: 0,
+  }
 });

@@ -95,7 +95,6 @@ const buttonStyles = (
   switch (variant) {
     case "secondary":
       backgroundColor = disabled ? disabledBg : ["orange"];
-
       break;
     case "danger":
       backgroundColor = disabled ? disabledBg : ["red"];
