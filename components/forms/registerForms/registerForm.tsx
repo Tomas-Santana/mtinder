@@ -14,7 +14,9 @@ export default function RegisterForm() {
     resolver: zodResolver(fullSchema),
     defaultValues: {
       info: {
-        email: ""
+        email: "",
+        firstName: "",
+        lastName: "", 
       },
       password: {
         password: "",

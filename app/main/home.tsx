@@ -17,7 +17,7 @@ import { ToastAndroid } from "react-native";
 
 
 export default function Home() {
-  const user = useAtomValue(userAtom);
+  const currentUser = useAtomValue(userAtom);
   const [currentCard, setCurrentCard] = useState<Card>();
 
   const chatsQuery = useChats();
@@ -33,17 +33,26 @@ export default function Home() {
   });
 
 
-  if (!user) {
+  if (!currentUser) {
     return <Redirect href="/" />;
   }
 
-  if (!user.profileReady) {
+  if (!currentUser.profileReady) {
     return <Redirect href="/main/completeProfile" />;
   }
   const userQuery = useQuery({
     queryKey: ["users"],
     queryFn: () => UserController.getUsers(),
   });
+
+  const filterUsers = (users: Card[]) => {
+    return users.filter( user => 
+      user.user._id !== currentUser._id &&
+      user.user.favoriteGenres?.some(genre => currentUser.favoriteGenres?.includes(genre))
+    )
+  }
+  
+  const filteredUsers = userQuery.data ? filterUsers(userQuery.data.map(user => ({ user }))) : []
 
   const liked = (card: Card) => {
     console.log("Liked", card);
@@ -63,7 +72,7 @@ export default function Home() {
         <SwipeCard
           onLeftSwipe={disliked}
           onRightSwipe={liked}
-          cardsData={userQuery.data.map((user) => ({ user }))}
+          cardsData={filteredUsers}
         />
       )}
 
