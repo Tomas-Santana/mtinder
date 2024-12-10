@@ -1,16 +1,15 @@
-import { View, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { Text } from "@/components/ui/text";
 import mt from "@/style/mtWind";
 import Navbar from "@/components/app/navbar";
 import SwipeCard from "@/components/app/SwipeCard";
 import { userAtom } from "@/utils/atoms/userAtom";
 import { useAtomValue } from "jotai";
-import { Link, Redirect, router } from "expo-router";
-import { useEffect, useState } from "react";
+import { Redirect } from "expo-router";
+import { useState } from "react";
 import { Card } from "@/components/app/SwipeCard";
 import { useQuery } from "@tanstack/react-query";
 import UserController from "@/api/controllers/UserController";
-import { useChats } from "@/hooks/useChats";
 import { useMutation } from "@tanstack/react-query";
 import MatchController from "@/api/controllers/MatchController";
 import { useMatchRequests } from "@/hooks/useMatchRequests";
@@ -20,7 +19,7 @@ import { MatchModal } from "@/components/app/matchModal";
 export default function Home() {
   const currentUser = useAtomValue(userAtom);
   const [currentCard, setCurrentCard] = useState<Card>();
-  const chatsQuery = useChats();
+  
   const matchRequestsQuery = useMatchRequests();
 
   const [openMatchDialog, setOpenMatchDialog] = useState(false);
@@ -40,7 +39,6 @@ export default function Home() {
       const hasRequestedMe = !!matchRequestsQuery.data?.requests.some(
         (req) => req.from === variables.userId
       );
-      console.log("hasRequestedMe", matchRequestsQuery.data);
       if (hasRequestedMe) {
         setOpenMatchDialog(true);
         return;
