@@ -26,8 +26,9 @@ import { superFetch, SuperFetchError } from "./superfetch/superFetch";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDefaultStore } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
-import socket from "./SocketController";
+import {socket} from "./SocketController";
 import { meResponse, MeResponse } from "@/types/api/Me";
+import { subscribe } from "./SocketController";
 
 const store = getDefaultStore();
 store.sub(userAtom, () => {
@@ -53,6 +54,8 @@ export default class AuthController {
       store.set(userAtom, result.user);
       socket.auth = { token: result.token };
       socket.connect();
+
+      subscribe();
 
       return result;
     } catch (error) {
@@ -113,6 +116,7 @@ export default class AuthController {
 
       socket.auth = { token: res.token };
       socket.connect();
+      subscribe();
 
       return res;
     } catch (error) {
