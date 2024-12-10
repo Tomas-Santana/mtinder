@@ -2,7 +2,6 @@ import z from "zod"
 
 export const chatSchema = z.object({
   _id: z.string(),
-  roomId: z.string(),
   participants: z.array(z.string()),
   participantsInfo: z.array(z.object({
     _id: z.string(),
@@ -19,3 +18,4 @@ export const chatSchema = z.object({
 })
 
 export type Chat = z.infer<typeof chatSchema>
+

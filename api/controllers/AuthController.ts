@@ -28,11 +28,12 @@ import { getDefaultStore } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
 import {socket} from "./SocketController";
 import { meResponse, MeResponse } from "@/types/api/Me";
-import { subscribe } from "./SocketController";
+import SocketController from "./SocketController";
 
 const store = getDefaultStore();
+
 store.sub(userAtom, () => {
-  console.log("userAtom changed");
+  console.log("user changed");
 });
 
 export default class AuthController {
@@ -52,10 +53,9 @@ export default class AuthController {
       await AsyncStorage.setItem("token", result.token);
 
       store.set(userAtom, result.user);
-      socket.auth = { token: result.token };
-      socket.connect();
-
-      subscribe();
+      SocketController.setToken(result.token);
+      SocketController.connect();
+      SocketController.subscribe();
 
       return result;
     } catch (error) {
@@ -114,9 +114,9 @@ export default class AuthController {
 
       store.set(userAtom, res.user);
 
-      socket.auth = { token: res.token };
-      socket.connect();
-      subscribe();
+      SocketController.setToken(res.token);
+      SocketController.connect();
+      SocketController.subscribe();
 
       return res;
     } catch (error) {
