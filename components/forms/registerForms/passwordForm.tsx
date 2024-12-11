@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { RegisterRequest } from "@/types/api/Register";
 import { mtForm, formStyles } from "@/style/formStyle";
+import { Toast } from "@/components/ui/toast";
 
 interface PasswordFormProps {
   setTab: (tabs: 0 | 1 | 2) => void;
@@ -35,8 +36,10 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
     mutationFn: AuthController.register,
     onError: (error) => {
       console.log(error.message);
+      Toast.error(error.message);
     },
     onSuccess: () => {
+      Toast.success("Bienvenido a Mellow Mates!")
       fullForm.reset();
       form.reset();
       setTab(0);

@@ -54,14 +54,13 @@ export function FormTextInput({
         name={name}
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
-          <Glow glowing={focus ? true : false} color="#39DBFF">
+          <Animated.View style={[focus && mt.glow("sm", "blue"), mt.rounded("sm")]} layout={LinearTransition}>
             <Input
               style={[
                 formStyles.input,
-                mt.bg("gray", 700),
-                mt.h(10),
+                mt.bg("gray", 800),
+                mt.rounded("sm"),
                 mt.p(2),
-                mt.border(2),
                 mt.color("white"),
                 inputStyle,
               ]}
@@ -78,7 +77,7 @@ export function FormTextInput({
               secureTextEntry={type === "password"}
               maxLength={100}
             />
-          </Glow>
+          </Animated.View>
         )}
       />
       {error && <FormError error={error} />}

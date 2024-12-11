@@ -20,8 +20,9 @@ export default function Login() {
         </GlowingText>
         <Text style={[mt.color("white")]}>Conecta con personas!</Text>
       </View>
-      <LoginForm />
-      <View style={[mt.h(10), mt.w(10), mt.glow()]}></View>
+      <View style={[mt.rounded("md"), mt.border(2), mt.mt(10), mt.p(4), mt.borderColor("gray", 400), mt.glow("md", "blue")]}>
+        <LoginForm />
+      </View>
     </View>
   );
 }

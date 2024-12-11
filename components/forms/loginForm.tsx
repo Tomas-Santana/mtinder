@@ -11,6 +11,7 @@ import mt from "@/style/mtWind";
 import { Link, useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "../ui/button";
+import { Toast } from "../ui/toast";
 
 const loginFormSchema = z.object({
   email: z
@@ -42,6 +43,7 @@ export default function LoginForm(){
     mutationFn: AuthController.login,
     onError: (error) => {
       console.log(error.message)
+      Toast.error(error.message)
     },
     onSuccess: (data) => {
       form.reset()
@@ -69,12 +71,15 @@ export default function LoginForm(){
         error={form.formState.errors.password}
       />
       <Animated.View layout={LinearTransition} style={mtForm.sideText}>
-        <Link
-          href={"/auth/sendResetPage"}
-          style={[mtForm.text]}
-        >
-          Olvidé mi contraseña
-        </Link>
+      
+          <Link
+            href={"/auth/sendResetPage"}
+            style={[mtForm.text]}
+          >
+            <Text>
+              Olvidé mi contraseña
+            </Text>
+          </Link>
       </Animated.View>
       <Animated.View layout={LinearTransition}>
         <Button
@@ -92,7 +97,9 @@ export default function LoginForm(){
           href={"/auth/registerPage"}
           style={[mtForm.text]}
         >
-          Crear una cuenta
+          <Text>
+            Crear una cuenta
+          </Text>
         </Link>
       </Animated.View>
     </Animated.View>

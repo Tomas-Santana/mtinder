@@ -46,7 +46,7 @@ export default function ChatsView() {
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (<ChatPreview chat={item} />)}
           ListEmptyComponent={<EmptySplash />}
-          
+          extraData={chatsQuery.data?.chats}
         />
 
        {/* {chatsQuery.data?.chats?.map((chat) => (

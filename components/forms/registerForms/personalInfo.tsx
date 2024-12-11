@@ -91,9 +91,6 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
           viewStyle={[mt.flex1]}
         />
       </Animated.View>
-
-      {/* <GlowingText color="white" style={[mt.color("white"), mt.pb(0)]}>Genero</GlowingText>
-      <DropDown data={options} placeholder="Selecciona tu genero" onChange={(genre)=> setGenre(genre)}/> */}
       
       <Animated.View layout={LinearTransition}>
         <Button 
@@ -106,7 +103,9 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
       </Animated.View>
       <Animated.View style={mtForm.sideText}>
         <Link href="/" style={mtForm.text}>
-          Volver al inicio de sesion
+          <Text>
+            Volver al inicio de sesion
+          </Text>
         </Link>
       </Animated.View>
     </Animated.View>

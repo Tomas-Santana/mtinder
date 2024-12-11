@@ -12,10 +12,13 @@ import { useUser } from "@/hooks/app/useUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface UserFormProps {
-  onClose: () => void;
+  firstName: string
+  lastName: string
+  setFirstName: (value: string) => void;
+  setLastName: (value: string) => void;
 }
 
-export default function UserForm({ onClose }: UserFormProps) {
+export default function UserForm({ firstName, lastName, setFirstName, setLastName }: UserFormProps) {
   const [currentUser, setCurrentUser] = useAtom(userAtom)
   const { updateUser } = useUser(currentUser || undefined, setCurrentUser)
   const form = useForm<z.infer<typeof UserFormSchema>>({
@@ -27,7 +30,6 @@ export default function UserForm({ onClose }: UserFormProps) {
   })
 
   const onSubmit = (data: z.infer<typeof UserFormSchema>) => {
-    onClose()
     if(
       currentUser?.firstName === data.firstName &&
       currentUser?.lastName === data.lastName
@@ -39,25 +41,22 @@ export default function UserForm({ onClose }: UserFormProps) {
   }
 
   return (
-    <Animated.View style={[mt.flexCol, mt.gap(4), mt.p(4), mt.w("full")]} layout={LinearTransition}>
-      <Text size="lg" style={[mt.align("center"), mt.color("white")]}>
-        Actualiza tus datos
-      </Text>
+    <Animated.View style={[mt.flexCol, mt.gap(4), mt.w("full")]} layout={LinearTransition}>
       <FormTextInput 
         name="firstName"
         control={form.control}
         placeholder="John"
-        label="Nombre"
+        label="Tu nombre"
         error={form.formState.errors.firstName}
       />
       <FormTextInput 
         name="lastName"
         control={form.control}
         placeholder="Holmes"
-        label="Apellido"
+        label="Tu apellido"
         error={form.formState.errors.lastName}
       />
-      <Animated.View layout={LinearTransition}>
+      <Animated.View layout={LinearTransition} style={[mt.mt(5)]}>
         <Button variant="success" onPress={form.handleSubmit(onSubmit)}>
           <Text>
             Actualizar datos

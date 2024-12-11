@@ -1,55 +1,88 @@
-import React, { useRef } from 'react';
-import { View, PanResponder, Animated } from 'react-native';
-import mt from '@/style/mtWind';
+import React, { useRef } from "react";
+import { View, PanResponder } from "react-native";
+import mt from "@/style/mtWind";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Text } from "../ui/text";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 
 interface SwipeableProps {
   children: React.ReactNode;
-  onSwipeAction: () => void; // Acción a ejecutar al completar el swipe
+  onSwipeAction: () => void;
+  entering?: any;
+  exiting?: any;
 }
 
-export const Swipeable = ({ children, onSwipeAction }: SwipeableProps) => {
-  const translateX = useRef(new Animated.Value(0)).current; // Control del movimiento horizontal
+export const Swipeable = ({
+  children,
+  onSwipeAction,
+  entering = FadeIn,
+  exiting = FadeOut,
+}: SwipeableProps) => {
+  const translateX = useSharedValue(0);
 
-  // Configuración de PanResponder para el swipe
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
-    onMoveShouldSetPanResponder: () => true, // Permite que el movimiento sea detectado
+    onMoveShouldSetPanResponder: () => true,
 
     onPanResponderMove: (e, gestureState) => {
-      const newTranslateX = Math.max(0, gestureState.dx); // Restringe el movimiento a la derecha
-      translateX.setValue(newTranslateX); // Actualiza el valor de translateX
+      const newTranslateX = Math.max(0, gestureState.dx);
+      translateX.value = newTranslateX;
     },
     onPanResponderRelease: (e, gestureState) => {
       if (gestureState.dx > 100) {
-        // Ejecuta la acción si se supera el umbral
         onSwipeAction();
-        Animated.timing(translateX, {
-          toValue: 500, // Mueve el ítem fuera de la pantalla
-          duration: 300,
-          useNativeDriver: true,
-        }).start();
+        translateX.value = withTiming(500, { duration: 300 });
       } else {
-        // Si no se supera el umbral, regresa a la posición original
-        Animated.spring(translateX, {
-          toValue: 0,
-          useNativeDriver: true,
-        }).start();
+        translateX.value = withSpring(0);
       }
     },
   });
 
-  // Estilo animado para la posición
-  const animatedStyle = {
-    transform: [{ translateX }],
-  };
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+    };
+  });
 
   return (
     <Animated.View
-      style={[ animatedStyle]}
-      {...panResponder.panHandlers} // Asigna el panResponder al contenedor
+      style={[mt.position("relative")]}
+      layout={LinearTransition}
+      entering={entering}
+      exiting={exiting}
     >
-      {children}
+      <Animated.View
+        style={[
+          mt.position("absolute"),
+          mt.bg("red", 500),
+          mt.flexCol,
+          mt.justify("center"),
+          mt.items("center"),
+          mt.left(0),
+          mt.z(-1),
+          mt.h("full"),
+          mt.w("full"),
+        ]}
+        layout={LinearTransition}
+      >
+        <MaterialCommunityIcons
+          name="trash-can-outline"
+          size={24}
+          color={"black"}
+        />
+        <Text style={[mt.align("center")]}>Delete chat</Text>
+      </Animated.View>
+      <Animated.View style={[animatedStyle]} {...panResponder.panHandlers}>
+        {children}
+      </Animated.View>
     </Animated.View>
   );
 };
-

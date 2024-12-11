@@ -7,6 +7,6 @@ interface FormLabelProps {
 
 export function FormLabel({ label }: FormLabelProps) {
   return (
-    <GlowingText color="white" style={[mt.fontSize("base"), mt.fontWeight("bold"), mt.color("white")]}>{label}</GlowingText>
+    <GlowingText color="white" style={[mt.fontSize("base"), mt.color("white")]}>{label}</GlowingText>
   );
 }

@@ -68,7 +68,11 @@ export default function Settings() {
             {currentUser?.email}
           </Text>
         </View>
-        <UpdateModal />
+        
+        <Button style={[mt.flexRow, mt.gap(2)]} onPress={() => router.push("/profile/edit")}>
+          <Text style={[mt.color("white")]}>Editar Perfil</Text>
+          <MaterialCommunityIcons name="account-edit" size={24} color={"white"} />
+        </Button>
         <Button style={[mt.flexRow, mt.gap(2)]} onPress={logOut}>
           <Text style={[mt.color("white")]}>Cerrar sesion</Text>
           <MaterialCommunityIcons name="logout" size={24} color={"white"} />

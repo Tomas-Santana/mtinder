@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FullSchema, fullSchema } from "./registerSchemas";
 import { StyleSheet } from "react-native";
+import mt from "@/style/mtWind";
 
 type TabNumber = 0 | 1 | 2
 
@@ -32,7 +33,7 @@ export default function RegisterForm() {
   ]
 
   return (
-    <Animated.View style={style.container}>
+    <Animated.View style={[mt.w("full"), mt.rounded("md")]}>
       {
         tabs[tab] ?? <InfoForm setTab={setTab} fullForm={form}/>
       }

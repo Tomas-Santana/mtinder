@@ -78,6 +78,7 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
           mt.justify("space-between"),
           mt.items("center"),
           mt.w("full"),
+          mt.bg("gray", 800)
         ]}
         entering={FadeIn}
         exiting={FadeOut}

@@ -34,12 +34,12 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <ThemeProvider value={DarkTheme}>
           <StatusBar barStyle="dark-content" backgroundColor="#191919" />
             <Stack screenOptions={{
               headerShown: false,
-              animation: "slide_from_right",
+              animation: "default",
               contentStyle: {
                 backgroundColor: "#191919", //change to transparent when we have the bg ready
                 height: adjustedHeight
