@@ -1,13 +1,12 @@
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { socket } from "@/api/controllers/SocketController";
 import ChatController from "@/api/controllers/ChatController";
 import type { Message } from "@/types/Message";
 import { GetMessagesResponse } from "@/types/api/GetMessages";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
-import { User } from "@/types/User";
 
 export const useMessages = (chatId: string) => {
   const messagesQuery = useQuery({
@@ -17,6 +16,12 @@ export const useMessages = (chatId: string) => {
   const queryClient = useQueryClient();
   const [chatDeleted, setChatDeleted] = useState(false);
 
+  useEffect(() => {
+    if (messagesQuery.data?.deleted) {
+      setChatDeleted(true);
+    }
+  });
+
   const user = useAtomValue(userAtom);
 
   if (!user) {
@@ -25,9 +30,6 @@ export const useMessages = (chatId: string) => {
 
   useFocusEffect(
     useCallback(() => {
-      socket.on("newMessage", (newMessage: Message) => {
-        handleNewMessage(newMessage, queryClient, chatId, user);
-      });
 
       socket.on("deleteMessage", (messageId: string, chatId: string) => {
         handleDeleteMessage(messageId, chatId, queryClient, chatId);
@@ -38,51 +40,27 @@ export const useMessages = (chatId: string) => {
       });
 
       socket.on("deleteChat", (deletedChatId: string) => {
-        if (deletedChatId === chatId) {
-          setChatDeleted(true);
-        }
+        handleDeleteChat(deletedChatId, chatId, setChatDeleted);
       });
 
       return () => {
-        socket.off("newMessage");
-        socket.off("deleteMessage");
-        socket.off("editMessage");
-        socket.off("deleteChat");
+        socket.off("deleteMessage", handleDeleteMessage);
+        socket.off("editMessage", handleEditMessage);
+        socket.off("deleteChat", handleDeleteChat);
       };
     }, []));
 
   return { messagesQuery, chatDeleted };
 };
 
-const handleNewMessage = (newMessage: Message, queryClient: QueryClient, currentChatId: string, user: User) => {
-  if (newMessage.chatId !== currentChatId) {
-    return; // it is handled elsewhere
+const handleDeleteChat = (deletedChatId: string, currentChatId: string, setChatDeleted: (deleted: boolean) => void) => {
+  console.log("deleted chat", deletedChatId, currentChatId);
+  if (deletedChatId === currentChatId) {
+    setChatDeleted(true);
   }
-  if (newMessage.userId === user._id) {
-    return; // handled in useSendMessage mutation
-  }
+} 
 
-  newMessage.timestamp = new Date(newMessage.timestamp);
 
-  console.log("newMessage");
-
-  const oldMessages = queryClient.getQueryData<GetMessagesResponse>([
-    "messages",
-    newMessage.chatId,
-  ]);
-  if (!!oldMessages?.messages?.some((msg) => msg._id === newMessage._id)) {
-    return;
-  }
-
-  queryClient.setQueryData<GetMessagesResponse>(
-    ["messages", newMessage.chatId],
-    (data) => {
-      return {
-        messages: [...(data?.messages || []), newMessage],
-      };
-    }
-  );
-};
 
 const handleDeleteMessage = (messageId: string, chatId: string, queryClient: QueryClient, currentChatId: string) => {
 

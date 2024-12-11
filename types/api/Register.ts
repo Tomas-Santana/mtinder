@@ -1,5 +1,5 @@
-import z from 'zod'
-import { UserSchema } from '../User'
+import z from "zod";
+import { userSchema } from "../User";
 
 export interface RegisterRequest {
   email: string;
@@ -10,19 +10,23 @@ export interface RegisterRequest {
 
 export const RegisterResponseSchema = z.object({
   token: z.string(),
-  user: UserSchema,
-})
+  user: userSchema,
+});
 
-export type RegisterResponse = z.infer<typeof RegisterResponseSchema>
+export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
 
 export const VerifyEmailAvailabilitySchema = z.object({
   email: z.string().email(),
 });
 
-export type VerifyEmailAvailability = z.infer<typeof VerifyEmailAvailabilitySchema>;
+export type VerifyEmailAvailability = z.infer<
+  typeof VerifyEmailAvailabilitySchema
+>;
 
 export const VerifyEmailAvailabilityResponseSchema = z.object({
   available: z.boolean(),
 });
 
-export type VerifyEmailAvailabilityResponse = z.infer<typeof VerifyEmailAvailabilityResponseSchema>;
+export type VerifyEmailAvailabilityResponse = z.infer<
+  typeof VerifyEmailAvailabilityResponseSchema
+>;

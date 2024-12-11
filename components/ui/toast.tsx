@@ -29,6 +29,7 @@ export class Toast {
   static custom(jsx: React.ReactElement, id?: string) {
     sonner.custom(jsx, {
       id,
+      duration: 5000,
     });
   }
 }

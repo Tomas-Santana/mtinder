@@ -21,6 +21,7 @@ export const useDeleteChats = () => {
       return { previousChats }
     },
     onError: (error, _ , context) => {
+      if (!context?.previousChats) return
       queryClient.setQueryData(["chats"], context?.previousChats)
     },
     onSettled: () => {

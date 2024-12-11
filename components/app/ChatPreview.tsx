@@ -11,6 +11,9 @@ import { useRouter } from "expo-router";
 import { Modal } from "react-native";
 import { Swipeable } from "./swipeable";
 import { useDeleteChats } from "@/hooks/app/useDelete";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSetAtom } from "jotai";
+import { currentChatAtom } from "@/utils/atoms/currentChatAtom";
 
 interface ChatPreviewProps {
   chat: Chat;
@@ -19,39 +22,34 @@ interface ChatPreviewProps {
 export function ChatPreview({ chat }: ChatPreviewProps) {
   const user = useAtomValue(userAtom);
   const router = useRouter();
-  const deleted = useDeleteChats()
+  const deleted = useDeleteChats();
   const [profilePicModalVisible, setProfilePicModalVisible] = useState(false);
   const otherUser = useMemo(() => {
-    return chat.participantsInfo.find((p) => p._id !== user?._id);
+    return chat.participants.find((p) => p._id !== user?._id);
   }, [chat, user]);
 
+  const setCurrentChat = useSetAtom(currentChatAtom);
+
+  const isMine = chat.lastMessage?.senderId === user?._id;
+  const isNew = chat.lastMessage?.senderId === "mm";
+
   const onSwipe = () => {
-    deleted.mutate({ _id: chat._id })
+    deleted.mutate({ _id: chat._id });
   };
 
   useEffect(() => {
-    console.log("chat", JSON.stringify(chat))
-  }, [chat])
+    console.log("chat", JSON.stringify(chat));
+  }, [chat]);
 
   const lastMessageContent = useMemo(() => {
-    const content = (chat.lastMessage?.message ?? "Say hi to your new friend!").replace(/\n/g, " ");
+    const content = (
+      chat.lastMessage?.message ?? "Say hi to your new friend!"
+    ).replace(/\n/g, " ");
     return content.length > 20 ? content.slice(0, 20) + "..." : content;
   }, [chat]);
 
-  const lastMessageSender = useMemo(() => {
-    if (!chat.lastMessage) return "";
-    if (chat.lastMessage.senderName === "Mellow Mates") return "";
-    return `${chat.lastMessage.senderName}: `;
-  }, [chat, user]);
-
   const route = useMemo(() => {
-    return `/chat/${chat._id}?otherUserId=${
-      otherUser?._id ?? ""
-    }&otherUserName=${
-      otherUser?.firstName ?? ""
-    } ${otherUser?.lastName ?? ""}&otherUserImageB64=${
-      btoa(otherUser?.profilePicture ?? "")
-    }` as const;
+    return `/chat/${chat._id}` as const;
   }, [otherUser, chat]);
 
   const time = useMemo(() => {
@@ -93,14 +91,17 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
             mt.borderColor("gray", 300),
             mt.gap(4),
           ]}
-          onPress={() => router.push(route)}
+          onPress={() => {
+            setCurrentChat(chat);
+            router.push(route);
+          }}
         >
           <TouchableOpacity
             style={[mt.w(12), mt.h(12), mt.rounded("full"), mt.glow()]}
             onPress={() => setProfilePicModalVisible(true)}
           >
             <Image
-              source={{ uri: otherUser?.profilePicture || undefined }}
+              source={{ uri: otherUser?.imageUrls?.[0] || undefined }}
               style={[mt.w(12), mt.h(12), mt.rounded("full")]}
             />
           </TouchableOpacity>
@@ -114,21 +115,36 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
             ]}
           >
             <Text style={[mt.color("white"), mt.fontSize("lg")]}>
-              {otherUser?.firstName} {otherUser?.lastName}
+              {otherUser?.firstName} {otherUser?.lastName} {"  "}{" "}
+              {isNew && (
+                <Text
+                  style={[
+                    mt.color("green"),
+                    mt.fontSize("lg"),
+                    mt.glow("sm", "green"),
+                  ]}
+                >
+                  New!
+                </Text>
+              )}
             </Text>
             <View
-              style={[
-                mt.flexRow,
-                mt.justify("space-between"),
-                mt.w("full"),
-              ]}
+              style={[mt.flexRow, mt.justify("space-between"), mt.w("full")]}
             >
-              <Text style={[mt.color("white")]}>
-                {lastMessageSender} {lastMessageContent}
-              </Text>
+              <Text style={[mt.color("white")]}>{lastMessageContent}</Text>
 
               <Text style={[mt.color("gray"), mt.align("right")]}>
                 {time}
+
+                {"  "}
+
+                {isMine && (
+                  <MaterialCommunityIcons
+                    name="check"
+                    size={16}
+                    color="white"
+                  />
+                )}
               </Text>
             </View>
           </View>
@@ -141,7 +157,7 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
         <ProfilePicModal
           visible={profilePicModalVisible}
           setVisible={setProfilePicModalVisible}
-          profilePicture={otherUser?.profilePicture || ""}
+          profilePicture={otherUser?.imageUrls?.[0] || ""}
         />
       </Animated.View>
     </Swipeable>

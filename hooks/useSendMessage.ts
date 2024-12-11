@@ -7,11 +7,6 @@ import { SendMessage } from "@/types/api/SendMessage";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
 
-interface LastMessage {
-  senderName: string;
-  message: string;
-  timestamp: Date;
-}
 
 export const useSendMessage = (chatId: string) => {
   const user = useAtomValue(userAtom);
@@ -40,7 +35,6 @@ export const useSendMessage = (chatId: string) => {
           },
         ],
       });
-      // also add the message to the current chat.lastMessage
       const oldLastMessage = queryClient.getQueryData<GetChatsResponse>([
         "chats",
       ])?.chats?.find((chat) => chat._id === chatId)?.lastMessage ?? null;
@@ -52,8 +46,8 @@ export const useSendMessage = (chatId: string) => {
             return {
               ...c,
               lastMessage: {
-                senderName: user.firstName,
-                message: newMessage.content,
+                senderId: user._id,
+                message: newMessage.contentType === "text" ? newMessage.content : "📷 Image",
                 timestamp: new Date(),
               },
             };
