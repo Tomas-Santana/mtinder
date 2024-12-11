@@ -31,13 +31,12 @@ export default class SocketController {
     if (!!oldChats?.chats?.some((chat) => chat._id === newChat._id)) {
       return;
     }
-    !noToast && Toast.custom(ChatToastContent({ chatId: newChat._id }));
+    !noToast && Toast.custom(ChatToastContent({ chat: newChat }));
     queryClient.setQueryData<GetChatsResponse>(["chats"], (data) => {
       return {
         chats: [...(data?.chats || []), newChat],
       };
     });
-    queryClient.invalidateQueries({ queryKey: ["chats"], exact: true });
   }
 
   static handleNewMatchRequest(newMatchRequest: MatchRequest) {

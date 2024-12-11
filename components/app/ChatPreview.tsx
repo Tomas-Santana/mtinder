@@ -45,8 +45,8 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
       otherUser?._id ?? ""
     }&otherUserName=${
       otherUser?.firstName ?? ""
-    } ${otherUser?.lastName ?? ""}&otherUserImage=${
-      otherUser?.profilePicture ?? ""
+    } ${otherUser?.lastName ?? ""}&otherUserImageB64=${
+      btoa(otherUser?.profilePicture ?? "")
     }` as const;
   }, [otherUser, chat]);
 
@@ -74,7 +74,7 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
             mt.borderColor("gray", 300),
             mt.gap(4),
           ]}
-          onPress={() => router.push(`/chat/${chat._id}`)}
+          onPress={() => router.push(route)}
         >
           <TouchableOpacity
             style={[mt.w(12), mt.h(12), mt.rounded("full"), mt.glow()]}

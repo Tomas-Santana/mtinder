@@ -94,6 +94,7 @@ export default class AuthController {
   }
 
   static async register(payload: RegisterRequest): Promise<RegisterResponse> {
+    console.log("regiuster", payload);
     try {
       const res = await superFetch<
         RegisterRequest,

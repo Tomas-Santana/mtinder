@@ -2,6 +2,7 @@ import { getChatsResponse, GetChatsResponse } from "@/types/api/GetChats";
 import { GetMessagesResponse, getMessagesResponse } from "@/types/api/GetMessages";
 import { superFetch } from "./superfetch/superFetch";
 import { DeleteChatRequest, DeleteChatResponse, DeleteChatResponseSchema } from "@/types/api/DeleteChat";
+import { SendMessage, sendMessageResponse, sendMessage, SendMessageResponse } from "@/types/api/SendMessage";
 
 export default class ChatController {
   static async getChats(): Promise<GetChatsResponse> {
@@ -56,6 +57,25 @@ export default class ChatController {
     } catch (error) {
       console.log(error);
       throw new Error("error fetching messages");
+    }
+  }
+
+  static async sendMessage(chatId: string, payload: SendMessage): Promise<SendMessageResponse> {
+    try {
+      const res = await superFetch<SendMessage, SendMessageResponse, "chatMessages">({
+        options: {
+          method: "POST",
+          includeCredentials: true,
+        },
+        route: "chatMessages",
+        routeParams: [chatId],
+        responseSchema: sendMessageResponse,
+        payload,
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw new Error("error sending message");
     }
   }
 

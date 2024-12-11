@@ -46,7 +46,10 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
 
   const onSubmit = (data: PasswordSchema) => {
     fullForm.setValue("password", data);
+
+    
     const formData = fullForm.getValues();
+    console.log(formData);
     const registerData: RegisterRequest = {
       email: formData.info.email,
       password: formData.password.password,

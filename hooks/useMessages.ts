@@ -5,6 +5,9 @@ import { socket } from "@/api/controllers/SocketController";
 import ChatController from "@/api/controllers/ChatController";
 import type { Message } from "@/types/Message";
 import { GetMessagesResponse } from "@/types/api/GetMessages";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/utils/atoms/userAtom";
+import { User } from "@/types/User";
 
 export const useMessages = (chatId: string) => {
   const messagesQuery = useQuery({
@@ -14,10 +17,16 @@ export const useMessages = (chatId: string) => {
   const queryClient = useQueryClient();
   const [chatDeleted, setChatDeleted] = useState(false);
 
-  useFocusEffect(() => {
+  const user = useAtomValue(userAtom);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  useFocusEffect(
     useCallback(() => {
       socket.on("newMessage", (newMessage: Message) => {
-        handleNewMessage(newMessage, queryClient, chatId);
+        handleNewMessage(newMessage, queryClient, chatId, user);
       });
 
       socket.on("deleteMessage", (messageId: string, chatId: string) => {
@@ -40,16 +49,23 @@ export const useMessages = (chatId: string) => {
         socket.off("editMessage");
         socket.off("deleteChat");
       };
-    }, []);
-  });
+    }, []));
 
   return { messagesQuery, chatDeleted };
 };
 
-const handleNewMessage = (newMessage: Message, queryClient: QueryClient, currentChatId: string) => {
+const handleNewMessage = (newMessage: Message, queryClient: QueryClient, currentChatId: string, user: User) => {
   if (newMessage.chatId !== currentChatId) {
     return; // it is handled elsewhere
   }
+  if (newMessage.userId === user._id) {
+    return; // handled in useSendMessage mutation
+  }
+
+  newMessage.timestamp = new Date(newMessage.timestamp);
+
+  console.log("newMessage");
+
   const oldMessages = queryClient.getQueryData<GetMessagesResponse>([
     "messages",
     newMessage.chatId,
