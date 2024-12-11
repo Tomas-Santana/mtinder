@@ -6,7 +6,6 @@ export const useChats = () => {
     queryFn: ChatController.getChats,
     queryKey: ["chats"],
   });
-
   return chatsQuery;
 };
 

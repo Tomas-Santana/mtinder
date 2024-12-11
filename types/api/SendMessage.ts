@@ -4,6 +4,7 @@ import { messageSchema } from "../Message";
 export const sendMessage = z.object({
   contentType: z.enum(["text", "image"]),
   content: z.string(),
+  mimeType: z.string().optional(),
 });
 
 export type SendMessage = z.infer<typeof sendMessage>;

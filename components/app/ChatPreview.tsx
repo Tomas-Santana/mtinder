@@ -5,7 +5,7 @@ import { Image, View } from "react-native";
 import mt from "@/style/mtWind";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { Modal } from "react-native";
@@ -29,9 +29,13 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
     deleted.mutate({ _id: chat._id })
   };
 
+  useEffect(() => {
+    console.log("chat", JSON.stringify(chat))
+  }, [chat])
+
   const lastMessageContent = useMemo(() => {
-    const content = chat.lastMessage?.message ?? "Say hi to your new friend!";
-    return content.length > 30 ? content.slice(0, 30) + "..." : content;
+    const content = (chat.lastMessage?.message ?? "Say hi to your new friend!").replace(/\n/g, " ");
+    return content.length > 20 ? content.slice(0, 20) + "..." : content;
   }, [chat]);
 
   const lastMessageSender = useMemo(() => {
@@ -49,6 +53,21 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
       btoa(otherUser?.profilePicture ?? "")
     }` as const;
   }, [otherUser, chat]);
+
+  const time = useMemo(() => {
+    const messageDate = new Date(chat.lastMessage?.timestamp ?? new Date());
+    const today = new Date();
+    const isToday = messageDate.toDateString() === today.toDateString();
+    return isToday
+      ? messageDate.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : `${messageDate.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })} ${messageDate.toLocaleTimeString()}`;
+  }, [chat]);
 
   return (
     <Swipeable onSwipeAction={onSwipe}>
@@ -97,9 +116,21 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
             <Text style={[mt.color("white"), mt.fontSize("lg")]}>
               {otherUser?.firstName} {otherUser?.lastName}
             </Text>
-            <Text style={[mt.color("white")]}>
-              {lastMessageSender} {lastMessageContent}
-            </Text>
+            <View
+              style={[
+                mt.flexRow,
+                mt.justify("space-between"),
+                mt.w("full"),
+              ]}
+            >
+              <Text style={[mt.color("white")]}>
+                {lastMessageSender} {lastMessageContent}
+              </Text>
+
+              <Text style={[mt.color("gray"), mt.align("right")]}>
+                {time}
+              </Text>
+            </View>
           </View>
         </TouchableOpacity>
 

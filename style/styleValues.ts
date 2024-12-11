@@ -48,6 +48,7 @@ const s = {
     full: "100%" as DimensionValue,
     half: "50%" as DimensionValue,
     sixty: "55%" as DimensionValue,
+    eighty: "80%" as DimensionValue,
     twoThirds: "66.666667%" as DimensionValue,
     third: "33.333333%" as DimensionValue,
     auto: "auto" as DimensionValue,

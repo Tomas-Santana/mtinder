@@ -1,24 +1,23 @@
 import mt from "@/style/mtWind";
 import { Link } from "expo-router";
-import { View } from "react-native";
-import { Text } from "../ui/text";
+import { View, Text, TouchableOpacity } from "react-native";
 import type { Chat } from "@/types/Chat";
 import { userAtom } from "@/utils/atoms/userAtom";
-import { useAtomValue } from "jotai";
-import { useMemo } from "react";
+import { getDefaultStore } from "jotai";
+import { Message } from "@/types/Message";
+import { router } from "expo-router";
+import { Image } from "react-native";
 
-export function ChatToastContent({ chat }: { chat: Chat }) {
-  const user = useAtomValue(userAtom);
-  const otherUser = useMemo(() => {
-    return chat.participantsInfo.find((p) => p._id !== user?._id);
-  }, [chat, user]);
-    const route = useMemo(() => {
-      return `/chat/${chat._id}?otherUserId=${
-        otherUser?._id ?? ""
-      }&otherUserName=${otherUser?.firstName ?? ""} ${
-        otherUser?.lastName ?? ""
-      }&otherUserImageB64=${btoa(otherUser?.profilePicture ?? "")}` as const;
-    }, [otherUser, chat]);
+export function NewChatToastContent({ chat }: { chat: Chat }) {
+  const user = getDefaultStore().get(userAtom);
+  const otherUser = chat.participantsInfo.find((p) => p._id !== user?._id);
+
+  const route = `/chat/${chat._id}?otherUserId=${
+    otherUser?._id ?? ""
+  }&otherUserName=${otherUser?.firstName ?? ""} ${
+    otherUser?.lastName ?? ""
+  }&otherUserImageB64=${btoa(otherUser?.profilePicture ?? "")}` as const;
+
   return (
     <View style={[mt.w("full"), mt.px(4)]}>
       <View
@@ -35,11 +34,66 @@ export function ChatToastContent({ chat }: { chat: Chat }) {
       >
         <Text style={[mt.color("white")]}>You have a new match!</Text>
         <Link href={route}>
-          <Text size="xl" style={[mt.color("green"), mt.underline]}>
+          <Text style={[mt.color("green"), mt.underline, mt.fontSize("2xl")]}>
             Go to chat
           </Text>
         </Link>
       </View>
     </View>
+  );
+}
+
+export function NewMessageToastContent({ message, chat }: { message: Message, chat: Chat }) {
+  const user = getDefaultStore().get(userAtom);
+  const otherUser = chat.participantsInfo.find((p) => p._id !== user?._id);
+
+  const route = `/chat/${chat._id}?otherUserId=${
+    otherUser?._id ?? ""
+  }&otherUserName=${otherUser?.firstName ?? ""} ${
+    otherUser?.lastName ?? ""
+  }&otherUserImageB64=${btoa(otherUser?.profilePicture ?? "")}` as const;
+
+  const messageContent = message.content.length > 30 ? message.content.slice(0, 30) + "..." : message.content;
+
+  return (
+    <TouchableOpacity style={[mt.w("full"), mt.px(4)]}
+      onPress={() => router.push(route)}
+    >
+      <View
+        style={[
+          mt.w("full"),
+          mt.bg("blackOpacity", 100, 0.9),
+          mt.p(4),
+          mt.flexRow,
+          mt.items("center"),
+          mt.justify("flex-start"),
+          mt.rounded("md"),
+          mt.glow("md", "green"),
+          mt.gap(4),
+        ]}
+      >
+        <View
+          // image
+          style={[mt.w(12), mt.h(12), mt.rounded("full"), mt.glow("md", "green")]}
+        >
+          <Image
+            source={{ uri: otherUser?.profilePicture || undefined }}
+            style={[mt.w("full"), mt.h("full"), mt.rounded("full")]}
+            
+          />
+        </View>
+
+
+
+        <View
+          style={[mt.flexCol, mt.items("flex-start"), mt.justify("center")]}
+        >
+          <Text style={[mt.color("white"), mt.fontSize("lg")]}>{otherUser?.firstName}</Text>
+          <Text style={[mt.color("white")]}>
+            {message.contentType === "text" ? messageContent : "📷 Image"}
+          </Text>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 }

@@ -51,7 +51,7 @@ type NegativePixels = keyof typeof s.negativePixels;
 type WholePixels = Pixels | NegativePixels;
 type AbsolutePixels = Exclude<
   Pixels,
-  "full" | "half" | "third" | "twoThirds" | "sixty" | "auto"
+  "full" | "half" | "third" | "twoThirds" | "sixty" | "auto" | "eighty"
 >;
 type Font = keyof typeof s.font;
 type FontWeight = "bold" | "medium" | "light" | "black";
