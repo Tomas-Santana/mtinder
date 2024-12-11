@@ -14,16 +14,16 @@ import { useMutation } from "@tanstack/react-query";
 import MatchController from "@/api/controllers/MatchController";
 import { useMatchRequests } from "@/hooks/useMatchRequests";
 import { MatchModal } from "@/components/app/matchModal";
-
+import { Chat, ReducedChat } from "@/types/Chat";
 
 export default function Home() {
   const currentUser = useAtomValue(userAtom);
   const [currentCard, setCurrentCard] = useState<Card>();
-  
+
   const matchRequestsQuery = useMatchRequests();
 
   const [openMatchDialog, setOpenMatchDialog] = useState(false);
-  const [matchChatId, setMatchChatId] = useState<string | null>(null);
+  const [matchChat, setMatchChat] = useState<ReducedChat | null>(null);
 
   const requestMatch = useMutation({
     mutationFn: MatchController.requestMatch,
@@ -31,8 +31,8 @@ export default function Home() {
       console.log(error.message);
     },
     onSuccess: (data) => {
-      if (data.chatId) {
-        setMatchChatId(data.chatId);
+      if (data.chat) {
+        setMatchChat(data.chat);
       }
     },
     onMutate: (variables) => {
@@ -46,12 +46,11 @@ export default function Home() {
     },
   });
 
-
   const userQuery = useQuery({
     queryKey: ["users"],
     queryFn: () => UserController.getUsers(),
   });
-  
+
   if (!currentUser) {
     console.log("no user");
     return <Redirect href="/" />;
@@ -62,13 +61,18 @@ export default function Home() {
     return <Redirect href="/main/completeProfile" />;
   }
   const filterUsers = (users: Card[]) => {
-    return users.filter( user => 
-      user.user._id !== currentUser._id &&
-      user.user.favoriteGenres?.some(genre => currentUser.favoriteGenres?.includes(genre))
-    )
-  }
-  
-  const filteredUsers = userQuery.data ? filterUsers(userQuery.data.map(user => ({ user }))) : []
+    return users.filter(
+      (user) =>
+        user.user._id !== currentUser._id &&
+        user.user.favoriteGenres?.some((genre) =>
+          currentUser.favoriteGenres?.includes(genre)
+        )
+    );
+  };
+
+  const filteredUsers = userQuery.data
+    ? filterUsers(userQuery.data.map((user) => ({ user })))
+    : [];
 
   const liked = (card: Card) => {
     setCurrentCard(card);
@@ -92,11 +96,11 @@ export default function Home() {
 
       {currentCard && <Text>{currentCard.user.firstName}</Text>}
       <MatchModal
-        chatId={matchChatId}
+        chat={matchChat}
         isOpen={openMatchDialog}
         setIsOpen={setOpenMatchDialog}
         onCancel={() => {
-          setMatchChatId(null);
+          setMatchChat(null);
         }}
         user={currentCard?.user ?? null}
       />

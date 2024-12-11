@@ -2,21 +2,45 @@ import { Modal, View, Image } from "react-native";
 import { Text } from "../ui/text";
 import { GlowingText } from "../ui/text";
 import { Button } from "../ui/button";
-import { Link } from "expo-router";
 import { User } from "@/types/User";
 import mt from "@/style/mtWind";
 import { useRouter } from "expo-router";
-import { BlurView } from 'expo-blur';
+import { useEffect, useMemo } from "react";
+import { currentChatAtom } from "@/utils/atoms/currentChatAtom";
+import { useAtomValue, useSetAtom } from "jotai";
+import type { Chat, ReducedChat } from "@/types/Chat";
+import { userAtom } from "@/utils/atoms/userAtom";
 
 interface MatchModalProps {
-  chatId: string | null;
   setIsOpen: (open: boolean) => void;
   isOpen: boolean;
   user: User | null;
+  chat: ReducedChat | null;
   onCancel: () => void;
 }
-export function MatchModal({ chatId, setIsOpen, isOpen, user, onCancel }: MatchModalProps) {
+export function MatchModal({
+  chat,
+  setIsOpen,
+  isOpen,
+  user,
+  onCancel,
+}: MatchModalProps) {
+  const currentUser = useAtomValue(userAtom);
   const router = useRouter();
+  const route = useMemo(() => {
+    return `/chat/${chat?._id}` as const;
+  }, [user, chat]);
+  const setCurrentChat = useSetAtom(currentChatAtom);
+  const fullChat = useMemo<Chat | null>(() => {
+    if (!chat || !user || !currentUser) return null;
+
+    return {
+      ...chat,
+      messages: [],
+      participants: [user, currentUser],
+    };
+  }, [chat, user, currentUser]);
+
   return (
     <Modal
       animationType="fade"
@@ -70,13 +94,14 @@ export function MatchModal({ chatId, setIsOpen, isOpen, user, onCancel }: MatchM
           </GlowingText>
           <Button
             variant="primary"
-            disabled={!chatId}
+            disabled={!fullChat}
             onPress={() => {
               setIsOpen(false);
-              router.push(`/chat/${chatId}`);
+              router.push(route);
+              setCurrentChat(fullChat);
             }}
           >
-            <Text>{chatId ? "Chat" : "Setting up your friendship..."}</Text>
+            <Text>{fullChat ? "Chat Now!" : "Setting up your friendship..."}</Text>
           </Button>
           <Button
             onPress={() => {
