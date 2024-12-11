@@ -15,6 +15,7 @@ export const apiRoutes = {
   uploadImages: () => `${server}/photos/upload-images`,
   chat: () => `${server}/chat`,
   "chat/[id]": (id: string) => `${server}/chat/${id}`, 
+  chatMessages: (chatId: string) => `${server}/chat/${chatId}/messages`,
   "match/request": () => `${server}/match/request`,
   match: () => `${server}/match`,
 };

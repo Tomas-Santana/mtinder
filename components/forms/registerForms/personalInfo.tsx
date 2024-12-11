@@ -22,12 +22,6 @@ interface InfoFormProps {
   fullForm: UseFormReturn<FullSchema>;
 }
 
-// const options = [
-//   { label: "Masculino", value: "male" },
-//   { label: "Femenino", value: "female" },
-//   { label: "Otro", value: "other" },
-// ];
-
 export function InfoForm({ setTab, fullForm }: InfoFormProps){
 
   const form = useForm<InfoSchema>({
@@ -45,6 +39,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
       console.log("No se pudo verificar el email")
     },
     onSuccess: (data) => {
+      console.log(data);
       if (!data.available) {
         // set an error in form
         form.setError("email", {
@@ -58,13 +53,13 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
         firstName: form.getValues("firstName"),
         lastName: form.getValues("lastName"),
       });
+      console.log(fullForm.getValues());
       setTab(1);
     },
   });
 
   const onSubmit = (data: InfoSchema) => {
     verifyEmailMutation.mutate(data);
-    setTab(1)
   }
 
   return (

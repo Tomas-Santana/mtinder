@@ -39,6 +39,17 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
     if (chat.lastMessage.senderName === "Mellow Mates") return "";
     return `${chat.lastMessage.senderName}: `;
   }, [chat, user]);
+
+  const route = useMemo(() => {
+    return `/chat/${chat._id}?otherUserId=${
+      otherUser?._id ?? ""
+    }&otherUserName=${
+      otherUser?.firstName ?? ""
+    } ${otherUser?.lastName ?? ""}&otherUserImageB64=${
+      btoa(otherUser?.profilePicture ?? "")
+    }` as const;
+  }, [otherUser, chat]);
+
   return (
     <Swipeable onSwipeAction={onSwipe}>
       <Animated.View
@@ -63,7 +74,7 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
             mt.borderColor("gray", 300),
             mt.gap(4),
           ]}
-          onPress={() => router.push(`/chat/${chat._id}`)}
+          onPress={() => router.push(route)}
         >
           <TouchableOpacity
             style={[mt.w(12), mt.h(12), mt.rounded("full"), mt.glow()]}

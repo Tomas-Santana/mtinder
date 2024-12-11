@@ -14,36 +14,32 @@ export const socket = io(SERVER, {
   autoConnect: false,
 });
 
-socket.on("connection", () => {
-  console.log("Connected to server");
-});
+export default class SocketController {
+  static socket = socket;
+  static async connect() {
+    socket.connect();
+  }
 
-socket.on("disconnect", () => {
-  console.log("Disconnected from server");
-});
-
-socket.on("match-request", (data) => {
-  console.log("Match request received", data);
-});
-
-export function subscribe() {
-  console.log("subscribing to socket events");
-  const handleNewChat = (newChat: Chat) => {
+  static async disconnect() {
+    socket.disconnect();
+  }
+  static setToken(token: string) {
+    SocketController.socket.auth = { token };
+  }
+  static handleNewChat(newChat: Chat, noToast?: boolean) {
     const oldChats = queryClient.getQueryData<GetChatsResponse>(["chats"]);
     if (!!oldChats?.chats?.some((chat) => chat._id === newChat._id)) {
       return;
     }
-
-    Toast.custom(ChatToastContent({ chatId: newChat._id }));
+    !noToast && Toast.custom(ChatToastContent({ chat: newChat }));
     queryClient.setQueryData<GetChatsResponse>(["chats"], (data) => {
       return {
         chats: [...(data?.chats || []), newChat],
       };
     });
-    queryClient.invalidateQueries({ queryKey: ["chats"], exact: true });
-  };
+  }
 
-  const handleNewMatchRequest = (newMatchRequest: MatchRequest) => {
+  static handleNewMatchRequest(newMatchRequest: MatchRequest) {
     const oldRequests = queryClient.getQueryData<GetMatchRequestsResponse>([
       "matchRequests",
     ]);
@@ -54,17 +50,19 @@ export function subscribe() {
       return;
     }
 
-    queryClient.setQueryData<GetMatchRequestsResponse>(
-      ["matchRequests"],
-      (data) => {
-        return {
-          requests: [...(data?.requests || []), newMatchRequest],
-        };
-      }
-    );
-  };
+    queryClient.setQueryData<GetMatchRequestsResponse>(["matchRequests"], (data) => {
+      return {
+        requests: [...(data?.requests || []), newMatchRequest],
+      };
+    });
+  }
 
-  socket.on("matchRequest", handleNewMatchRequest);
-
-  socket.on("newChat", handleNewChat);
+  static async subscribe() {
+    socket.on("matchRequest", SocketController.handleNewMatchRequest);
+    socket.on("newChat", SocketController.handleNewChat);
+  }
 }
+
+
+
+

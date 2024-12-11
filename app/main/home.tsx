@@ -53,10 +53,12 @@ export default function Home() {
   });
   
   if (!currentUser) {
+    console.log("no user");
     return <Redirect href="/" />;
   }
 
   if (!currentUser.profileReady) {
+    console.log("no profile");
     return <Redirect href="/main/completeProfile" />;
   }
   const filterUsers = (users: Card[]) => {
