@@ -270,8 +270,8 @@ const styles = StyleSheet.create({
   },
   background: {
     position: 'absolute',
-    top: 16, // Ajusta este valor para la distancia desde la parte superior
-    bottom: 16, // Ajusta este valor para la distancia desde la parte inferior
+    top: 16, 
+    bottom: 16, 
     left: 0,
     right: 0,
   }
