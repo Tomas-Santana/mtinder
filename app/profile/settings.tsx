@@ -50,9 +50,9 @@ export default function Settings() {
               />
             </TouchableOpacity>
           </View>
-          <View
+          {/* <View
             style={[mt.pxh(1), mt.w("full"), mt.glow("sm"), mt.bg("blue", 300)]}
-          ></View>
+          ></View> */}
           <UpdateProfilePic
             visible={modalVisible}
             setVisible={setModalVisible}
@@ -63,19 +63,22 @@ export default function Settings() {
             {currentUser?.firstName} {currentUser?.lastName}
           </Text>
           <Text
-            style={[mt.fontSize("sm"), mt.align("center"), mt.color("gray")]}
+            style={[mt.fontSize("md"), mt.align("center"), mt.color("gray")]}
           >
             {currentUser?.email}
           </Text>
         </View>
-        
-        <Button style={[mt.flexRow, mt.gap(2)]} onPress={() => router.push("/profile/edit")}>
-          <Text style={[mt.color("white")]}>Editar Perfil</Text>
-          <MaterialCommunityIcons name="account-edit" size={24} color={"white"} />
+        <View style={[mt.flexCol, mt.gap(6), mt.justify("center"), mt.items("center"), mt.p(2)]}></View>
+        <Button 
+          style={[mt.flexRow, mt.gap(2), mt.borderColor("blue"), mt.border(2), mt.p(3), mt.rounded("sm"), mt.glow("sm", "blue"), mt.mb(5)]} 
+          onPress={() => router.push("/profile/edit")}
+        >
+          <MaterialCommunityIcons name="account-edit-outline" size={24} color="#80E1FF" style={[mt.textGlow("sm", "blue")]} />
+          <Text style={[mt.color("blue")]}>Editar Perfil</Text>
         </Button>
-        <Button style={[mt.flexRow, mt.gap(2)]} onPress={logOut}>
-          <Text style={[mt.color("white")]}>Cerrar sesion</Text>
-          <MaterialCommunityIcons name="logout" size={24} color={"white"} />
+        <Button style={[mt.flexRow, mt.gap(2), mt.borderColor("orange"), mt.border(2), mt.p(3), mt.rounded("sm"), mt.glow("sm", "orange")]} onPress={logOut}>
+          <MaterialCommunityIcons name="logout" size={24} color={"orange"} style={[mt.textGlow("sm", "orange")]}/>
+          <Text style={[mt.color("orange")]}>Cerrar sesion</Text>
         </Button>
         <DeleteModal />
       </View>

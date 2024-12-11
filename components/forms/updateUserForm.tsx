@@ -12,13 +12,11 @@ import { useUser } from "@/hooks/app/useUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface UserFormProps {
-  firstName: string
-  lastName: string
   setFirstName: (value: string) => void;
   setLastName: (value: string) => void;
 }
 
-export default function UserForm({ firstName, lastName, setFirstName, setLastName }: UserFormProps) {
+export default function UserForm({ setFirstName, setLastName }: UserFormProps) {
   const [currentUser, setCurrentUser] = useAtom(userAtom)
   const { updateUser } = useUser(currentUser || undefined, setCurrentUser)
   const form = useForm<z.infer<typeof UserFormSchema>>({
@@ -37,7 +35,8 @@ export default function UserForm({ firstName, lastName, setFirstName, setLastNam
       return
     }
 
-    if (currentUser?._id) updateUser(data)
+    setFirstName(data.firstName)
+    setLastName(data.lastName)
   }
 
   return (
@@ -48,6 +47,7 @@ export default function UserForm({ firstName, lastName, setFirstName, setLastNam
         placeholder="John"
         label="Tu nombre"
         error={form.formState.errors.firstName}
+        inputStyle={[mt.bg("gray", 800)]}
       />
       <FormTextInput 
         name="lastName"
@@ -55,11 +55,12 @@ export default function UserForm({ firstName, lastName, setFirstName, setLastNam
         placeholder="Holmes"
         label="Tu apellido"
         error={form.formState.errors.lastName}
+        inputStyle={[mt.bg("gray", 800)]}
       />
       <Animated.View layout={LinearTransition} style={[mt.mt(5)]}>
         <Button variant="success" onPress={form.handleSubmit(onSubmit)}>
           <Text>
-            Actualizar datos
+            Save
           </Text>
         </Button>
       </Animated.View>

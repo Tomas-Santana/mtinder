@@ -11,6 +11,7 @@ export type UserUpdateRequest = {
   _id: string;
   firstName: string;
   lastName: string;
+  favoriteGenres: string[]
 };
 
 export const UserDeleteSchema = z.object({
@@ -26,6 +27,7 @@ export const UserUpdateSchema = z.object({
   _id: z.string(),
   firstName: z.string(),
   lastName: z.string(),
+  favoriteGenres: z.array(z.string())
 });
 
 export type UserDeleteResponse = z.infer<typeof UserDeleteSchema>;

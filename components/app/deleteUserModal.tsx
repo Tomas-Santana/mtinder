@@ -47,8 +47,7 @@ export function DeleteModal() {
       style={[mt.flexCol, mt.items("center"), mt.gap(9), mt.p(5), mt.w("full")]}
     >
       <Button
-        variant="secondary"
-        style={[mt.flexRow, mt.gap(2), mt.borderColor("red"), mt.border(2), mt.p(3), mt.rounded("base")]}
+        style={[mt.flexRow, mt.gap(2), mt.borderColor("red", 700), mt.border(2), mt.p(3), mt.rounded("base"), mt.glow("sm", "red", 800)]}
         onPress={() => setVisible(true)}
       >
         <MaterialCommunityIcons
@@ -57,7 +56,7 @@ export function DeleteModal() {
           color="#ff0000"
           style={[mt.textGlow("md", "red")]}
         />
-        <Text style={[mt.color("white")]}>Borrar Cuenta</Text>
+        <Text style={[mt.color("red")]}>Borrar Cuenta</Text>
       </Button>
       <Modal visible={visible} transparent={true} animationType="fade">
         <TouchableWithoutFeedback onPress={close}>
@@ -70,6 +69,7 @@ export function DeleteModal() {
                 mt.border(2),
                 mt.borderColor("white"),
                 mt.glow("sm", "white"),
+                mt.bg("gray", 900)
               ]}
             >
               <TouchableOpacity
