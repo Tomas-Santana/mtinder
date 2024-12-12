@@ -14,6 +14,7 @@ import { Text } from "../ui/text";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Reanimated from "react-native-reanimated";
+import { NoMoreScroll } from "./noMoreScroll";
 
 const { width, height } = Dimensions.get("window");
 
@@ -107,6 +108,9 @@ export default function SwipeCard({
       onPanResponderRelease: (event: any, gestureState: any) =>
         handlePanResponderRelease(event, gestureState, index),
     });
+  if (cards.length === 0) {
+    return <NoMoreScroll />
+  }
 
   return (
     <View style={styles.container}>
