@@ -131,7 +131,7 @@ export default class SocketController {
       }
     );
   }
-  handleChatDeleted(deletedChatId: string) {
+  static handleChatDeleted(deletedChatId: string) {
     const currentChat = store.get(currentChatIdAtom);
     if (deletedChatId === currentChat) {
       store.set(currentChatIdAtom, null);
@@ -141,6 +141,7 @@ export default class SocketController {
         chats: data?.chats?.filter((chat) => chat._id !== deletedChatId) || [],
       };
     });
+    queryClient.invalidateQueries({queryKey: ["chat"]})
   }
 
 
@@ -149,5 +150,6 @@ export default class SocketController {
     socket.on("matchRequest", SocketController.handleNewMatchRequest);
     socket.on("newChat", SocketController.handleNewChat);
     socket.on("newMessage", SocketController.handleNewMessage);
+    socket.on("chatDeleted", SocketController.handleChatDeleted);
   }
 }

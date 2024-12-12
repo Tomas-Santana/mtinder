@@ -15,6 +15,7 @@ import { userAtom } from "@/utils/atoms/userAtom";
 import { useMutation } from "@tanstack/react-query";
 import UserController from "@/api/controllers/UserController";
 import { router } from "expo-router";
+import SocketController from "@/api/controllers/SocketController";
 
 export function DeleteModal() {
   const [currentUser, setUser] = useAtom(userAtom);
@@ -29,6 +30,8 @@ export function DeleteModal() {
     mutationFn: UserController.DeleteUser,
     onSuccess: () => {
       console.log("Account deleted");
+      SocketController.disconnect();
+
       setUser(null);
       router.push("/");
     },
