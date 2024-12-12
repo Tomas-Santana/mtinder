@@ -6,7 +6,7 @@ export default function Logo() {
   const opacity = useSharedValue(0.5);
 
 
-
+  useEffect(() => {
   opacity.value = opacity.value = withRepeat(
     withTiming(1, {
       duration: 1000,
@@ -15,6 +15,7 @@ export default function Logo() {
     -1,
     true
   );
+  }, [opacity]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

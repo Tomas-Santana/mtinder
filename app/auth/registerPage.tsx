@@ -19,7 +19,7 @@ export default function Register(){
           Create an account and find your next best mate.
         </Text>
       </View>
-      <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), mt.glow("md", "orange", 600), mt.p(4), mt.mt(10)]}>
+      <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), mt.glow("md", "orange", 600), mt.p(4)]}>
         <RegisterForm />
       </View>
     </View>
