@@ -67,7 +67,7 @@ export default function LoginForm(){
       <FormTextInput 
         name="password"
         control={form.control}
-        label="Contraseña"
+        label="Password"
         error={form.formState.errors.password}
       />
       <Animated.View layout={LinearTransition} style={mtForm.sideText}>
@@ -77,7 +77,7 @@ export default function LoginForm(){
             style={[mtForm.text]}
           >
             <Text>
-              Olvidé mi contraseña
+              Forgot password
             </Text>
           </Link>
       </Animated.View>
@@ -88,7 +88,7 @@ export default function LoginForm(){
           loading={loginMutation.isPending}
         >
           <Text>
-            Iniciar Sesion
+            Log In
           </Text>
         </Button>
       </Animated.View>
@@ -98,7 +98,7 @@ export default function LoginForm(){
           style={[mtForm.text]}
         >
           <Text>
-            Crear una cuenta
+            Create Account
           </Text>
         </Link>
       </Animated.View>

@@ -39,17 +39,17 @@ export default function SendResetForm() {
   const SendResetMutation = useMutation({
     mutationFn: AuthController.sendResetEmail,
     onSuccess: () => {
-      console.log("Email enviado!");
+      console.log("Email sent!");
       router.push("/auth/changePasswordPage");
     },
     onError: (error) => {
-      console.log("Error al enviar el email", error);
+      console.log("Error sending email", error);
     },
   });
 
   const onSubmit = (data: z.infer<typeof sendResetFormSchema>) => {
     SendResetMutation.mutate(data)
-    console.log("Data enviada", data);
+    console.log("Data sent", data);
   };
 
   return (
@@ -59,7 +59,7 @@ export default function SendResetForm() {
     >
       <FormTextInput
         name="email"
-        label="Correo Electronico"
+        label="Email"
         control={form.control}
         placeholder="Linker@gmail.com"
         error={form.formState.errors.email}
@@ -80,9 +80,9 @@ export default function SendResetForm() {
         layout={LinearTransition}
       >
         <Text style={[mt.align("center"), mt.color("white")]}>
-          Recuerdas tu contraseña?{" "}
+          Remember your password?{" "}
           <Link href={"/"} style={[mt.color("orange"), mt.align("center")]}>
-            Inicia Sesion.
+            Log in.
           </Link>
         </Text>
       </Animated.View>

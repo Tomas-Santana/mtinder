@@ -52,11 +52,11 @@ export default function SetPasswordForm({
   const SetPasswordMutation = useMutation({
     mutationFn: AuthController.resetPassword,
     onSuccess: () => {
-      console.log("Contrasena establecida");
+      console.log("Password changed");
       router.push("/");
     },
     onError: (error) => {
-      console.log("Error al establecer la contrasena", error);
+      console.log("Error changing your password", error);
       setTab(0);
     },
   });
@@ -78,14 +78,14 @@ export default function SetPasswordForm({
     >
       <FormTextInput
         name="password"
-        label="Contraseña"
+        label="Password"
         control={form.control}
         error={form.formState.errors.password}
         type="password"
       />
       <FormTextInput
         name="confirmPassword"
-        label="Confirmar contraseña"
+        label="Confirm Password"
         control={form.control}
         error={form.formState.errors.confirmPassword}
         type="password"
@@ -95,7 +95,7 @@ export default function SetPasswordForm({
           {SetPasswordMutation.isPending ? (
             <ActivityIndicator size="small" color="white" />
           ) : (
-            <Text>Establecer contraseña</Text>
+            <Text>Change Password</Text>
           )}
         </Button>
       </Animated.View>

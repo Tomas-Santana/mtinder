@@ -36,7 +36,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
   const verifyEmailMutation = useMutation({
     mutationFn: AuthController.verifyEmailAvailability,
     onError: (_) => {
-      console.log("No se pudo verificar el email")
+      console.log("Email could not be verified.")
     },
     onSuccess: (data) => {
       console.log(data);
@@ -66,7 +66,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
     <Animated.View style={mtForm.container} layout={LinearTransition} entering={SlideInRight} exiting={SlideOutLeft}>
       <FormTextInput 
         name="email"
-        label="Correo Electonico"
+        label="Email"
         placeholder="Linker@gmail.com"
         control={form.control}
         error={form.formState.errors.email}
@@ -75,7 +75,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
       <Animated.View layout={LinearTransition} style={[mt.flexRow, mt.gap(4), mt.w("full")]}>
         <FormTextInput 
           name="firstName"
-          label="Nombre"
+          label="Name"
           placeholder="Sam"
           control={form.control}
           error={form.formState.errors.firstName}
@@ -84,7 +84,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
 
         <FormTextInput 
           name="lastName"
-          label="Apellido"
+          label="Last name"
           placeholder="Witwiki"
           control={form.control}
           error={form.formState.errors.lastName}
@@ -104,7 +104,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
       <Animated.View style={mtForm.sideText}>
         <Link href="/" style={mtForm.text}>
           <Text>
-            Volver al inicio de sesion
+            Back to Log In
           </Text>
         </Link>
       </Animated.View>

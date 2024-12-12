@@ -28,12 +28,12 @@ export function DeleteModal() {
   const deleteMutation = useMutation({
     mutationFn: UserController.DeleteUser,
     onSuccess: () => {
-      console.log("Cuenta eliminada");
+      console.log("Account deleted");
       setUser(null);
       router.push("/");
     },
     onError: (error) => {
-      console.log("Error al eliminar la cuenta", error);
+      console.log("Error deleting account", error);
     },
   });
 
@@ -99,18 +99,16 @@ export function DeleteModal() {
                   ]}
                   color="#FF0000"
                 >
-                  Borrar tu cuenta
+                  Delete your Account
                 </GlowingText>
                 <Text style={[mt.color("red"), mt.align("center")]}>
-                  Estás a punto de borrar tu cuenta y todos tus datos
-                  personales. No podrás recuperarlos una vez borrados. ¿Estás
-                  seguro de querer continuar?
+                  You are about to delete your account and all your personal data. You will not be able to recover them once deleted. Are you sure you want to continue?
                 </Text>
               </View>
 
               <Button onPress={deleteUser} style={[mt.flexRow, mt.gap(2), mt.borderColor("red"), mt.border(2), mt.p(3), mt.rounded("base")]}>
                 <Text style={[mt.color("white")]}>
-                  Borrar cuenta
+                  Delete
                 </Text>
                 <MaterialCommunityIcons
                   name="account-cancel-outline"
@@ -122,7 +120,7 @@ export function DeleteModal() {
 
               <Button variant="secondary" style={[mt.mt(4)]} onPress={close}>
                 <Text>
-                  Cancelar
+                  Cancel
                 </Text>
               </Button>
             </View>

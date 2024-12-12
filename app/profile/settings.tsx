@@ -74,11 +74,11 @@ export default function Settings() {
           onPress={() => router.push("/profile/edit")}
         >
           <MaterialCommunityIcons name="account-edit-outline" size={24} color="#80E1FF" style={[mt.textGlow("sm", "blue")]} />
-          <Text style={[mt.color("blue")]}>Editar Perfil</Text>
+          <Text style={[mt.color("blue")]}>Edit Profile</Text>
         </Button>
         <Button style={[mt.flexRow, mt.gap(2), mt.borderColor("orange"), mt.border(2), mt.p(3), mt.rounded("sm"), mt.glow("sm", "orange")]} onPress={logOut}>
           <MaterialCommunityIcons name="logout" size={24} color={"orange"} style={[mt.textGlow("sm", "orange")]}/>
-          <Text style={[mt.color("orange")]}>Cerrar sesion</Text>
+          <Text style={[mt.color("orange")]}>Log Out</Text>
         </Button>
         <DeleteModal />
       </View>

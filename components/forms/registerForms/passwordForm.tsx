@@ -39,7 +39,7 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
       Toast.error(error.message);
     },
     onSuccess: () => {
-      Toast.success("Bienvenido a Mellow Mates!")
+      Toast.success("Welcome to Mellow Mates!")
       fullForm.reset();
       form.reset();
       setTab(0);
@@ -72,14 +72,14 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
       <FormTextInput
         name="password"
         control={form.control}
-        label="Contraseña"
+        label="Password"
         error={form.formState.errors.password}
         type="password"
       />
       <FormTextInput
         name="confirmPassword"
         control={form.control}
-        label="Confirmar contraseña"
+        label="Confirm Password"
         error={form.formState.errors.confirmPassword}
         type="password"
       />
@@ -89,12 +89,12 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
           loading={registerMutation.isPending}
           disabled={registerMutation.isPending}
         >
-          <Text>Crear Cuenta</Text>
+          <Text>Create Account</Text>
         </Button>
       </Animated.View>
       <Animated.View layout={LinearTransition}>
         <Button variant="secondary" onPress={() => setTab(0)} >
-          <Text>Volver</Text>
+          <Text>Go Back</Text>
         </Button>
       </Animated.View>
     </Animated.View>

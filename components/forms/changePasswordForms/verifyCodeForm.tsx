@@ -56,7 +56,7 @@ export default function VerifyCodeForm({ setTab, fullForm }: VerifyCodeProps) {
     >
       <FormTextInput
         name="code"
-        label="Codigo de Verificacion"
+        label="Verification Code"
         control={form.control}
         error={form.formState.errors.code}
       />
@@ -65,7 +65,7 @@ export default function VerifyCodeForm({ setTab, fullForm }: VerifyCodeProps) {
           {VerifyMutation.isPending ? (
             <ActivityIndicator size="small" color="white" />
           ) : (
-            <Text>Verificar</Text>
+            <Text>Verify</Text>
           )}
         </Button>
       </Animated.View>

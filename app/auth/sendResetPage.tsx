@@ -13,7 +13,7 @@ export default function SendReset() {
       <View style={[mt.flexCol, mt.gap(3), mt.items("center")]}>
         <Logo />
         <Text style={[mt.fontSize("md"), mt.color("gray"), mt.spacing(1)]}>
-          Ingresa tu correo para que puedas cambiar tu cotraseña!
+          Enter your email so you can change your password!
         </Text>
       </View>
       <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), ]}>

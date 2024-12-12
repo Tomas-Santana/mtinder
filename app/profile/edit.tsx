@@ -40,10 +40,10 @@ export default function UpdateInfoScreen() {
           <View style={[mt.flex1, mt.justify("center"), mt.items("center"), mt.p(4)]}>
             <View style={[mt.flexCol, mt.justify("center"), mt.gap(4), mt.rounded("md"), mt.border(2), mt.borderColor("gray", 200), mt.glow("md", "blue"), mt.p(6), mt.bg("gray", 900)]}>
               <GlowingText style={[mt.fontSize("2xl"), mt.align("center"), mt.color("blue")]} color="#80E1FF">
-                Tus datos personales
+                Personal Info
               </GlowingText>
               <Text style={[mt.fontSize("md"), mt.align("center"), mt.color("gray", 300)]}>
-                Actualiza tus datos personales para ver información más precisa en tu app.
+                Update your personal data.
               </Text>
               <View style={[mt.mt(10)]}>
                 <UserForm setFirstName={setFirstName} setLastName={setLastName} />
@@ -56,10 +56,10 @@ export default function UpdateInfoScreen() {
             <View style={[mt.flex1, mt.justify("center"), mt.items("center"), mt.p(4)]}>
               <View style={[mt.flexCol, mt.justify("center"), mt.gap(4), mt.rounded("md"), mt.border(2), mt.borderColor("gray", 200), mt.glow("md", "blue"), mt.bg("gray", 800)]}>
                 <GlowingText style={[mt.fontSize("2xl"), mt.align("center"), mt.color("blue")]} color="#80E1FF">
-                  Tus géneros favoritos
+                  Favorites Genres
                 </GlowingText>
                 <Text style={[mt.fontSize("md"), mt.align("center"), mt.color("gray", 300)]}>
-                  Selecciona tus géneros favoritos para obtener recomendaciones personalizadas.
+                  Select your favorite genres to get personalized recommendations.
                 </Text>
                 
                 <GenreTab 
