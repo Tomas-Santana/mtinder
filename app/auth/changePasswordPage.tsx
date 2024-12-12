@@ -16,7 +16,9 @@ export default function ChangePasswordPage(){
           Recover your password to continue interacting!
         </Text>
       </View>
-      <ChangePasswordForm />
+      <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), mt.glow("md", "yellow", 600), mt.p(4), mt.mt(10)]}>
+        <ChangePasswordForm />
+      </View>
     </View>
   );
 }

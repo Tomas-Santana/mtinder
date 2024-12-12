@@ -8,7 +8,7 @@ import UserForm from "../forms/updateUserForm";
 import mt from "@/style/mtWind";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button, CoolButton } from "../ui/button";
 import { GlowingText, Text } from "../ui/text";
 import { useAtom } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
@@ -64,11 +64,11 @@ export function DeleteModal() {
             <View
               style={[
                 mt.position("absolute"),
-                mt.p(4),
+                mt.p(9),
                 mt.maxW(96),
                 mt.border(2),
-                mt.borderColor("white"),
-                mt.glow("sm", "white"),
+                mt.borderColor("red"),
+                mt.glow("sm", "red", 600),
                 mt.bg("gray", 900)
               ]}
             >
@@ -106,23 +106,25 @@ export function DeleteModal() {
                 </Text>
               </View>
 
-              <Button onPress={deleteUser} style={[mt.flexRow, mt.gap(2), mt.borderColor("red"), mt.border(2), mt.p(3), mt.rounded("base")]}>
-                <Text style={[mt.color("white")]}>
-                  Delete
-                </Text>
+              <Button onPress={deleteUser} style={[mt.flexRow, mt.gap(2), mt.borderColor("red"), mt.border(2), mt.p(3), mt.rounded("base"), mt.items("center"), mt.justify("center"), mt.mt(5), mt.glow("sm", "red", 600)]}>
                 <MaterialCommunityIcons
                   name="account-cancel-outline"
                   size={24}
                   color="#ff0000"
                   style={[mt.textGlow("md", "red"), mt.ml(2)]}
                 />
-              </Button>
-
-              <Button variant="secondary" style={[mt.mt(4)]} onPress={close}>
-                <Text>
-                  Cancel
+                <Text style={[mt.color("red"), mt.align("center")]}>
+                  Delete
                 </Text>
               </Button>
+
+              <View style={[mt.mt(5)]}>
+                <CoolButton style={[mt.p(2)]} onPress={close} color="white">
+                  <Text style={[mt.color("white"), mt.align("center")]}>
+                    Cancel
+                  </Text>
+                </CoolButton>
+              </View>
             </View>
           </View>
         </TouchableWithoutFeedback>

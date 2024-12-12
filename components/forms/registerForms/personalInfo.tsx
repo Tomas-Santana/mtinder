@@ -15,7 +15,7 @@ import { mtForm } from "@/style/formStyle";
 import mt from "@/style/mtWind";
 import DropDown from "@/components/ui/dropDown";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, CoolButton } from "@/components/ui/button";
 import { Toast } from "@/components/ui/toast";
 
 interface InfoFormProps {
@@ -75,6 +75,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps) {
         placeholder="me@mellow-mates.com"
         control={form.control}
         error={form.formState.errors.email}
+        color="orange"
       />
 
       <Animated.View
@@ -88,6 +89,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps) {
           control={form.control}
           error={form.formState.errors.firstName}
           viewStyle={[mt.flex1]}
+          color="orange"
         />
 
         <FormTextInput
@@ -97,21 +99,24 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps) {
           control={form.control}
           error={form.formState.errors.lastName}
           viewStyle={[mt.flex1]}
+          color="orange"
         />
       </Animated.View>
 
       <Animated.View layout={LinearTransition}>
-        <Button
+        <CoolButton
           onPress={form.handleSubmit(onSubmit)}
           loading={verifyEmailMutation.isPending}
           disabled={verifyEmailMutation.isPending}
+          color="orange"
+          style={[mt.p(2)]}
         >
-          <Text>Next</Text>
-        </Button>
+          <Text style={[mt.color("orange"), mt.align("center")]}>Next</Text>
+        </CoolButton>
       </Animated.View>
       <Animated.View style={mtForm.sideText}>
-        <Link href="/" style={mtForm.text}>
-          <Text>Back to login</Text>
+        <Link href="/" style={[mtForm.text, mt.mt(5)]}>
+          <Text style={[mt.color("blue")]}>Back to login</Text>
         </Link>
       </Animated.View>
     </Animated.View>

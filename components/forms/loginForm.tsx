@@ -10,7 +10,7 @@ import { Text } from "../ui/text";
 import mt from "@/style/mtWind";
 import { Link, useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../ui/button";
+import { Button, CoolButton } from "../ui/button";
 import { Toast } from "../ui/toast";
 
 const loginFormSchema = z.object({
@@ -76,17 +76,26 @@ export default function LoginForm() {
         </Link>
       </Animated.View>
       <Animated.View layout={LinearTransition}>
-        <Button
+        <CoolButton
           onPress={form.handleSubmit(onSubmit)}
           disabled={loginMutation.isPending}
           loading={loginMutation.isPending}
+          color="blue"
+          style={[mt.p(2)]}
         >
-          <Text>Log in</Text>
-        </Button>
+          <Text style={[mt.color("blue"), mt.align("center")]}>
+            Log In
+          </Text>
+        </CoolButton>
       </Animated.View>
-      <Animated.View layout={LinearTransition} style={mtForm.sideText}>
-        <Link href={"/auth/registerPage"} style={[mtForm.text]}>
-          <Text>Create an account</Text>
+      <Animated.View layout={LinearTransition} style={[mtForm.sideText]}>
+        <Link
+          href={"/auth/registerPage"}
+          style={[mtForm.text, mt.mt(5)]}
+        >
+          <Text>
+            Create Account
+          </Text>
         </Link>
       </Animated.View>
     </Animated.View>
