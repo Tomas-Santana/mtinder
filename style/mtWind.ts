@@ -178,6 +178,10 @@ const mt = {
   border: (value: keyof typeof s.borderWidth) => ({
     borderWidth: s.borderWidth[value],
   }),
+  borderB: (value: keyof typeof s.borderWidth) => ({
+    borderBottomWidth: s.borderWidth[value],
+  }),
+
   borderColor: (
     value: keyof typeof s.colors,
     shade: ColorShade = 500,
