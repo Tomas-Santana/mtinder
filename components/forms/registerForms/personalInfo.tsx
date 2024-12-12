@@ -84,7 +84,6 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps) {
         <FormTextInput
           name="firstName"
           label="Name"
-          label="Name"
           placeholder="Sam"
           control={form.control}
           error={form.formState.errors.firstName}

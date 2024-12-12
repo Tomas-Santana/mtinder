@@ -72,14 +72,12 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
         name="password"
         control={form.control}
         label="Password"
-        label="Password"
         error={form.formState.errors.password}
         type="password"
       />
       <FormTextInput
         name="confirmPassword"
         control={form.control}
-        label="Confirm Password"
         label="Confirm Password"
         error={form.formState.errors.confirmPassword}
         type="password"

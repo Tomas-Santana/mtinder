@@ -62,7 +62,6 @@ export default function SendResetForm() {
       <FormTextInput
         name="email"
         label="Email"
-        label="Email"
         control={form.control}
         placeholder="me@mellow-mates.com"
         error={form.formState.errors.email}

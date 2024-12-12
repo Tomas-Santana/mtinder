@@ -68,7 +68,6 @@ export default function LoginForm() {
         name="password"
         control={form.control}
         label="Password"
-        label="Password"
         error={form.formState.errors.password}
       />
       <Animated.View layout={LinearTransition} style={mtForm.sideText}>
