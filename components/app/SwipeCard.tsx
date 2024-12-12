@@ -1,6 +1,6 @@
 import mt from "@/style/mtWind";
 import { User } from "@/types/User";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -15,6 +15,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Reanimated from "react-native-reanimated";
 import { NoMoreScroll } from "./noMoreScroll";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/utils/atoms/userAtom";
 
 const { width, height } = Dimensions.get("window");
 
@@ -108,9 +110,9 @@ export default function SwipeCard({
       onPanResponderRelease: (event: any, gestureState: any) =>
         handlePanResponderRelease(event, gestureState, index),
     });
-  if (cards.length === 0) {
-    return <NoMoreScroll />
-  }
+  // if (cards.length === 0) {
+  //   return <NoMoreScroll />;
+  // }
 
   return (
     <View style={styles.container}>
@@ -143,7 +145,7 @@ export default function SwipeCard({
                 backgroundColor,
                 zIndex: cards.length - index,
                 top: 10 * index,
-                opacity: isTopCard ? 1 : 0.8,
+
               },
               mt.bg("transparent"),
             ]}
@@ -155,6 +157,20 @@ export default function SwipeCard({
           </Animated.View>
         );
       })}
+
+      {/* place noMoreScroll bellow the cards */}
+      <View
+        style={[
+          mt.flex1,
+          mt.justify("center"),
+          mt.items("center"),
+          mt.position("absolute"),
+          mt.inset(0),
+        ]}
+      >
+        <NoMoreScroll />
+
+      </View>
     </View>
   );
 }
@@ -166,6 +182,13 @@ interface UserCardProps {
 const UserCard = ({ user }: UserCardProps) => {
   const [imageIndex, setImageIndex] = useState(0);
   const imagesLength = user.imageUrls?.length || 0;
+  const currentUser = useAtomValue(userAtom);
+
+  const howManyGenresInCommon = useMemo(() => {
+    return user.favoriteGenres?.filter((genre) =>
+      currentUser?.favoriteGenres?.includes(genre)
+    ).length;
+  }, [currentUser, user.favoriteGenres]);
 
   return (
     <View
@@ -195,6 +218,18 @@ const UserCard = ({ user }: UserCardProps) => {
           {user.firstName} {user.lastName}
         </Text>
         <Text size="lg">Likes {user.favoriteGenres?.join(", ")}</Text>
+        <Text size="lg"
+          style={[mt.textGlow("md", 
+            howManyGenresInCommon === 0 ? "red" : "green"
+          )]}
+        >You have 
+          {howManyGenresInCommon === 0
+            ? " no genres in common"
+            : howManyGenresInCommon === 1
+            ? " 1 genre in common"
+            : ` ${howManyGenresInCommon} genres in common` 
+            }
+        </Text>
 
         <View
           style={[
@@ -209,6 +244,18 @@ const UserCard = ({ user }: UserCardProps) => {
             style={[mt.flex1, mt.w("full"), mt.rounded("lg")]}
           ></Image>
         </View>
+
+        {/* white background for when images have not loaded */}
+
+        <View
+          style={[
+            mt.rounded("lg"),
+            mt.position("absolute"),
+            mt.inset(0),
+            mt.z(-3),
+            mt.bg("gray", 900),
+          ]}
+        ></View>
 
         <LinearGradient
           colors={["transparent", "transparent", "white"]}
@@ -274,7 +321,6 @@ const styles = StyleSheet.create({
     width: width - 40,
     height: "100%",
     borderRadius: 5,
-    elevation: 5,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
