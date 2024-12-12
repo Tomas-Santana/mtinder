@@ -38,6 +38,7 @@ export default function Chater() {
   const otherUser = useMemo(() => {
     return currentChat?.participants.find((p) => p._id !== currentUser?._id);
   }, [currentChat, currentUser]);
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   const { messagesQuery, chatDeleted } = useMessages(id);
   useEffect(() => {
@@ -173,9 +174,11 @@ export default function Chater() {
       />
 
       <ProfilePicModal
-        profilePicture={otherUser?.imageUrls?.[0] || ""}
+        profilePicture={otherUser?.imageUrls || []}
         setVisible={setProfilePicModalVisible}
         visible={profilePicModalVisible}
+        currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
       />
       <DeletedChatModal visible={chatDeleted} />
     </SafeAreaView>
