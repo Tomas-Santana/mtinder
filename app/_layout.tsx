@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaView, StatusBar, useWindowDimensions } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Toaster } from 'sonner-native'
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 
 export const queryClient = new QueryClient()
 
@@ -34,6 +35,7 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ActionSheetProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ThemeProvider value={DarkTheme}>
           <StatusBar barStyle="dark-content" backgroundColor="#191919" />
@@ -50,6 +52,7 @@ export default function RootLayout() {
             <Toaster theme='dark' />
         </ThemeProvider>
       </GestureHandlerRootView>
+      </ActionSheetProvider>
     </QueryClientProvider>
       
   );

@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native";
 import { useChats } from "@/hooks/useChats";
 import { ChatPreview } from "@/components/app/ChatPreview";
 import Animated, { LinearTransition } from "react-native-reanimated";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SimpleNavbarWithTitle } from "@/components/app/simpleNavbar";
 
@@ -15,6 +15,14 @@ export default function ChatsView() {
 
   useEffect(() => {
     console.log(chatsQuery.data);
+  }, [chatsQuery.data]);
+
+  const sortedChats = useMemo(() => {
+    // sort chats by last message date
+    return chatsQuery.data?.chats?.sort((a, b) => {
+      if (!a.lastMessage || !b.lastMessage) return 0;
+      return new Date(b.lastMessage.timestamp).getTime() - new Date(a.lastMessage.timestamp).getTime();
+    });
   }, [chatsQuery.data]);
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -31,11 +39,11 @@ export default function ChatsView() {
           style={[mt.flex1, mt.bg("gray", 900)]}
           contentContainerStyle={[]}
           itemLayoutAnimation={LinearTransition}
-          data={chatsQuery.data?.chats}
+          data={sortedChats}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (<ChatPreview chat={item} />)}
           ListEmptyComponent={<EmptySplash />}
-          extraData={chatsQuery.data?.chats}
+          extraData={sortedChats}
         />
 
        {/* {chatsQuery.data?.chats?.map((chat) => (
