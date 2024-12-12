@@ -9,7 +9,7 @@ import Animated, {
 } from "react-native-reanimated";
 import z from "zod";
 import { FormTextInput } from "../formUtils/textInputForm";
-import { Button } from "@/components/ui/button";
+import { Button, CoolButton } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
@@ -59,15 +59,17 @@ export default function VerifyCodeForm({ setTab, fullForm }: VerifyCodeProps) {
         label="Verification Code"
         control={form.control}
         error={form.formState.errors.code}
+        color="yellow"
       />
       <Animated.View layout={LinearTransition}>
-        <Button onPress={form.handleSubmit(onSubmit)}>
-          {VerifyMutation.isPending ? (
-            <ActivityIndicator size="small" color="white" />
-          ) : (
-            <Text>Verify</Text>
-          )}
-        </Button>
+        <CoolButton 
+          onPress={form.handleSubmit(onSubmit)}
+          disabled={VerifyMutation.isPending}
+          loading={VerifyMutation.isPending}
+          color="yellow"
+        >
+          <Text style={[mt.color("yellow"), mt.align("center")]}>Verify</Text>
+        </CoolButton>
       </Animated.View>
     </Animated.View>
   );

@@ -1,6 +1,6 @@
 import { View, SafeAreaView } from "react-native";
 import { Text } from "@/components/ui/text";
-import { Button } from "@/components/ui/button";
+import { Button, CoolButton } from "@/components/ui/button";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -63,23 +63,26 @@ export default function SendResetForm() {
         control={form.control}
         placeholder="Linker@gmail.com"
         error={form.formState.errors.email}
+        color="yellow"
       />
 
       <Animated.View layout={LinearTransition}>
-        <Button
+        <CoolButton
           onPress={form.handleSubmit(onSubmit)}
           loading={SendResetMutation.isPending}
           disabled={SendResetMutation.isPending}
+          color="yellow"
+          style={[mt.p(2)]}
         >
-          <Text style={[mt.align("center")]}>Enviar Email</Text>
-        </Button>
+          <Text style={[mt.align("center"), mt.color("yellow")]}>Send Email</Text>
+        </CoolButton>
       </Animated.View>
 
       <Animated.View
         style={[mt.w("full"), mt.justify("center")]}
         layout={LinearTransition}
       >
-        <Text style={[mt.align("center"), mt.color("white")]}>
+        <Text style={[mt.align("center"), mt.color("blue")]}>
           Remember your password?{" "}
           <Link href={"/"} style={[mt.color("orange"), mt.align("center")]}>
             Log in.

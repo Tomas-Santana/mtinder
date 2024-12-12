@@ -18,6 +18,7 @@ interface ButtonProps extends TouchableOpacityProps {
   variant?: "primary" | "secondary" | "danger" | "success";
   style?: StyleProp<ViewStyle>;
   loading?: boolean;
+  color?: MTTypes["Color"]
   children: React.ReactNode;
 }
 
@@ -80,6 +81,32 @@ export function CPushButton({ isPushed, ...props } : CPushButtonProps) {
     </AnimatedPressable>
   );
 
+}
+
+export function CoolButton({ ...props }: ButtonProps) {
+  const [pressed, setPressed] = useState(false);
+  return (
+    <View style={[mt.glow("sm", props.color)]}>
+      <TouchableOpacity 
+        style={[mt.rounded("md"), mt.bg("black"), props.style]}
+        {...props}
+        onPressIn={(e) => {
+          setPressed(true);
+          props.onPressIn?.(e);
+        }}
+        onPressOut={(e) => {
+          setPressed(false);
+          props.onPressOut?.(e);
+        }}
+      >
+        {props.loading ? (
+          <ActivityIndicator size="small" style={[mt.color(props.color ?? "white")]} />
+        ): (
+          props.children
+        )}
+      </TouchableOpacity>
+    </View>
+  )
 }
 
 const buttonStyles = (

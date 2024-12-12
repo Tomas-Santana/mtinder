@@ -13,7 +13,7 @@ import { TextInput } from "react-native-gesture-handler";
 import React, { Ref, useState } from "react";
 import { formStyles } from "@/style/formStyle";
 import s from "@/style/styleValues";
-import mt from "@/style/mtWind";
+import mt, { MTTypes } from "@/style/mtWind";
 import { ViewStyle } from "react-native";
 import { Glow } from "../../ui/glow";
 
@@ -28,6 +28,7 @@ interface FormTextInputFormProps {
   viewStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   inputRef?: Ref<TextInput>;
   autofocus?: boolean;
+  color?: MTTypes["Color"]
 }
 
 export function FormTextInput({
@@ -41,6 +42,7 @@ export function FormTextInput({
   viewStyle,
   inputRef,
   autofocus,
+  color
 }: FormTextInputFormProps) {
   const [focus, setFocus] = useState(false);
 
@@ -54,7 +56,7 @@ export function FormTextInput({
         name={name}
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
-          <Animated.View style={[focus && mt.glow("sm", "blue"), mt.rounded("sm")]} layout={LinearTransition}>
+          <Animated.View style={[focus && mt.glow("sm", color), mt.rounded("sm")]} layout={LinearTransition}>
             <Input
               style={[
                 formStyles.input,

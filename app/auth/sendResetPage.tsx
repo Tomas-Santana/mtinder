@@ -16,7 +16,7 @@ export default function SendReset() {
           Enter your email so you can change your password!
         </Text>
       </View>
-      <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), ]}>
+      <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), mt.glow("md", "yellow", 600), mt.p(4), mt.mt(10)]}>
         <SendResetForm />
       </View>
     </View>

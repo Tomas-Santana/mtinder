@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { FormTextInput } from "../formUtils/textInputForm";
 import { Text, GlowingText } from "@/components/ui/text";
-import { Button } from "@/components/ui/button";
+import { Button, CoolButton } from "@/components/ui/button";
 import Animated, {
   LinearTransition,
   SlideInRight,
@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 import { RegisterRequest } from "@/types/api/Register";
 import { mtForm, formStyles } from "@/style/formStyle";
 import { Toast } from "@/components/ui/toast";
+import mt from "@/style/mtWind";
 
 interface PasswordFormProps {
   setTab: (tabs: 0 | 1 | 2) => void;
@@ -75,6 +76,7 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
         label="Password"
         error={form.formState.errors.password}
         type="password"
+        color="orange"
       />
       <FormTextInput
         name="confirmPassword"
@@ -82,20 +84,23 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
         label="Confirm Password"
         error={form.formState.errors.confirmPassword}
         type="password"
+        color="orange"
       />
-      <Animated.View layout={LinearTransition}>
-        <Button
+      <Animated.View layout={LinearTransition} style={[mt.mb(2)]}>
+        <CoolButton
           onPress={form.handleSubmit(onSubmit)}
           loading={registerMutation.isPending}
           disabled={registerMutation.isPending}
+          color="orange"
+          style={[mt.p(2)]}
         >
-          <Text>Create Account</Text>
-        </Button>
+          <Text style={[mt.color("orange"), mt.align("center")]}>Create Account</Text>
+        </CoolButton>
       </Animated.View>
       <Animated.View layout={LinearTransition}>
-        <Button variant="secondary" onPress={() => setTab(0)} >
-          <Text>Go Back</Text>
-        </Button>
+        <CoolButton color="blue" onPress={() => setTab(0)} style={[mt.p(2)]}>
+          <Text style={[mt.color("blue"), mt.align("center")]}>Go Back</Text>
+        </CoolButton>
       </Animated.View>
     </Animated.View>
   )

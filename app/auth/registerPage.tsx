@@ -12,14 +12,14 @@ export default function SendReset(){
     >
       <View style={[mt.flexCol, mt.gap(3), mt.items("center")]}>
         <Logo />
-        <GlowingText style={[mt.fontSize("lg"), mt.color("blue"), mt.align("center")]} color="#80E1FF">
+        <GlowingText style={[mt.fontSize("lg"), mt.color("orange", 600), mt.align("center")]} color="#FFA500">
           Create Account
         </GlowingText>
         <Text style={[mt.fontSize("md"), mt.color("gray"), mt.spacing(1)]}>
           Create an account to start interacting with people.
         </Text>
       </View>
-      <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), mt.glow("md", "blue"), mt.p(4), mt.mt(10)]}>
+      <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), mt.glow("md", "orange", 600), mt.p(4), mt.mt(10)]}>
         <RegisterForm />
       </View>
     </View>

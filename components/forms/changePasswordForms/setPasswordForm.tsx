@@ -6,7 +6,7 @@ import Animated, {
 } from "react-native-reanimated";
 import z from "zod";
 import { FormTextInput } from "../formUtils/textInputForm";
-import { Button } from "@/components/ui/button";
+import { Button, CoolButton } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
@@ -82,6 +82,7 @@ export default function SetPasswordForm({
         control={form.control}
         error={form.formState.errors.password}
         type="password"
+        color="yellow"
       />
       <FormTextInput
         name="confirmPassword"
@@ -89,15 +90,17 @@ export default function SetPasswordForm({
         control={form.control}
         error={form.formState.errors.confirmPassword}
         type="password"
+        color="yellow"
       />
       <Animated.View layout={LinearTransition}>
-        <Button onPress={form.handleSubmit(onSubmit)}>
-          {SetPasswordMutation.isPending ? (
-            <ActivityIndicator size="small" color="white" />
-          ) : (
-            <Text>Change Password</Text>
-          )}
-        </Button>
+        <CoolButton 
+          onPress={form.handleSubmit(onSubmit)}
+          disabled={SetPasswordMutation.isPending}
+          loading={SetPasswordMutation.isPending}
+          color="yellow"
+        >
+          <Text style={[mt.color("yellow"), mt.align("center")]}>Change Password</Text>
+        </CoolButton>
       </Animated.View>
     </Animated.View>
   );
