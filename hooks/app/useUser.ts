@@ -16,7 +16,7 @@ export function useUser(
     mutationFn: UserController.UpdateUser,
     onSuccess: (data) => {
       console.log("User updated")
-      Toast.success("User updated")
+      // Toast.success("User updated")
       if(user && data.firstName && data.lastName){
         const udpdatedUser = {
           ...user,
@@ -39,7 +39,7 @@ export function useUser(
     },
     onError: (error) => {
       console.log(error.message)
-      Toast.error(error.message)
+      // Toast.error(error.message)
     },
 
   });

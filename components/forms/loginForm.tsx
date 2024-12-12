@@ -43,7 +43,6 @@ export default function LoginForm() {
     mutationFn: AuthController.login,
     onError: (error) => {
       console.log(error.message);
-      Toast.error(error.message);
     },
     onSuccess: (data) => {
       form.reset();

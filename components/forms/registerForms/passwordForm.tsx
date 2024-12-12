@@ -37,10 +37,10 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
     mutationFn: AuthController.register,
     onError: (error) => {
       console.log(error.message);
-      Toast.error(error.message);
+      // Toast.error(error.message);
     },
     onSuccess: () => {
-      Toast.success("Account created successfully. Let's get you started!");
+      // Toast.success("Account created successfully. Let's get you started!");
       router.push("/main/completeProfile");
       fullForm.reset();
       form.reset();

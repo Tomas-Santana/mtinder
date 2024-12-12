@@ -13,11 +13,13 @@ export function useAddProfilePic() {
     {
       mutationFn: PhotosController.addProfilePic,
       onMutate: () => {
-        Toast.info("Uploading profile picture...");
+        // Toast.info("Uploading profile picture...");
+        console.log("Uploading profile picture...")
       },
       onSuccess: (data) => {
         if (data.error) {
-          Toast.error(data.error);
+          // Toast.error(data.error);
+          console.log(data.error)
           return;
         }
         if (!data.url) return;
@@ -27,7 +29,8 @@ export function useAddProfilePic() {
           imageUrls: [data.url, ...(currentUser?.imageUrls ?? [])],
         });
         queryClient.invalidateQueries({queryKey: ["user"]});
-        Toast.success("Profile picture uploaded successfully");
+        // Toast.success("Profile picture uploaded successfully");
+        console.log("Profile picture uploaded successfully")
       }
     }
   )
