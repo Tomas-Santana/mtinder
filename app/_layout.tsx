@@ -10,10 +10,13 @@ import { SafeAreaView, StatusBar, useWindowDimensions } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Toaster } from 'sonner-native'
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import { Image } from 'react-native';
 
 export const queryClient = new QueryClient()
 
 SplashScreen.preventAutoHideAsync();
+
+const bg = require('../assets/images/bg.png');
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -50,6 +53,7 @@ export default function RootLayout() {
             >
             </Stack>
             <Toaster theme='dark' />
+            
         </ThemeProvider>
       </GestureHandlerRootView>
       </ActionSheetProvider>

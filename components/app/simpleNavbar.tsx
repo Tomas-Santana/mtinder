@@ -30,8 +30,8 @@ export function SimpleNavbarWithTitle({ title }: { title: string }) {
         mt.justify("flex-start"),
         mt.items("center"),
         mt.gap(4),
-        mt.px(4),
-        mt.pt(4),
+        mt.p(4),
+        mt.bg("gray", 900),
       ]}
     >
       {/* go back button */}

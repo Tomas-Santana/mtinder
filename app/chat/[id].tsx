@@ -28,6 +28,8 @@ import { ImageChatBubble, ChatBubble } from "@/components/app/chat/ChatBubble";
 import { ProfilePicModal } from "@/components/app/ProfilePicModal";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 
+const bg = require("@/assets/images/bg.png");
+
 export default function Chater() {
   const { id } = useLocalSearchParams<{
     id: string;
@@ -192,6 +194,21 @@ export default function Chater() {
         visible={profilePicModalVisible}
       />
       <DeletedChatModal visible={chatDeleted} />
+
+
+      {/* image bg */}
+      <Image
+        source={bg}
+        style={[
+          mt.position("absolute"),
+          mt.top(0),
+          mt.left(0),
+          mt.w("full"),
+          mt.h("full"),
+          mt.opacity(0.5),
+          mt.z(-1)
+        ]}
+      />
     </SafeAreaView>
   );
 }

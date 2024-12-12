@@ -10,6 +10,9 @@ import { useEffect, useMemo } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SimpleNavbarWithTitle } from "@/components/app/simpleNavbar";
 import { RefreshControl } from "react-native-gesture-handler";
+import { Image } from "react-native";
+
+const bg = require("@/assets/images/bg.png");
 
 export default function ChatsView() {
   const chatsQuery = useChats();
@@ -26,14 +29,13 @@ export default function ChatsView() {
       <View
         style={[
           mt.flexCol,
-          mt.gap(4),
           
           mt.flex1,
         ]}
       >
         <SimpleNavbarWithTitle title="Chats" />
         <Animated.FlatList
-          style={[mt.flex1, mt.bg("gray", 900)]}
+          style={[mt.flex1]}
           
           contentContainerStyle={[]}
           itemLayoutAnimation={LinearTransition}
@@ -52,6 +54,18 @@ export default function ChatsView() {
         />
 
       </View>
+
+      {/* image bg */}
+      <Image
+        source={bg}
+        style={[
+          mt.position("absolute"),
+          mt.w("full"),
+          mt.h("full"),
+          mt.opacity(0.5),
+          mt.z(-1),
+        ]}
+      />
     </SafeAreaView>
   );
 }

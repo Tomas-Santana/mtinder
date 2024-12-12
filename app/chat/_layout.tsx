@@ -14,7 +14,7 @@ export default function Chats() {
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: "#191919", height: "100%"},
+          contentStyle: { backgroundColor: "transparent", height: "100%"},
           animation: "default"
         }}
       ></Stack>
