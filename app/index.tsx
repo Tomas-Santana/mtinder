@@ -1,4 +1,4 @@
-import { View, TextInput, Button, Animated } from "react-native";
+import { View, TextInput, Button, Animated, Image } from "react-native";
 import mt from "@/style/mtWind";
 import { useState } from "react";
 import { NeonGlow } from "@/components/ui/glow";
@@ -12,7 +12,11 @@ export default function Login() {
   return (
     <View style={[mt.flexCol, mt.gap(4), mt.p(4), mt.pt(10), mt.w("full")]}>
       <View style={[mt.flexCol, mt.gap(2), mt.items("center")]}>
-        <Logo></Logo>
+        
+          <Image 
+            source={require("../assets/images/logo.png")}
+            style={[mt.w(56), mt.h(40), ]}
+          />
         <GlowingText
           style={[mt.fontSize("lg"), mt.color("blue")]}
           color="#80E1FF"

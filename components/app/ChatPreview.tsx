@@ -14,6 +14,7 @@ import { useDeleteChats } from "@/hooks/app/useDelete";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSetAtom } from "jotai";
 import { currentChatAtom } from "@/utils/atoms/currentChatAtom";
+import PagerView from "react-native-pager-view";
 
 interface ChatPreviewProps {
   chat: Chat;
@@ -24,6 +25,7 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
   const router = useRouter();
   const deleted = useDeleteChats();
   const [profilePicModalVisible, setProfilePicModalVisible] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0)
   const otherUser = useMemo(() => {
     return chat.participants.find((p) => p._id !== user?._id);
   }, [chat, user]);
@@ -99,7 +101,9 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
         >
           <TouchableOpacity
             style={[mt.w(12), mt.h(12), mt.rounded("full"), mt.glow()]}
-            onPress={() => setProfilePicModalVisible(true)}
+            onPress={() => {setProfilePicModalVisible(true)
+              console.log("Abrete sesamo")
+            }}
           >
             <Image
               source={{ uri: otherUser?.imageUrls?.[0] || undefined }}
@@ -158,7 +162,9 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
         <ProfilePicModal
           visible={profilePicModalVisible}
           setVisible={setProfilePicModalVisible}
-          profilePicture={otherUser?.imageUrls?.[0] || ""}
+          profilePicture={otherUser?.imageUrls || []}
+          currentIndex={currentIndex}
+          setCurrentIndex={setCurrentIndex}
         />
       </Animated.View>
     </Swipeable>
@@ -169,10 +175,14 @@ function ProfilePicModal({
   visible,
   setVisible,
   profilePicture,
+  currentIndex,
+  setCurrentIndex,
 }: {
   visible: boolean;
   setVisible: (v: boolean) => void;
-  profilePicture: string;
+  profilePicture: string[];
+  currentIndex: number;
+  setCurrentIndex: (index: number) => void;
 }) {
   return (
     <Modal
@@ -199,17 +209,74 @@ function ProfilePicModal({
             mt.p(10),
           ]}
         >
-          <View style={[mt.w(72), mt.h(72), mt.glow(), mt.rounded("lg")]}>
-            <Image
-              source={{ uri: profilePicture }}
+          <PagerView 
+            style={[
+              mt.p(2),
+              mt.justify("center"),
+              mt.items("center"),
+              mt.flex1,
+              mt.w("full"),
+              mt.border(2),
+            ]}
+            initialPage={0}
+            collapsable={false}
+            orientation={"horizontal"}
+            onPageSelected={(event) => {
+              setCurrentIndex(event.nativeEvent.position);
+            }}
+          >
+            {profilePicture.map((picture) => {
+              return (
+                <Animated.View key={picture} style={[
+                  mt.w(72),
+                  mt.h(72),
+                  mt.m(2),
+                  mt.flex1,
+                  mt.position("relative"),
+                  mt.items("center"),
+                  mt.rounded("md"),
+                  mt.justify("center"),
+                  mt.glow("sm"),
+                  mt.gap(2),
+                ]}>
+                  <Image
+                    source={{ uri: picture }}
+                    style={[
+                      { resizeMode: "cover" },
+                      mt.flex1,
+                      mt.w("full"),
+                      mt.rounded("md"),
+                    ]}
+                  />
+                </Animated.View>
+              );
+            })}
+          </PagerView>
+          {profilePicture.length > 0 && (
+            <Animated.View
+              entering={FadeIn}
+              exiting={FadeOut}
               style={[
-                mt.w("full"),
-                mt.h("full"),
-                mt.bg("blackOpacity", 500),
-                mt.rounded("lg"),
+                mt.flexRow,
+                mt.justify("center"),
+                mt.items("center"),
+                mt.h(4),
+                mt.gap(2),
               ]}
-            />
-          </View>
+            >
+              {profilePicture.map((_, index) => (
+                <View
+                  key={index}
+                  style={[
+                    mt.w(4),
+                    mt.h(4),
+                    mt.rounded("full"),
+                    mt.bg(index === currentIndex ? "white" : "gray"),
+                  ]}
+                ></View>
+              ))}
+            </Animated.View>
+          )}
         </TouchableOpacity>
       </View>
     </Modal>
