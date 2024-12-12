@@ -33,6 +33,8 @@ export default function Chater() {
     id: string;
   }>();
 
+  const router = useRouter();
+
   const currentChat = useAtomValue(currentChatAtom);
   const currentUser = useAtomValue(userAtom);
   const otherUser = useMemo(() => {
@@ -122,7 +124,18 @@ export default function Chater() {
           mt.gap(4),
         ]}
       >
-        <Animated.View sharedTransitionTag="profilePic">
+        {/* go back button */}
+        <TouchableOpacity
+          onPress={() => {
+            router.back();
+          }}
+          >
+            <MaterialCommunityIcons name="arrow-left" size={32} color={"red"}
+            style={[ mt.textGlow("md", "red")]}
+            />
+          </TouchableOpacity>
+
+        <Animated.View>
           <TouchableOpacity
             style={[mt.w(12), mt.h(12), mt.rounded("full"), mt.glow()]}
             onPress={() => setProfilePicModalVisible(true)}

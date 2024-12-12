@@ -37,10 +37,10 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
     mutationFn: AuthController.register,
     onError: (error) => {
       console.log(error.message);
-      // Toast.error(error.message);
+      Toast.error(error.message);
     },
     onSuccess: () => {
-      // Toast.success("Account created successfully. Let's get you started!");
+      Toast.success("Account created successfully. Let's get you started!");
       router.push("/main/completeProfile");
       fullForm.reset();
       form.reset();
@@ -92,7 +92,9 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
           color="orange"
           style={[mt.p(2)]}
         >
-          <Text style={[mt.color("orange"), mt.align("center")]}>Create Account</Text>
+          <Text style={[mt.color("orange"), mt.align("center")]}>
+            Create Account
+          </Text>
         </CoolButton>
       </Animated.View>
       <Animated.View layout={LinearTransition}>

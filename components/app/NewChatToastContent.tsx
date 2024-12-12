@@ -8,6 +8,7 @@ import { getDefaultStore } from "jotai";
 import { Message } from "@/types/Message";
 import { router } from "expo-router";
 import { Image } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export function NewChatToastContent({ chat }: { chat: Chat }) {
 
@@ -22,10 +23,12 @@ export function NewChatToastContent({ chat }: { chat: Chat }) {
           mt.items("center"),
           mt.justify("flex-start"),
           mt.rounded("md"),
+          mt.glow("md", "blue"),
         ]}
       >
         <Text style={[mt.color("white")]}>You have a new match!</Text>
-        <Link href={`/chat`}
+        <Link
+          href={`/chat`}
           onPress={() => {
             getDefaultStore().set(currentChatAtom, chat);
           }}
@@ -68,6 +71,7 @@ export function NewMessageToastContent({ message, chat }: { message: Message, ch
           mt.justify("flex-start"),
           mt.rounded("md"),
           mt.gap(4),
+          mt.glow("md", "blue"),
         ]}
       >
         <View
@@ -93,5 +97,42 @@ export function NewMessageToastContent({ message, chat }: { message: Message, ch
         </View>
       </View>
     </TouchableOpacity>
+  );
+}
+
+export function NormalToastContent({ message, variant }: { message: string, variant: "success" | "error" | "info" }) {
+  const icon = {
+    success: "check-circle",
+    error: "alert-circle",
+    info: "information",
+  }[variant] as keyof typeof MaterialCommunityIcons.glyphMap;
+
+  const glowColor = {
+    success: "green",
+    error: "red",
+    info: "blue",
+  }[variant] as "green" | "red" | "blue";
+
+  return (
+    <View style={[mt.w("full"), mt.px(4)]}>
+      <View
+        style={[
+          mt.w("full"),
+          mt.bg("blackOpacity", 100, 0.9),
+          mt.p(2),
+          mt.py(4),
+          mt.flexRow,
+          mt.items("center"),
+          mt.justify("flex-start"),
+          mt.rounded("md"),
+          mt.glow("md", glowColor),
+        ]}
+      >
+        <MaterialCommunityIcons name={icon} size={24}
+          style={[mt.color(glowColor)]}
+        />
+        <Text style={[mt.color(glowColor), mt.ml(2)]}>{message}</Text>
+      </View>
+    </View>
   );
 }

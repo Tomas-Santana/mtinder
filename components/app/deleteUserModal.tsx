@@ -16,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import UserController from "@/api/controllers/UserController";
 import { router } from "expo-router";
 import SocketController from "@/api/controllers/SocketController";
+import { Toast } from "../ui/toast";
 
 export function DeleteModal() {
   const [currentUser, setUser] = useAtom(userAtom);
@@ -37,6 +38,7 @@ export function DeleteModal() {
     },
     onError: (error) => {
       console.log("Error deleting account", error);
+      Toast.error("Error deleting account");
     },
   });
 
@@ -50,7 +52,7 @@ export function DeleteModal() {
       style={[mt.flexCol, mt.items("center"), mt.gap(9), mt.p(5), mt.w("full")]}
     >
       <Button
-        style={[mt.flexRow, mt.gap(2), mt.borderColor("red", 700), mt.border(2), mt.p(3), mt.rounded("base"), mt.glow("sm", "red", 800)]}
+        style={[mt.flexRow, mt.gap(2), mt.borderColor("red", 700), mt.border(2), mt.p(3), mt.rounded("sm"), mt.glow("md", "red", 800)]}
         onPress={() => setVisible(true)}
       >
         <MaterialCommunityIcons
@@ -59,7 +61,7 @@ export function DeleteModal() {
           color="#ff0000"
           style={[mt.textGlow("md", "red")]}
         />
-        <Text style={[mt.color("red")]}>Borrar Cuenta</Text>
+        <Text style={[mt.color("red")]}>Delete account</Text>
       </Button>
       <Modal visible={visible} transparent={true} animationType="fade">
         <TouchableWithoutFeedback onPress={close}>

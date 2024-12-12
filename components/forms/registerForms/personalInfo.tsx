@@ -36,8 +36,8 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps) {
   const verifyEmailMutation = useMutation({
     mutationFn: AuthController.verifyEmailAvailability,
     onError: (_) => {
-      // Toast.error("An error ocurred, please try again.");
-      console.log("An error ocurred")
+      Toast.error("An error ocurred, please try again.");
+      console.log("An error ocurred");
     },
     onSuccess: (data) => {
       console.log(data);

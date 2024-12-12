@@ -43,6 +43,7 @@ export default function LoginForm() {
     mutationFn: AuthController.login,
     onError: (error) => {
       console.log(error.message);
+      Toast.error("Fallo el incio de sesion")
     },
     onSuccess: (data) => {
       form.reset();

@@ -12,13 +12,13 @@ export default function AuthLayout() {
   return (
     <Stack screenOptions={{
       headerShown: false,
-      animation: "slide_from_right",
       contentStyle: {
         backgroundColor: "#191919",
         height: "100%"
       }
     }}
     >
+      
     </Stack>
   );
 }

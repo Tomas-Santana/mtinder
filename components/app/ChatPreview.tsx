@@ -48,7 +48,7 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
     const content = (
       chat.lastMessage?.message ?? "Say hi to your new friend!"
     ).replace(/\n/g, " ");
-    return content.length > 20 ? content.slice(0, 20) + "..." : content;
+    return content.length > 25 ? content.slice(0, 25) + "..." : content;
   }, [chat]);
 
   const route = useMemo(() => {

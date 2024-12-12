@@ -40,12 +40,12 @@ export default function SendResetForm() {
   const SendResetMutation = useMutation({
     mutationFn: AuthController.sendResetEmail,
     onSuccess: () => {
-      // Toast.success("Email sent, check your inbox.");
+      Toast.success("Email sent, check your inbox.");
       router.push("/auth/changePasswordPage");
     },
     onError: (error) => {
       console.log("Error al enviar el email", error);
-      // Toast.error("Error sending email, try again.");
+      Toast.error("Error sending email, try again.");
     },
   });
 
@@ -76,7 +76,9 @@ export default function SendResetForm() {
           color="yellow"
           style={[mt.p(2)]}
         >
-          <Text style={[mt.align("center"), mt.color("yellow")]}>Send Email</Text>
+          <Text style={[mt.align("center"), mt.color("yellow")]}>
+            Send Email
+          </Text>
         </CoolButton>
       </Animated.View>
 

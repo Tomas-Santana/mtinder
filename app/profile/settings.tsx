@@ -207,7 +207,6 @@ const ImageModal = ({
     }
     if (option === "Set as main") {
       principalMutation.mutate({ index });
-      setVisible(false);
     }
   };
 

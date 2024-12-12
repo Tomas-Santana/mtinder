@@ -61,7 +61,7 @@ export const DropdownWithOptions: React.FC<DropdownWithOptionsProps> = ({
               mt.borderB(1),
               mt.borderColor("white") 
             ]}
-              onPress={() => onSelect(option)}
+              onPress={() => {onSelect(option); setVisible(false)}}
             >
               {option}
             </Text>

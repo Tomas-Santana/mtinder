@@ -1,19 +1,18 @@
 import {toast as sonner} from 'sonner-native';
 import mt from '@/style/mtWind';
+import { NormalToastContent } from '../app/NewChatToastContent';
 
 export class Toast {
   static success(message: string) {
-    sonner.success(message);
+    sonner.custom(<NormalToastContent message={message} variant="success" />)
   }
 
   static error(message: string) {
-    sonner.error(message);
+    sonner.custom(<NormalToastContent message={message} variant="error" />)
   }
 
   static info(message: string) {
-    sonner.info(message, {
-      style: mt.glow("md", "blue"),
-    });
+    sonner.custom(<NormalToastContent message={message} variant="info" />)
   }
 
   static warning(message: string) {
