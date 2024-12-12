@@ -1,7 +1,7 @@
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { Chat } from "@/types/Chat";
 import { Text } from "../ui/text";
-import { Image, View } from "react-native";
+import { Image, Pressable, TouchableWithoutFeedback, View } from "react-native";
 import mt from "@/style/mtWind";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
@@ -66,7 +66,7 @@ export function ChatPreview({ chat }: ChatPreviewProps) {
       : `${messageDate.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
-        })} ${messageDate.toLocaleTimeString()}`;
+        })}`;
   }, [chat]);
 
   return (
@@ -191,94 +191,96 @@ function ProfilePicModal({
       visible={visible}
       onRequestClose={() => setVisible(false)}
     >
-      <View
-        style={[
-          mt.flex1,
-          mt.bg("blackOpacity", 500, 0.7),
-          mt.justify("center"),
-          mt.items("center"),
-        ]}
-      >
-        <TouchableOpacity
-          onPress={() => setVisible(false)}
+      <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+
+        <View
           style={[
             mt.flex1,
-            mt.w("full"),
+            mt.bg("blackOpacity", 500, 0.7),
             mt.justify("center"),
             mt.items("center"),
-            mt.p(10),
           ]}
         >
-          <PagerView 
+          <View
             style={[
-              mt.p(2),
-              mt.justify("center"),
-              mt.items("center"),
               mt.flex1,
               mt.w("full"),
-              mt.border(2),
+              mt.justify("center"),
+              mt.items("center"),
+              mt.p(10),
             ]}
-            initialPage={0}
-            collapsable={false}
-            orientation={"horizontal"}
-            onPageSelected={(event) => {
-              setCurrentIndex(event.nativeEvent.position);
-            }}
           >
-            {profilePicture.map((picture) => {
-              return (
-                <Animated.View key={picture} style={[
-                  mt.w(72),
-                  mt.h(72),
-                  mt.m(2),
-                  mt.flex1,
-                  mt.position("relative"),
-                  mt.items("center"),
-                  mt.rounded("md"),
-                  mt.justify("center"),
-                  mt.glow("sm"),
-                  mt.gap(2),
-                ]}>
-                  <Image
-                    source={{ uri: picture }}
-                    style={[
-                      { resizeMode: "cover" },
-                      mt.flex1,
-                      mt.w("full"),
-                      mt.rounded("md"),
-                    ]}
-                  />
-                </Animated.View>
-              );
-            })}
-          </PagerView>
-          {profilePicture.length > 0 && (
-            <Animated.View
-              entering={FadeIn}
-              exiting={FadeOut}
+            <PagerView 
               style={[
-                mt.flexRow,
+                mt.p(2),
                 mt.justify("center"),
                 mt.items("center"),
-                mt.h(4),
-                mt.gap(2),
+                mt.flex1,
+                mt.w("full"),
+                mt.border(2),
               ]}
+              initialPage={0}
+              collapsable={false}
+              orientation={"horizontal"}
+              onPageSelected={(event) => {
+                setCurrentIndex(event.nativeEvent.position);
+              }}
             >
-              {profilePicture.map((_, index) => (
-                <View
-                  key={index}
-                  style={[
-                    mt.w(4),
-                    mt.h(4),
-                    mt.rounded("full"),
-                    mt.bg(index === currentIndex ? "white" : "gray"),
-                  ]}
-                ></View>
-              ))}
-            </Animated.View>
-          )}
-        </TouchableOpacity>
-      </View>
+              {profilePicture.map((picture) => {
+                return (
+                  <Animated.View key={picture} style={[
+                    mt.w("full"),
+                    mt.h("full"),
+                    mt.m(2),
+                    mt.flex1,
+                    mt.position("relative"),
+                    mt.items("center"),
+                    mt.rounded("md"),
+                    mt.justify("center"),
+                    mt.glow("sm"),
+                    mt.gap(2),
+                  ]}>
+                    <Image
+                      source={{ uri: picture }}
+                      style={[
+                        { resizeMode: "cover" },
+                        mt.flex1,
+                        mt.w("full"),
+                        mt.rounded("md"),
+                      ]}
+                    />
+                  </Animated.View>
+                );
+              })}
+            </PagerView>
+            {profilePicture.length > 0 && (
+              <Animated.View
+                entering={FadeIn}
+                exiting={FadeOut}
+                style={[
+                  mt.flexRow,
+                  mt.justify("center"),
+                  mt.items("center"),
+                  mt.h(4),
+                  mt.gap(2),
+                ]}
+              >
+                {profilePicture.map((_, index) => (
+                  <View
+                    key={index}
+                    style={[
+                      mt.w(4),
+                      mt.h(4),
+                      mt.rounded("full"),
+                      mt.bg(index === currentIndex ? "white" : "gray"),
+                    ]}
+                  ></View>
+                ))}
+              </Animated.View>
+            )}
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
