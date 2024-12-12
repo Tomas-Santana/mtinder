@@ -30,6 +30,7 @@ interface FormTextInputFormProps {
   autofocus?: boolean;
   onChangeText?: (text: string) => void;
   color?: MTTypes["Color"]
+  maxLength?: number
 }
 
 export function FormTextInput({
@@ -44,7 +45,8 @@ export function FormTextInput({
   inputRef,
   autofocus,
   onChangeText,
-  color
+  color,
+  maxLength
 }: FormTextInputFormProps) {
   const [focus, setFocus] = useState(false);
 
@@ -82,7 +84,7 @@ export function FormTextInput({
               }}
               value={value}
               secureTextEntry={type === "password"}
-              maxLength={100}
+              maxLength={maxLength}
             />
           </Animated.View>
         )}

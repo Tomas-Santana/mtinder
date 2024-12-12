@@ -49,6 +49,7 @@ export default function UserForm({ setFirstName, setLastName }: UserFormProps) {
         label="Your name"
         error={form.formState.errors.firstName}
         inputStyle={[mt.bg("gray", 800)]}
+        maxLength={30}
       />
       <FormTextInput 
         name="lastName"
@@ -57,6 +58,7 @@ export default function UserForm({ setFirstName, setLastName }: UserFormProps) {
         label="Your lastname"
         error={form.formState.errors.lastName}
         inputStyle={[mt.bg("gray", 800)]}
+        maxLength={30}
       />
       <Animated.View layout={LinearTransition} style={[mt.mt(5)]}>
         <Button variant="success" onPress={form.handleSubmit(onSubmit)}>
