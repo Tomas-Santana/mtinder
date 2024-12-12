@@ -177,8 +177,6 @@ export default function Chater() {
         profilePicture={otherUser?.imageUrls || []}
         setVisible={setProfilePicModalVisible}
         visible={profilePicModalVisible}
-        currentIndex={currentIndex}
-        setCurrentIndex={setCurrentIndex}
       />
       <DeletedChatModal visible={chatDeleted} />
     </SafeAreaView>

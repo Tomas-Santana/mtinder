@@ -6,24 +6,21 @@ import { GlowingText, Text } from "@/components/ui/text";
 import LoginForm from "@/components/forms/loginForm";
 import DropDown from "@/components/ui/dropDown";
 import Logo from "@/components/app/Logo";
-// import Logo from "../assets/images/mellow-mates-logo.svg"
+
 
 export default function Login() {
   return (
-    <View style={[mt.flexCol, mt.gap(4), mt.p(4), mt.pt(10), mt.w("full")]}>
+    <View style={[mt.flexCol, mt.gap(2), mt.p(4), mt.w("full")]}>
       <View style={[mt.flexCol, mt.gap(2), mt.items("center")]}>
         
-          <Image 
-            source={require("../assets/images/logo.png")}
-            style={[mt.w(56), mt.h(40), ]}
-          />
+          <Logo></Logo>
         <GlowingText
           style={[mt.fontSize("lg"), mt.color("blue")]}
           color="#80E1FF"
         >
           Log in
         </GlowingText>
-        <Text style={[mt.color("white")]}>
+        <Text style={[mt.color("white"), mt.align("center")]}>
           Log in to your account and find your next best mate.
         </Text>
       </View>

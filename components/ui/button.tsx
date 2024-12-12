@@ -87,7 +87,7 @@ export function CoolButton({ ...props }: ButtonProps) {
   const [pressed, setPressed] = useState(false);
   return (
     <View style={[mt.glow("sm", props.color)]}>
-      <TouchableOpacity 
+      <TouchableOpacity
         style={[mt.rounded("md"), mt.bg("black"), props.style]}
         {...props}
         onPressIn={(e) => {
@@ -100,13 +100,14 @@ export function CoolButton({ ...props }: ButtonProps) {
         }}
       >
         {props.loading ? (
-          <ActivityIndicator size="small" style={[mt.color(props.color ?? "white")]} />
+          <ActivityIndicator size={20} color={"white"} style={[mt.color(props.color ?? "white")]} />
         ): (
           props.children
         )}
+        
       </TouchableOpacity>
     </View>
-  )
+  );
 }
 
 const buttonStyles = (

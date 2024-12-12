@@ -1,43 +1,31 @@
 import mt from "@/style/mtWind";
-import { View } from "react-native";
-import { NeonGlow } from "../ui/glow";
-import { GlowingText } from "../ui/text";
+import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming, withRepeat } from "react-native-reanimated";
+import { useEffect } from "react";
 
 export default function Logo() {
+  const opacity = useSharedValue(0.5);
+
+
+
+  opacity.value = opacity.value = withRepeat(
+    withTiming(1, {
+      duration: 1000,
+      easing: Easing.inOut(Easing.ease),
+    }),
+    -1,
+    true
+  );
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  }, [opacity]);
+
   return (
-    <NeonGlow mtColor="blue" viewStyles={[mt.p(2), mt.rounded("full"), mt.border(2), mt.borderColor("blue", 200)]}>
-      <View
-        style={[
-          mt.flexRow,
-          mt.gap(2),
-          mt.items("center"),
-          mt.justify("center"),
-        ]}
-      >
-        <GlowingText
-          style={[mt.fontSize("xl"), mt.color("blue", 300), mt.spacing(2)]}
-          color="#39DBFF"
-        >
-          🎵
-        </GlowingText>
-        <GlowingText
-          style={[
-            mt.fontSize("xl"),
-            mt.color("blue", 200),
-            mt.spacing(2),
-            mt.align("center"),
-          ]}
-          color="#39DBFF"
-        >
-          Mellow{"\n"}Mates
-        </GlowingText>
-        <GlowingText
-          style={[mt.fontSize("xl"), mt.color("blue", 200), mt.spacing(2)]}
-          color="#39DBFF"
-        >
-          🎵
-        </GlowingText>
-      </View>
-    </NeonGlow>
+    <Animated.Image
+      source={require("../../assets/images/mmlogo.png")}
+      style={[mt.w(56), mt.pxh(150), animatedStyle]}
+    />
   );
 }

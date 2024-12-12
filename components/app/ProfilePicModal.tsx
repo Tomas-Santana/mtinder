@@ -1,21 +1,21 @@
 import mt from "@/style/mtWind";
+import { useState } from "react";
 import { Modal, TouchableOpacity, View, Image } from "react-native";
 import PagerView from "react-native-pager-view";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { Button } from "../ui/button";
+import { Text } from "../ui/text";
 
 export function ProfilePicModal({
   visible,
   setVisible,
   profilePicture,
-  currentIndex,
-  setCurrentIndex,
 }: {
   visible: boolean;
   setVisible: (v: boolean) => void;
   profilePicture: string[];
-  currentIndex: number;
-  setCurrentIndex: (index: number) => void;
 }) {
+  const [index, setIndex] = useState(0)
   return (
     <Modal
       animationType="fade"
@@ -31,85 +31,50 @@ export function ProfilePicModal({
           mt.items("center"),
         ]}
       >
-        <TouchableOpacity
-          onPress={() => setVisible(false)}
+        <PagerView
+          style={[mt.flex1, mt.w("full"), mt.h("full")]}
+          initialPage={index}
+          orientation="horizontal"
+          onPageSelected={(e) => setIndex(e.nativeEvent.position)}
+        >
+          {profilePicture.map((image, index) => (
+            <Image
+              key={index}
+              source={{ uri: image }}
+              style={{
+                resizeMode: "contain",
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          ))}
+        </PagerView>
+        <View
           style={[
-            mt.flex1,
-            mt.w("full"),
+            mt.flexRow,
             mt.justify("center"),
             mt.items("center"),
-            mt.p(10),
+            mt.p(2),
           ]}
         >
-          <PagerView 
-            style={[
-              mt.p(2),
-              mt.justify("center"),
-              mt.items("center"),
-              mt.flex1,
-              mt.w("full"),
-              mt.border(2),
-            ]}
-            initialPage={0}
-            collapsable={false}
-            orientation={"horizontal"}
-            onPageSelected={(event) => {
-              setCurrentIndex(event.nativeEvent.position);
-            }}
-          >
-            {profilePicture.map((picture) => {
-              return (
-                <Animated.View key={picture} style={[
-                  mt.w(72),
-                  mt.h(72),
-                  mt.m(2),
-                  mt.flex1,
-                  mt.position("relative"),
-                  mt.items("center"),
-                  mt.rounded("md"),
-                  mt.justify("center"),
-                  mt.glow("sm"),
-                  mt.gap(2),
-                ]}>
-                  <Image
-                    source={{ uri: picture }}
-                    style={[
-                      { resizeMode: "cover" },
-                      mt.flex1,
-                      mt.w("full"),
-                      mt.rounded("md"),
-                    ]}
-                  />
-                </Animated.View>
-              );
-            })}
-          </PagerView>
-          {profilePicture.length > 0 && (
-            <Animated.View
-              entering={FadeIn}
-              exiting={FadeOut}
+          {profilePicture.map((_, i) => (
+            <View
+              key={i}
               style={[
-                mt.flexRow,
-                mt.justify("center"),
-                mt.items("center"),
-                mt.h(4),
-                mt.gap(2),
+                mt.w(2),
+                mt.h(2),
+                mt.rounded("full"),
+                mt.bg("gray", i === index ? 800 : 300),
+                mt.mr(1),
               ]}
-            >
-              {profilePicture.map((_, index) => (
-                <View
-                  key={index}
-                  style={[
-                    mt.w(4),
-                    mt.h(4),
-                    mt.rounded("full"),
-                    mt.bg(index === currentIndex ? "white" : "gray"),
-                  ]}
-                ></View>
-              ))}
-            </Animated.View>
-          )}
-        </TouchableOpacity>
+            />
+          ))}
+        </View>
+        <View style={[mt.p(4)]}>
+          <Button onPress={() => setVisible(false)}>
+            <Text>Close</Text>
+          </Button>
+        </View>
       </View>
     </Modal>
   );
