@@ -10,7 +10,6 @@ import { router } from "expo-router";
 import { Image } from "react-native";
 
 export function NewChatToastContent({ chat }: { chat: Chat }) {
-  const user = getDefaultStore().get(userAtom);
 
   return (
     <View style={[mt.w("full"), mt.px(4)]}>
@@ -27,7 +26,7 @@ export function NewChatToastContent({ chat }: { chat: Chat }) {
         ]}
       >
         <Text style={[mt.color("white")]}>You have a new match!</Text>
-        <Link href={`/chat/${chat._id}`}
+        <Link href={`/chat`}
           onPress={() => {
             getDefaultStore().set(currentChatAtom, chat);
           }}

@@ -56,6 +56,7 @@ export const useMessages = (chatId: string) => {
 const handleDeleteChat = (deletedChatId: string, currentChatId: string, setChatDeleted: (deleted: boolean) => void) => {
   console.log("deleted chat", deletedChatId, currentChatId);
   if (deletedChatId === currentChatId) {
+    console.log("setting chat deleted");
     setChatDeleted(true);
   }
 } 

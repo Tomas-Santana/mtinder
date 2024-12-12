@@ -1,4 +1,4 @@
-import { RequestMatch, RequestMatchResponse, requestMatchResponseSchema } from "@/types/api/requestMatch";
+import { RequestMatch, requestMatchResponseSchema, RequestMatchResponse } from "@/types/api/RequestMatch";
 import { getMatchRequestResponseSchema, GetMatchRequestsResponse  } from "@/types/api/GetMatchRequests";
 
 
