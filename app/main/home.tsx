@@ -94,7 +94,6 @@ export default function Home() {
         />
       )}
 
-      {currentCard && <Text>{currentCard.user.firstName}</Text>}
       <MatchModal
         chat={matchChat}
         isOpen={openMatchDialog}
