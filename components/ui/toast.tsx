@@ -3,15 +3,11 @@ import mt from '@/style/mtWind';
 
 export class Toast {
   static success(message: string) {
-    sonner.success(message, {
-      style: mt.glow("md", "green"),
-    });
+    sonner.success(message);
   }
 
   static error(message: string) {
-    sonner.error(message, {
-      style: mt.glow("md", "red"),
-    });
+    sonner.error(message);
   }
 
   static info(message: string) {
@@ -21,15 +17,13 @@ export class Toast {
   }
 
   static warning(message: string) {
-    sonner.warning(message, {
-      style: mt.glow("md", "orange"),
-    });
+    sonner.warning(message);
   }
 
   static custom(jsx: React.ReactElement, id?: string) {
     sonner.custom(jsx, {
       id,
-      duration: 5000,
+      duration: 3000,
     });
   }
 }

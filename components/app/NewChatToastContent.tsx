@@ -22,7 +22,6 @@ export function NewChatToastContent({ chat }: { chat: Chat }) {
           mt.items("center"),
           mt.justify("flex-start"),
           mt.rounded("md"),
-          mt.glow("md", "green"),
         ]}
       >
         <Text style={[mt.color("white")]}>You have a new match!</Text>
@@ -68,13 +67,12 @@ export function NewMessageToastContent({ message, chat }: { message: Message, ch
           mt.items("center"),
           mt.justify("flex-start"),
           mt.rounded("md"),
-          mt.glow("md", "green"),
           mt.gap(4),
         ]}
       >
         <View
           // image
-          style={[mt.w(12), mt.h(12), mt.rounded("full"), mt.glow("md", "green")]}
+          style={[mt.w(12), mt.h(12), mt.rounded("full")]}
         >
           <Image
             source={{ uri: otherUser?.imageUrls?.[0] || undefined }}
