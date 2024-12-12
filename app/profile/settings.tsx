@@ -42,7 +42,9 @@ export default function Settings() {
                 mt.resize("cover"),
               ]}
             />
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <TouchableOpacity onPress={() => setModalVisible(true)}
+                style={[mt.bg("gray", 900), mt.rounded("full"), mt.p(2), mt.position("absolute"), mt.right(0), mt.bottom(0), mt.glow("sm")]}
+              >
               <MaterialCommunityIcons
                 name="pencil-outline"
                 size={24}

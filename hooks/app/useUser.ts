@@ -27,17 +27,21 @@ export function useUser(
         setUser(udpdatedUser);
         setCurrentUser(udpdatedUser);
       }
-      queryClient.setQueryData(['user'], (prevUser) => ({
+      queryClient.setQueryData(['user'], (prevUser: User) => ({
         ...(prevUser || {}),
         firstName: data.firstName,
         lastName: data.lastName,
         favoriteGenres: data.favoriteGenres,
       }));
     },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
     onError: (error) => {
       console.log(error.message)
       Toast.error(error.message)
     },
+
   });
 
   const updateUser = (userData: { firstName: string; lastName: string; genres: string[] }) => {

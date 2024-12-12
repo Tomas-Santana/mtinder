@@ -90,7 +90,7 @@ export function MatchModal({
             style={[mt.fontSize("2xl"), mt.color("blue"), mt.align("center")]}
             color="#80E1FF"
           >
-            You have a matched with {user?.firstName}!
+            You have matched with {user?.firstName}!
           </GlowingText>
           <Button
             variant="primary"

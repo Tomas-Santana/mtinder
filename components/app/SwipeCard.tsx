@@ -13,9 +13,9 @@ import {
 import { Text } from "../ui/text";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Reanimated from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
-
 
 export interface Card {
   user: User;
@@ -41,6 +41,7 @@ export default function SwipeCard({
       outputRange: ["-20deg", "0deg", "20deg"],
       extrapolate: "clamp",
     }),
+    scale: new Animated.Value(1),
   }));
 
   const handlePanResponderMove = (
@@ -50,7 +51,7 @@ export default function SwipeCard({
   ): void => {
     animatedCards[index].pan.setValue({
       x: gestureState.dx,
-    y: gestureState.dy,
+      y: gestureState.dy,
     });
   };
 
@@ -114,14 +115,12 @@ export default function SwipeCard({
 
         const backgroundColor = animatedCards[index].pan.x.interpolate({
           inputRange: [-width, 0, width],
-          outputRange: ['rgba(255, 0, 0, 1)', 'rgba(0, 0, 0, 0)', 'rgba(0, 255, 0, 1)'],
-          extrapolate: 'clamp',
-        });
-
-        const animatedOpacity = animatedCards[index].pan.x.interpolate({
-          inputRange: [-width, 0, width],
-          outputRange: [0, 0.5, 1],
-          extrapolate: 'clamp',
+          outputRange: [
+            "rgba(255, 0, 0, 1)",
+            "rgba(0, 0, 0, 0)",
+            "rgba(0, 255, 0, 1)",
+          ],
+          extrapolate: "clamp",
         });
 
         return (
@@ -142,10 +141,12 @@ export default function SwipeCard({
                 top: 10 * index,
                 opacity: isTopCard ? 1 : 0.8,
               },
-              mt.bg("transparent"), 
+              mt.bg("transparent"),
             ]}
           >
-            <Animated.View style={[styles.background, { backgroundColor }]} />
+            <Animated.View
+              style={[styles.background, { backgroundColor }, mt.rounded("lg")]}
+            />
             <UserCard user={card.user} />
           </Animated.View>
         );
@@ -193,7 +194,7 @@ const UserCard = ({ user }: UserCardProps) => {
 
         <View
           style={[
-            mt.rounded("sm"),
+            mt.rounded("lg"),
             mt.position("absolute"),
             mt.inset(0),
             mt.z(-2),
@@ -201,7 +202,7 @@ const UserCard = ({ user }: UserCardProps) => {
         >
           <Image
             source={{ uri: user.imageUrls?.[imageIndex] }}
-            style={[mt.flex1, mt.w("full"), mt.rounded("sm")]}
+            style={[mt.flex1, mt.w("full"), mt.rounded("lg")]}
           ></Image>
         </View>
 
@@ -211,41 +212,48 @@ const UserCard = ({ user }: UserCardProps) => {
             mt.flex1,
             mt.position("absolute"),
             mt.inset(0),
-            mt.rounded("sm"),
+            mt.rounded("lg"),
             mt.z(-1),
           ]}
         />
-        {
-          imagesLength > 1 &&
+        {imagesLength > 1 && (
           <View
-          style={[mt.flexRow, mt.justify("space-between"), mt.items("center"), mt.w("full")]}
-        >
-          <Pressable
-            style={[mt.flex1, mt.items("center"), mt.justify("center")]}
-            onPress={() => {
-              setImageIndex((prev) => (prev - 1 + imagesLength) % imagesLength);
-            }}
+            style={[
+              mt.flexRow,
+              mt.justify("space-between"),
+              mt.items("center"),
+              mt.w("full"),
+            ]}
           >
-            {/* arrow left */}
-            <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
-          </Pressable>
-          <Pressable
-            style={[mt.flex1, mt.items("center"), mt.justify("center")]}
-            onPress={() => {
-              setImageIndex((prev) => (prev + 1) % imagesLength);
-            }}
-          >
-            {/* arrow right */}
-
-            <MaterialCommunityIcons
-              name="arrow-right"
-              size={24}
-              color="black"
-            />
-
-
-          </Pressable>
-        </View>}
+            <Pressable
+              style={[mt.flex1, mt.items("center"), mt.justify("center")]}
+              onPress={() => {
+                setImageIndex(
+                  (prev) => (prev - 1 + imagesLength) % imagesLength
+                );
+              }}
+            >
+              {/* arrow left */}
+              <MaterialCommunityIcons
+                name="arrow-left"
+                size={24}
+                color="black"
+              />
+            </Pressable>
+            <Pressable
+              style={[mt.flex1, mt.items("center"), mt.justify("center")]}
+              onPress={() => {
+                setImageIndex((prev) => (prev + 1) % imagesLength);
+              }}
+            >
+              <MaterialCommunityIcons
+                name="arrow-right"
+                size={24}
+                color="black"
+              />
+            </Pressable>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -256,23 +264,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 5,
   },
   card: {
     width: width - 40,
     height: "100%",
-    borderRadius: 10,
+    borderRadius: 5,
     elevation: 5,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "transparent",
-    overflow: "hidden"
+    overflow: "hidden",
   },
   background: {
-    position: 'absolute',
-    top: 16, 
-    bottom: 16, 
+    position: "absolute",
+    top: 16,
+    bottom: 16,
     left: 0,
     right: 0,
-  }
+    borderRadius: 5,
+  },
 });

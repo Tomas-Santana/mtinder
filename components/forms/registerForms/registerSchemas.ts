@@ -3,12 +3,18 @@ import z from "zod";
 export const infoSchema = z.object({
   email: z
     .string()
-    .min(1, "Se debe ingresar un email.")
-    .max(50, "El email es muy largo.")
-    .email("Email invalido.")
+    .min(1, "You must enter an email.")
+    .max(100, "Email is too long.")
+    .email("Invalid Email.")
     .toLowerCase(),
-  firstName: z.string({message: "Ingresa un nombre"}).min(1, "Se debe ingresar un nombre."),
-  lastName: z.string({message: "Ingresa un apellido"}).min(1, "Se debe ingresar un apellido."),
+  firstName: z
+    .string({ message: "Enter your name." })
+    .min(1, "Enter your name.")
+    .max(50, "Name is too long."),
+  lastName: z
+    .string({ message: "Enter your last name." })
+    .min(1, "Enter your last name.")
+    .max(50, "Last name is too long."),
 });
 
 export type InfoSchema = z.infer<typeof infoSchema>;
@@ -17,16 +23,15 @@ export const passwordSchema = z
   .object({
     password: z
       .string()
-      .min(8, "La contraseña es muy corta.")
-      .max(50, "La contraseña es muy larga."),
-    // })
+      .min(8, "Password is too short.")
+      .max(50, "Password is too long."),
     confirmPassword: z
       .string()
-      .min(1, "Ingresa la contraseña de nuevo.")
-      .max(50, "La contraseña es muy larga."),
+      .min(1, "Enter the password again.")
+      .max(50, "Password is too long."),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Las contraseñas no coinciden.",
+    message: "Passwords do not match.",
     path: ["confirmPassword"],
   });
 

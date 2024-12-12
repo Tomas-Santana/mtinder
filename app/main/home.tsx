@@ -84,7 +84,7 @@ export default function Home() {
   };
 
   return (
-    <SafeAreaView style={[mt.flex1, mt.justify("center"), mt.items("center")]}>
+    <SafeAreaView style={[mt.flex1, mt.justify("flex-start"), mt.items("center")]}>
       <Navbar />
       {userQuery.data && (
         <SwipeCard

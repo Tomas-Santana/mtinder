@@ -5,7 +5,7 @@ import { NeonGlow } from "@/components/ui/glow";
 import RegisterForm from "@/components/forms/registerForms/registerForm";
 import Logo from "@/components/app/Logo";
 
-export default function SendReset(){
+export default function Register(){
   return (
     <View
       style={[mt.flexCol, mt.items("center"), mt.gap(4), mt.p(5), mt.w("full")]}
@@ -16,7 +16,7 @@ export default function SendReset(){
           Create Account
         </GlowingText>
         <Text style={[mt.fontSize("md"), mt.color("gray"), mt.spacing(1)]}>
-          Create an account to start interacting with people.
+          Create an account and find your next best mate.
         </Text>
       </View>
       <View style={[mt.rounded("md"), mt.border(2), mt.borderColor("gray", 400), mt.glow("md", "orange", 600), mt.p(4), mt.mt(10)]}>

@@ -40,7 +40,7 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
       Toast.error(error.message);
     },
     onSuccess: () => {
-      Toast.success("Welcome to Mellow Mates!")
+      Toast.success("Account created successfully. Let's get you started!");
       fullForm.reset();
       form.reset();
       setTab(0);
@@ -51,7 +51,6 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
   const onSubmit = (data: PasswordSchema) => {
     fullForm.setValue("password", data);
 
-    
     const formData = fullForm.getValues();
     console.log(formData);
     const registerData: RegisterRequest = {
@@ -68,7 +67,7 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
       entering={SlideInRight}
       exiting={SlideOutLeft}
       layout={LinearTransition}
-      style={formStyles.container}
+      style={[formStyles.container]}
     >
       <FormTextInput
         name="password"
@@ -103,5 +102,5 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
         </CoolButton>
       </Animated.View>
     </Animated.View>
-  )
+  );
 }

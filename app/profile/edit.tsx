@@ -13,6 +13,9 @@ import { genres } from "@/constants/genres";
 import { Button, CPushButton } from "@/components/ui/button";
 import { useUser } from "@/hooks/app/useUser";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
+import { Platform } from "react-native";
 
 export default function UpdateInfoScreen() {
   const [currentUser, setCurrentUser] = useAtom(userAtom)
@@ -28,41 +31,99 @@ export default function UpdateInfoScreen() {
   }
 
   return (
-    <View style={[mt.flex1, mt.bg("gray", 900)]}>
-      <View style={[mt.position("absolute"), mt.top(5), mt.left(5), mt.z(100)]}>
+    <SafeAreaView style={[mt.flex1, mt.bg("gray", 900)]}>
+      <View>
         <SimpleNavbar />
       </View>
-      <View>
-
-      </View>
-      <VerticalTabs fill>
+      <VerticalTabs fill
+        activeTab={0}
+      >
         <Tab name="Info">
-          <View style={[mt.flex1, mt.justify("center"), mt.items("center"), mt.p(4)]}>
-            <View style={[mt.flexCol, mt.justify("center"), mt.gap(4), mt.rounded("md"), mt.border(2), mt.borderColor("gray", 200), mt.glow("md", "blue"), mt.p(6), mt.bg("gray", 900)]}>
-              <GlowingText style={[mt.fontSize("2xl"), mt.align("center"), mt.color("blue")]} color="#80E1FF">
-                Personal Info
+          <View
+            style={[
+              mt.flex1,
+              mt.justify("flex-start"),
+              mt.items("flex-start"),
+              mt.p(4),
+              mt.h("full"),
+            ]}
+          >
+            <View
+              style={[
+                mt.justify("flex-start"),
+                mt.gap(4),
+                mt.rounded("md"),
+                mt.border(2),
+                mt.borderColor("gray", 200),
+                mt.glow("md", "blue"),
+                mt.p(6),
+                mt.bg("gray", 900),
+              ]}
+            >
+              <GlowingText
+                style={[
+                  mt.fontSize("2xl"),
+                  mt.align("center"),
+                  mt.color("blue"),
+                ]}
+                color="#80E1FF"
+              >
+                Your personal information 
               </GlowingText>
-              <Text style={[mt.fontSize("md"), mt.align("center"), mt.color("gray", 300)]}>
-                Update your personal data.
+              <Text
+                style={[
+                  mt.fontSize("md"),
+                  mt.align("center"),
+                  mt.color("gray", 300),
+                ]}
+              >
+                Update your personal information to get the best experience.
               </Text>
-              <View style={[mt.mt(10)]}>
-                <UserForm setFirstName={setFirstName} setLastName={setLastName} />
-              </View>
+
+                <UserForm
+                  setFirstName={setFirstName}
+                  setLastName={setLastName}
+                />
             </View>
           </View>
         </Tab>
         <Tab name="Genres">
           {currentUser && (
-            <View style={[mt.flex1, mt.justify("center"), mt.items("center"), mt.p(4)]}>
-              <View style={[mt.flexCol, mt.justify("center"), mt.gap(4), mt.rounded("md"), mt.border(2), mt.borderColor("gray", 200), mt.glow("md", "blue"), mt.bg("gray", 800)]}>
-                <GlowingText style={[mt.fontSize("2xl"), mt.align("center"), mt.color("blue")]} color="#80E1FF">
-                  Favorites Genres
+            <View
+              style={[
+                mt.flex1,
+                mt.justify("center"),
+                mt.items("center"),
+                mt.p(4),
+              ]}
+            >
+              <View
+                style={[
+                  mt.flexCol,
+                  mt.justify("center"),
+                  mt.gap(4),
+                  mt.p(4),
+                  mt.rounded("md"),
+                  mt.border(2),
+                  mt.borderColor("gray", 200),
+                  mt.glow("md", "blue"),
+                ]}
+              >
+                <GlowingText
+                  style={[
+                    mt.fontSize("2xl"),
+                    mt.align("center"),
+                    mt.color("blue"),
+                  ]}
+                  color="#80E1FF"
+                >
+                  Favorite genres
                 </GlowingText>
                 <Text style={[mt.fontSize("md"), mt.align("center"), mt.color("gray", 300)]}>
                   Select your favorite genres to get personalized recommendations.
                 </Text>
-                
-                <GenreTab 
+
+                <GenreTab
                   user={currentUser}
                   selectedGenres={selectedGenres}
                   setSelectedGenres={setSelectedGenres}
@@ -74,11 +135,11 @@ export default function UpdateInfoScreen() {
       </VerticalTabs>
       <View style={[mt.p(2)]}>
         <Button onPress={handleSubmit}>
-          <Text>Upload</Text>
+          <Text>Save Changes</Text>
         </Button>
       </View>
-    </View>
-  )
+    </SafeAreaView>
+  );
 }
 
 
@@ -103,7 +164,6 @@ const GenreTab = ({ user, selectedGenres, setSelectedGenres }: GenreTabProps) =>
       style={[
         mt.flexCol,
         mt.gap(2),
-        mt.p(4),
         mt.justify("center"),
         mt.items("center"),
         mt.flex1,
@@ -111,7 +171,7 @@ const GenreTab = ({ user, selectedGenres, setSelectedGenres }: GenreTabProps) =>
       ]}
     >
       <Text style={[mt.color("white")]} size="md">
-        Choose your favorite genres (up to 10)
+        Choose your favorite genres (up to 5)
       </Text>
       <View
         style={[

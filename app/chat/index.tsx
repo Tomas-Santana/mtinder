@@ -8,6 +8,7 @@ import { ChatPreview } from "@/components/app/ChatPreview";
 import Animated, { LinearTransition } from "react-native-reanimated";
 import { useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { SimpleNavbarWithTitle } from "@/components/app/simpleNavbar";
 
 export default function ChatsView() {
   const chatsQuery = useChats();
@@ -25,19 +26,7 @@ export default function ChatsView() {
           mt.flex1,
         ]}
       >
-        <View
-          style={[
-            mt.px(4),
-          ]}
-        >
-          <GlowingText
-            style={[mt.color("white"), mt.fontSize("2xl")]}
-            color="#80E1FF"
-          >
-            Chats
-          </GlowingText>
-        </View>
-
+        <SimpleNavbarWithTitle title="Chats" />
         <Animated.FlatList
           style={[mt.flex1, mt.bg("gray", 900)]}
           contentContainerStyle={[]}

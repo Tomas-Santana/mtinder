@@ -28,6 +28,7 @@ interface FormTextInputFormProps {
   viewStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
   inputRef?: Ref<TextInput>;
   autofocus?: boolean;
+  onChangeText?: (text: string) => void;
   color?: MTTypes["Color"]
 }
 
@@ -42,6 +43,7 @@ export function FormTextInput({
   viewStyle,
   inputRef,
   autofocus,
+  onChangeText,
   color
 }: FormTextInputFormProps) {
   const [focus, setFocus] = useState(false);
@@ -74,7 +76,10 @@ export function FormTextInput({
                 onBlur();
               }}
               onFocus={() => setFocus(true)}
-              onChangeText={onChange}
+              onChangeText={(text) => {
+                onChange(text);
+                onChangeText && onChangeText(text);
+              }}
               value={value}
               secureTextEntry={type === "password"}
               maxLength={100}
