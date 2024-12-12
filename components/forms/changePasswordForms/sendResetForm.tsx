@@ -45,13 +45,13 @@ export default function SendResetForm() {
     },
     onError: (error) => {
       console.log("Error al enviar el email", error);
-      Toast.error("Error al enviar el email");
+      Toast.error("Error sending email, try again.");
     },
   });
 
   const onSubmit = (data: z.infer<typeof sendResetFormSchema>) => {
-    SendResetMutation.mutate(data)
-    console.log("Data enviada", data);
+    SendResetMutation.mutate(data);
+    console.log("Data sent", data);
   };
 
   return (
@@ -61,6 +61,7 @@ export default function SendResetForm() {
     >
       <FormTextInput
         name="email"
+        label="Email"
         label="Email"
         control={form.control}
         placeholder="me@mellow-mates.com"
@@ -73,9 +74,7 @@ export default function SendResetForm() {
           loading={SendResetMutation.isPending}
           disabled={SendResetMutation.isPending}
         >
-          <Text style={[mt.align("center")]}>
-            Send Reset Email
-          </Text>
+          <Text style={[mt.align("center")]}>Send Reset Email</Text>
         </Button>
       </Animated.View>
 

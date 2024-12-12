@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { FormTextInput } from "../formUtils/textInputForm"; 
+import { FormTextInput } from "../formUtils/textInputForm";
 import Animated, {
   LinearTransition,
   SlideInRight,
@@ -23,8 +23,7 @@ interface InfoFormProps {
   fullForm: UseFormReturn<FullSchema>;
 }
 
-export function InfoForm({ setTab, fullForm }: InfoFormProps){
-
+export function InfoForm({ setTab, fullForm }: InfoFormProps) {
   const form = useForm<InfoSchema>({
     resolver: zodResolver(infoSchema),
     defaultValues: {
@@ -61,11 +60,16 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
 
   const onSubmit = (data: InfoSchema) => {
     verifyEmailMutation.mutate(data);
-  }
+  };
 
   return (
-    <Animated.View style={mtForm.container} layout={LinearTransition} entering={SlideInRight} exiting={SlideOutLeft}>
-      <FormTextInput 
+    <Animated.View
+      style={mtForm.container}
+      layout={LinearTransition}
+      entering={SlideInRight}
+      exiting={SlideOutLeft}
+    >
+      <FormTextInput
         name="email"
         label="Email"
         placeholder="me@mellow-mates.com"
@@ -73,9 +77,13 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
         error={form.formState.errors.email}
       />
 
-      <Animated.View layout={LinearTransition} style={[mt.flexRow, mt.gap(4), mt.w("full")]}>
-        <FormTextInput 
+      <Animated.View
+        layout={LinearTransition}
+        style={[mt.flexRow, mt.gap(4), mt.w("full")]}
+      >
+        <FormTextInput
           name="firstName"
+          label="Name"
           label="Name"
           placeholder="Sam"
           control={form.control}
@@ -83,7 +91,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
           viewStyle={[mt.flex1]}
         />
 
-        <FormTextInput 
+        <FormTextInput
           name="lastName"
           label="Last Name"
           placeholder="Witwiki"
@@ -92,9 +100,9 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
           viewStyle={[mt.flex1]}
         />
       </Animated.View>
-      
+
       <Animated.View layout={LinearTransition}>
-        <Button 
+        <Button
           onPress={form.handleSubmit(onSubmit)}
           loading={verifyEmailMutation.isPending}
           disabled={verifyEmailMutation.isPending}
@@ -104,11 +112,9 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
       </Animated.View>
       <Animated.View style={mtForm.sideText}>
         <Link href="/" style={mtForm.text}>
-          <Text>
-            Back to login
-          </Text>
+          <Text>Back to login</Text>
         </Link>
       </Animated.View>
     </Animated.View>
-  )
+  );
 }

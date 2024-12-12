@@ -13,7 +13,7 @@ export default function Register(){
       <View style={[mt.flexCol, mt.gap(3), mt.items("center")]}>
         <Logo />
         <GlowingText style={[mt.fontSize("lg"), mt.color("blue"), mt.align("center")]} color="#80E1FF">
-          Register
+          Create Account
         </GlowingText>
         <Text style={[mt.fontSize("md"), mt.color("gray"), mt.spacing(1)]}>
           Create an account and find your next best mate.

@@ -46,7 +46,7 @@ export default function UserForm({ setFirstName, setLastName }: UserFormProps) {
         name="firstName"
         control={form.control}
         placeholder="John"
-        label="Tu nombre"
+        label="Your name"
         error={form.formState.errors.firstName}
         inputStyle={[mt.bg("gray", 800)]}
       />
@@ -54,7 +54,7 @@ export default function UserForm({ setFirstName, setLastName }: UserFormProps) {
         name="lastName"
         control={form.control}
         placeholder="Holmes"
-        label="Tu apellido"
+        label="Your lastname"
         error={form.formState.errors.lastName}
         inputStyle={[mt.bg("gray", 800)]}
       />

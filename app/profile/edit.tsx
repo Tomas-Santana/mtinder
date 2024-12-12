@@ -117,15 +117,9 @@ export default function UpdateInfoScreen() {
                   ]}
                   color="#80E1FF"
                 >
-                  Tus géneros favoritos
+                  Favorite genres
                 </GlowingText>
-                <Text
-                  style={[
-                    mt.fontSize("md"),
-                    mt.align("center"),
-                    mt.color("gray", 300),
-                  ]}
-                >
+                <Text style={[mt.fontSize("md"), mt.align("center"), mt.color("gray", 300)]}>
                   Select your favorite genres to get personalized recommendations.
                 </Text>
 

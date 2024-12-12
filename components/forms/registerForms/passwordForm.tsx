@@ -50,7 +50,6 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
   const onSubmit = (data: PasswordSchema) => {
     fullForm.setValue("password", data);
 
-    
     const formData = fullForm.getValues();
     console.log(formData);
     const registerData: RegisterRequest = {
@@ -73,12 +72,14 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
         name="password"
         control={form.control}
         label="Password"
+        label="Password"
         error={form.formState.errors.password}
         type="password"
       />
       <FormTextInput
         name="confirmPassword"
         control={form.control}
+        label="Confirm Password"
         label="Confirm Password"
         error={form.formState.errors.confirmPassword}
         type="password"
@@ -93,10 +94,10 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
         </Button>
       </Animated.View>
       <Animated.View layout={LinearTransition}>
-        <Button variant="secondary" onPress={() => setTab(0)} >
+        <Button variant="secondary" onPress={() => setTab(0)}>
           <Text>Back</Text>
         </Button>
       </Animated.View>
     </Animated.View>
-  )
+  );
 }
