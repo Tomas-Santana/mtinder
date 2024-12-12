@@ -17,15 +17,15 @@ const loginFormSchema = z.object({
   email: z
     .string()
     .trim()
-    .min(1, "Se debe ingresar un email.")
+    .min(1, "You must enter an email.")
     .max(50, "El email es muy largo.")
-    .email("Email invalido.")
+    .email("Invalid Email.")
     .toLowerCase(),
 
   password: z
     .string()
-    .min(8, "La contraseña debe tener al menos 8 caracteres.")
-    .max(50, "La contraseña es muy larga."),
+    .min(8, "Password must be at least 8 characters.")
+    .max(50, "Password is too long."),
 });
 
 export default function LoginForm(){
@@ -67,7 +67,7 @@ export default function LoginForm(){
       <FormTextInput 
         name="password"
         control={form.control}
-        label="Contraseña"
+        label="Password"
         error={form.formState.errors.password}
       />
       <Animated.View layout={LinearTransition} style={mtForm.sideText}>
@@ -77,7 +77,7 @@ export default function LoginForm(){
             style={[mtForm.text]}
           >
             <Text>
-              Olvidé mi contraseña
+              Forgot your password?
             </Text>
           </Link>
       </Animated.View>
@@ -88,7 +88,7 @@ export default function LoginForm(){
           loading={loginMutation.isPending}
         >
           <Text>
-            Iniciar Sesion
+            Log in
           </Text>
         </Button>
       </Animated.View>
@@ -98,7 +98,7 @@ export default function LoginForm(){
           style={[mtForm.text]}
         >
           <Text>
-            Crear una cuenta
+            Create an account
           </Text>
         </Link>
       </Animated.View>

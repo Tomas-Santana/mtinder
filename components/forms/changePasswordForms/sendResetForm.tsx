@@ -15,6 +15,7 @@ import { ActivityIndicator } from "react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 import mt from "@/style/mtWind";
 import { FormTextInput } from "../formUtils/textInputForm";
+import { Toast } from "@/components/ui/toast";
 
 const sendResetFormSchema = z.object({
   email: z
@@ -39,11 +40,12 @@ export default function SendResetForm() {
   const SendResetMutation = useMutation({
     mutationFn: AuthController.sendResetEmail,
     onSuccess: () => {
-      console.log("Email enviado!");
+      Toast.success("Email sent, check your inbox.");
       router.push("/auth/changePasswordPage");
     },
     onError: (error) => {
       console.log("Error al enviar el email", error);
+      Toast.error("Error al enviar el email");
     },
   });
 
@@ -59,9 +61,9 @@ export default function SendResetForm() {
     >
       <FormTextInput
         name="email"
-        label="Correo Electronico"
+        label="Email"
         control={form.control}
-        placeholder="Linker@gmail.com"
+        placeholder="me@mellow-mates.com"
         error={form.formState.errors.email}
       />
 
@@ -71,18 +73,20 @@ export default function SendResetForm() {
           loading={SendResetMutation.isPending}
           disabled={SendResetMutation.isPending}
         >
-          <Text style={[mt.align("center")]}>Enviar Email</Text>
+          <Text style={[mt.align("center")]}>
+            Send Reset Email
+          </Text>
         </Button>
       </Animated.View>
 
       <Animated.View
-        style={[mt.w("full"), mt.justify("center")]}
+        style={[mt.w("full"), mt.justify("flex-end")]}
         layout={LinearTransition}
       >
-        <Text style={[mt.align("center"), mt.color("white")]}>
-          Recuerdas tu contraseña?{" "}
+        <Text style={[mt.align("right"), mt.color("white")]}>
+          Remember your password?{" "}
           <Link href={"/"} style={[mt.color("orange"), mt.align("center")]}>
-            Inicia Sesion.
+            Log in
           </Link>
         </Text>
       </Animated.View>

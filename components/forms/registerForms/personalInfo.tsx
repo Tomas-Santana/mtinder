@@ -16,6 +16,7 @@ import mt from "@/style/mtWind";
 import DropDown from "@/components/ui/dropDown";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Toast } from "@/components/ui/toast";
 
 interface InfoFormProps {
   setTab: (tab: 0 | 1) => void;
@@ -36,7 +37,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
   const verifyEmailMutation = useMutation({
     mutationFn: AuthController.verifyEmailAvailability,
     onError: (_) => {
-      console.log("No se pudo verificar el email")
+      Toast.error("An error ocurred, please try again.");
     },
     onSuccess: (data) => {
       console.log(data);
@@ -66,8 +67,8 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
     <Animated.View style={mtForm.container} layout={LinearTransition} entering={SlideInRight} exiting={SlideOutLeft}>
       <FormTextInput 
         name="email"
-        label="Correo Electonico"
-        placeholder="Linker@gmail.com"
+        label="Email"
+        placeholder="me@mellow-mates.com"
         control={form.control}
         error={form.formState.errors.email}
       />
@@ -75,7 +76,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
       <Animated.View layout={LinearTransition} style={[mt.flexRow, mt.gap(4), mt.w("full")]}>
         <FormTextInput 
           name="firstName"
-          label="Nombre"
+          label="Name"
           placeholder="Sam"
           control={form.control}
           error={form.formState.errors.firstName}
@@ -84,7 +85,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
 
         <FormTextInput 
           name="lastName"
-          label="Apellido"
+          label="Last Name"
           placeholder="Witwiki"
           control={form.control}
           error={form.formState.errors.lastName}
@@ -104,7 +105,7 @@ export function InfoForm({ setTab, fullForm }: InfoFormProps){
       <Animated.View style={mtForm.sideText}>
         <Link href="/" style={mtForm.text}>
           <Text>
-            Volver al inicio de sesion
+            Back to login
           </Text>
         </Link>
       </Animated.View>

@@ -40,7 +40,8 @@ export default function UserForm({ setFirstName, setLastName }: UserFormProps) {
   }
 
   return (
-    <Animated.View style={[mt.flexCol, mt.gap(4), mt.w("full")]} layout={LinearTransition}>
+
+      <Animated.View style={[mt.flexCol, mt.gap(4), mt.w("full")]} layout={LinearTransition}>
       <FormTextInput 
         name="firstName"
         control={form.control}
@@ -59,11 +60,11 @@ export default function UserForm({ setFirstName, setLastName }: UserFormProps) {
       />
       <Animated.View layout={LinearTransition} style={[mt.mt(5)]}>
         <Button variant="success" onPress={form.handleSubmit(onSubmit)}>
-          <Text>
-            Save
-          </Text>
+        <Text>
+          Save
+        </Text>
         </Button>
       </Animated.View>
-    </Animated.View>
+      </Animated.View>
   )
 }

@@ -75,7 +75,7 @@ export default function CompleteProfile() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["me"] });
-      router.push("/main/home");
+      router.replace("/main/home");
     },
   });
 

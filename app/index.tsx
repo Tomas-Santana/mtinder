@@ -16,11 +16,13 @@ export default function Login() {
           style={[mt.fontSize("lg"), mt.color("blue")]}
           color="#80E1FF"
         >
-          Iniciar Sesion
+          Log in
         </GlowingText>
-        <Text style={[mt.color("white")]}>Conecta con personas!</Text>
+        <Text style={[mt.color("white")]}>
+          Log in to your account and find your next best mate.
+        </Text>
       </View>
-      <View style={[mt.rounded("md"), mt.border(2), mt.mt(10), mt.p(4), mt.borderColor("gray", 400), mt.glow("md", "blue")]}>
+      <View style={[mt.rounded("md"), mt.border(2), mt.p(4), mt.borderColor("gray", 400), mt.glow("md", "blue")]}>
         <LoginForm />
       </View>
     </View>
