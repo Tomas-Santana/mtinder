@@ -17,7 +17,7 @@ import { useAtomValue } from "jotai";
 import { userAtom } from "@/utils/atoms/userAtom";
 import { currentChatAtom } from "@/utils/atoms/currentChatAtom";
 import { Image } from "react-native";
-import { useSendMessage } from "@/hooks/useSendMessage";
+import { useSendMessage, useDeleteMessage } from "@/hooks/useSendMessage";
 import { useMessages } from "@/hooks/useMessages";
 import { Platform } from "react-native";
 import Animated, { LinearTransition } from "react-native-reanimated";
@@ -26,6 +26,7 @@ import { useSetCurrentChat } from "@/hooks/useSetCurrentChat";
 import { Toast } from "@/components/ui/toast";
 import { ImageChatBubble, ChatBubble } from "@/components/app/chat/ChatBubble";
 import { ProfilePicModal } from "@/components/app/ProfilePicModal";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 export default function Chater() {
   const { id } = useLocalSearchParams<{
@@ -39,18 +40,42 @@ export default function Chater() {
   }, [currentChat, currentUser]);
 
   const { messagesQuery, chatDeleted } = useMessages(id);
+  useEffect(() => {
+    console.log("chat deleted", chatDeleted);
+  }, [chatDeleted]);
   const { sendMessage } = useSendMessage(id);
   useSetCurrentChat(id); // set the current chat id in the global state, sets it to null when the component unmounts
 
   const memoMessages = useMemo(() => {
     return (
       messagesQuery.data?.messages.sort(
-        // reverse chronological order
         (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
       ) ?? []
     );
   }, [messagesQuery.data]);
   const [profilePicModalVisible, setProfilePicModalVisible] = useState(false);
+
+  const { deleteMessage } = useDeleteMessage(id);
+
+  const { showActionSheetWithOptions } = useActionSheet();
+
+  const onMessageLongPress = (messageId: string) => {
+    const options = ["Delete", "Cancel"];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+
+    showActionSheetWithOptions(
+      {
+        options,
+        destructiveButtonIndex,
+        cancelButtonIndex,
+        title: "Actions"
+      },
+      (selectedIndex) => {
+        if (selectedIndex === 0) deleteMessage(messageId)
+      }
+    );
+  };
 
   const handleImageSelection = async () => {
     const result = await launchImageLibraryAsync({
@@ -125,11 +150,19 @@ export default function Chater() {
         contentContainerStyle={[mt.px(2)]}
         style={[mt.flex1]}
         renderItem={({ item }) => {
-          return item.contentType === "text" ? (
-            <ChatBubble message={item} user={currentUser} />
-          ) : (
-            <ImageChatBubble message={item} user={currentUser} />
-          );
+            return item.contentType === "text" ? (
+            <ChatBubble
+              message={item}
+              user={currentUser}
+              onLongPress={item.userId === currentUser?._id ? onMessageLongPress : undefined}
+            />
+            ) : (
+            <ImageChatBubble
+              message={item}
+              user={currentUser}
+              onLongPress={item.userId === currentUser?._id ? onMessageLongPress : undefined}
+            />
+            );
         }}
         inverted
       />
@@ -214,27 +247,25 @@ const ChatInput = ({
           <MaterialCommunityIcons name="send" size={24} color="white" />
         </Text>
       </TouchableOpacity>
-          
-
     </KeyboardAvoidingView>
   );
 };
 
-const DeletedChatModal = ({
-  visible,
-}: {
-  visible: boolean;
-}) => {
+const DeletedChatModal = ({ visible }: { visible: boolean }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(visible);
+  useEffect(() => {
+    setIsOpen(visible);
+  }, [visible]);
+
   return (
     <Modal
-      visible={isOpen}
+      visible={visible}
       onRequestClose={() => {
         router.replace("/chat");
         setIsOpen(false);
       }}
-      animationType="slide"
+      animationType="fade"
       transparent
     >
       <TouchableOpacity
@@ -243,7 +274,7 @@ const DeletedChatModal = ({
           mt.flex1,
           mt.justify("center"),
           mt.items("center"),
-          mt.p(4)
+          mt.p(4),
         ]}
         onPress={() => {
           router.replace("/chat");
@@ -266,9 +297,9 @@ const DeletedChatModal = ({
           <Text style={[mt.color("white"), mt.fontSize("xl")]}>
             This chat has been deleted
           </Text>
-            <Text style={[mt.color("red"), mt.underline, mt.fontSize("lg")]}>
-              Go back to chats
-            </Text>
+          <Text style={[mt.color("red"), mt.underline, mt.fontSize("lg")]}>
+            Go back to chats
+          </Text>
         </View>
       </TouchableOpacity>
     </Modal>

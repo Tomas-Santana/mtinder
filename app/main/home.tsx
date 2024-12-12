@@ -6,7 +6,7 @@ import SwipeCard from "@/components/app/SwipeCard";
 import { userAtom } from "@/utils/atoms/userAtom";
 import { useAtomValue } from "jotai";
 import { Redirect } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Card } from "@/components/app/SwipeCard";
 import { useQuery } from "@tanstack/react-query";
 import UserController from "@/api/controllers/UserController";
@@ -16,6 +16,7 @@ import { useMatchRequests } from "@/hooks/useMatchRequests";
 import { MatchModal } from "@/components/app/matchModal";
 import { Chat, ReducedChat } from "@/types/Chat";
 import { useFocusEffect } from "expo-router";
+
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 export default function Home() {
@@ -54,17 +55,12 @@ export default function Home() {
     queryFn: () => UserController.getUsers(),
   });
 
-  const sortedUsers = useMemo(() => userQuery.data?.sort((a, b) => {
-    // sort users by how many genres they have in common with the current user
-    const currentUserGenres = currentUser?.favoriteGenres ?? [];
-    const aGenres = a.favoriteGenres ?? [];
-    const bGenres = b.favoriteGenres ?? [];
+  useFocusEffect(
+    useCallback(() => {
+      userQuery.refetch();
+    }, [])
+  );
 
-    const aGenresInCommon = findGenresInCommon(currentUserGenres, aGenres);
-    const bGenresInCommon = findGenresInCommon(currentUserGenres, bGenres);
-
-    return bGenresInCommon.length - aGenresInCommon.length;
-  }), [userQuery.data, currentUser]);
 
 
 
@@ -102,7 +98,7 @@ export default function Home() {
           onLeftSwipe={disliked}
           onRightSwipe={liked}
           cardsData={
-            sortedUsers?.map((user) => ({
+            userQuery.data?.map((user) => ({
               user,
             })) ?? []
           }

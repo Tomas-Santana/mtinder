@@ -31,10 +31,6 @@ export const useMessages = (chatId: string) => {
   useFocusEffect(
     useCallback(() => {
 
-      socket.on("deleteMessage", (messageId: string, chatId: string) => {
-        handleDeleteMessage(messageId, chatId, queryClient, chatId);
-      });
-
       socket.on("editMessage", (messageId: string, chatId: string, newText: string) => {
         handleEditMessage(messageId, chatId, newText, queryClient, chatId);
       });
@@ -44,7 +40,6 @@ export const useMessages = (chatId: string) => {
       });
 
       return () => {
-        socket.off("deleteMessage", handleDeleteMessage);
         socket.off("editMessage", handleEditMessage);
         socket.off("deleteChat", handleDeleteChat);
       };
@@ -60,23 +55,6 @@ const handleDeleteChat = (deletedChatId: string, currentChatId: string, setChatD
     setChatDeleted(true);
   }
 } 
-
-
-
-const handleDeleteMessage = (messageId: string, chatId: string, queryClient: QueryClient, currentChatId: string) => {
-
-  if (chatId !== currentChatId) {
-    return; // it is handled elsewhere
-  }
-  queryClient.setQueryData<GetMessagesResponse>(
-    ["messages", chatId],
-    (data) => {
-      return {
-        messages: data?.messages?.filter((msg) => msg._id !== messageId) || [],
-      };
-    }
-  );
-};
 
 const handleEditMessage = (messageId: string, chatId: string, newText: string, queryClient: QueryClient, currentChatId: string) => {
   if (chatId !== currentChatId) {

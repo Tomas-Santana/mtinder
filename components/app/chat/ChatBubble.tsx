@@ -12,9 +12,11 @@ import { Modal } from "react-native";
 export const ImageChatBubble = ({
   message,
   user,
+  onLongPress,
 }: {
   message: Message;
   user: User | null;
+  onLongPress?: (messageId: string) => void
 }) => {
   const isMine = message.userId === user?._id;
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -50,6 +52,10 @@ export const ImageChatBubble = ({
         ]}
         disabled={isUploading}
         onPress={() => setIsModalVisible(true)}
+        onLongPress={
+          () => onLongPress && onLongPress(message._id)
+        }
+
       >
         <View style={[mt.w(64), mt.h(64), mt.position("relative")]}>
           <Image
@@ -172,9 +178,12 @@ const ImageModal = ({ image, isVisible, setIsVisible }: { image: string, isVisib
 export const ChatBubble = ({
   message,
   user,
+  onLongPress,
 }: {
   message: Message;
   user: User | null;
+  onLongPress?: (messageId: string) => void;
+
 }) => {
   const isMine = message.userId === user?._id;
   const isUploading = message._id.startsWith("temp");
@@ -203,6 +212,9 @@ export const ChatBubble = ({
           mt.justify("center"),
           mt.items(isMine ? "flex-end" : "flex-start"),
         ]}
+        onLongPress={
+          () => onLongPress && onLongPress(message._id)
+        }
       >
         <Text style={[mt.color("white")]}>{message.content}</Text>
         <Text

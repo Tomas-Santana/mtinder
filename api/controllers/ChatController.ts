@@ -3,6 +3,7 @@ import { GetMessagesResponse, getMessagesResponse } from "@/types/api/GetMessage
 import { superFetch } from "./superfetch/superFetch";
 import { DeleteChatRequest, DeleteChatResponse, DeleteChatResponseSchema } from "@/types/api/DeleteChat";
 import { SendMessage, sendMessageResponse, sendMessage, SendMessageResponse } from "@/types/api/SendMessage";
+import { DeleteMessageResponse, deleteMessageResponse } from "@/types/api/DeleteMessage";
 
 export default class ChatController {
   static async getChats(): Promise<GetChatsResponse> {
@@ -76,6 +77,24 @@ export default class ChatController {
     } catch (error) {
       console.log(error);
       throw new Error("error sending message");
+    }
+  }
+
+  static async deleteMessage(chatId: string, messageId: string): Promise<DeleteMessageResponse> {
+    try {
+      const res = await superFetch<null, DeleteMessageResponse, "messages/[id]">({
+        options: {
+          method: "DELETE",
+          includeCredentials: true,
+        },
+        route: "messages/[id]",
+        routeParams: [chatId, messageId],
+        responseSchema: deleteMessageResponse,
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw new Error("error deleting message");
     }
   }
 

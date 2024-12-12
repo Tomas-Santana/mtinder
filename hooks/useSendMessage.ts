@@ -111,3 +111,39 @@ export const useSendMessage = (chatId: string) => {
 
   return { sendMessage };
 };
+
+export const useDeleteMessage = (chatId: string) => {
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: (messageId: string) =>
+      ChatController.deleteMessage(chatId, messageId),
+    onMutate: async (messageId: string) => {
+      const oldMessages = queryClient.getQueryData<GetMessagesResponse>([
+        "messages",
+        chatId,
+      ]);
+      queryClient.setQueryData<GetMessagesResponse>(["messages", chatId], {
+        messages: oldMessages?.messages.filter((msg) => msg._id !== messageId) || [],
+      });
+      return { oldMessages };
+    },
+    onError: (error, variables, context) => {
+      if (!context?.oldMessages) {
+        return;
+      }
+      queryClient.setQueryData<GetMessagesResponse>(
+        ["messages", chatId],
+        context?.oldMessages
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages", chatId] });
+    },
+  });
+
+  const deleteMessage = (messageId: string) => {
+    mutate(messageId);
+  };
+
+  return { deleteMessage };
+};

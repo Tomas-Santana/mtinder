@@ -41,10 +41,9 @@ export function PasswordForm({ setTab, fullForm }: PasswordFormProps) {
     },
     onSuccess: () => {
       Toast.success("Account created successfully. Let's get you started!");
+      router.push("/main/completeProfile");
       fullForm.reset();
       form.reset();
-      setTab(0);
-      router.push("/main/home");
     },
   });
 

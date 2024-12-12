@@ -9,16 +9,13 @@ import Animated, { LinearTransition } from "react-native-reanimated";
 import { useEffect, useMemo } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SimpleNavbarWithTitle } from "@/components/app/simpleNavbar";
+import { RefreshControl } from "react-native-gesture-handler";
 
 export default function ChatsView() {
   const chatsQuery = useChats();
 
-  useEffect(() => {
-    console.log(chatsQuery.data);
-  }, [chatsQuery.data]);
 
   const sortedChats = useMemo(() => {
-    // sort chats by last message date
     return chatsQuery.data?.chats?.sort((a, b) => {
       if (!a.lastMessage || !b.lastMessage) return 0;
       return new Date(b.lastMessage.timestamp).getTime() - new Date(a.lastMessage.timestamp).getTime();
@@ -37,6 +34,7 @@ export default function ChatsView() {
         <SimpleNavbarWithTitle title="Chats" />
         <Animated.FlatList
           style={[mt.flex1, mt.bg("gray", 900)]}
+          
           contentContainerStyle={[]}
           itemLayoutAnimation={LinearTransition}
           data={sortedChats}
@@ -44,11 +42,15 @@ export default function ChatsView() {
           renderItem={({ item }) => (<ChatPreview chat={item} />)}
           ListEmptyComponent={<EmptySplash />}
           extraData={sortedChats}
+
+          refreshControl={<RefreshControl
+          tintColor={"white"}
+            refreshing={chatsQuery.isFetching}
+            onRefresh={chatsQuery.refetch}
+            
+          />}
         />
 
-       {/* {chatsQuery.data?.chats?.map((chat) => (
-          <ChatPreview key={chat._id} chat={chat} />
-        ))} */}
       </View>
     </SafeAreaView>
   );

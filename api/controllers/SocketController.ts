@@ -141,9 +141,21 @@ export default class SocketController {
         chats: data?.chats?.filter((chat) => chat._id !== deletedChatId) || [],
       };
     });
-    queryClient.invalidateQueries({queryKey: ["chat"]})
+    queryClient.invalidateQueries({ queryKey: ["chat"] });
   }
 
+  static handleMessageDeleted(deletedMessageId: string, chatId: string) {
+    queryClient.setQueryData<GetMessagesResponse>(
+      ["messages", chatId],
+      (data) => {
+        return {
+          messages:
+            data?.messages?.filter((msg) => msg._id !== deletedMessageId) || [],
+        };
+      }
+    );
+    queryClient.invalidateQueries({ queryKey: ["messages", chatId] });
+  }
 
   static async subscribe() {
     console.log("subscribing to socket events");
@@ -151,5 +163,6 @@ export default class SocketController {
     socket.on("newChat", SocketController.handleNewChat);
     socket.on("newMessage", SocketController.handleNewMessage);
     socket.on("chatDeleted", SocketController.handleChatDeleted);
+    socket.on("deleteMessage", SocketController.handleMessageDeleted)
   }
 }
